@@ -12,16 +12,21 @@ const Login: React.FC = () => {
 	function handleLogin(e: any) {
 		e.preventDefault()
 		axios
-			.post(process.env.NEXT_PUBLIC_URL + "/api/users/login", {
-				name: userName,
-				password: password,
-			})
+			.post(
+				process.env.NEXT_PUBLIC_URL + "/api/users/login",
+				{
+					name: userName,
+					password: password,
+				},
+				{ withCredentials: true }
+			)
 			.then((res) => {
 				login({
 					id: res.data.id,
 					name: res.data.name,
 					auth: true,
 				})
+				console.log("authed")
 				router.push("/")
 			})
 			.catch((err) => alert(err))

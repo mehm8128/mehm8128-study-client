@@ -13,9 +13,6 @@ const User: NextPage = () => {
 	const { me, getUsers } = useContext(UserContext)
 	const router = useRouter()
 	const id = router.query.userId !== "me" ? router.query.userId : me.id
-	if (router.isReady) {
-		if (!me.auth) router.replace("/login")
-	}
 	const [user, setUser] = useState<User>()
 
 	useEffect(() => {
@@ -31,7 +28,7 @@ const User: NextPage = () => {
 
 	return (
 		<>
-			<Box h="hull">
+			<Box h="full">
 				{user !== undefined ? <UserIntro user={user} /> : null}
 				<Flex>
 					<Box h={500} width="50%">
