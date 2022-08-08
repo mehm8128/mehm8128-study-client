@@ -30,8 +30,10 @@ const Memorize: NextPage = () => {
 		}
 	}
 	function handleGoToNext() {
-		setJudge(0)
-		setCount(count + 1)
+		if (count < data!.length - 1) {
+			setJudge(0)
+			setCount(count + 1)
+		}
 	}
 
 	useEffect(() => {
@@ -54,7 +56,7 @@ const Memorize: NextPage = () => {
 					タイトル名前表示する
 				</Heading>
 				<Box w={{ base: "", md: "20%" }}>
-					{data && data[count].answer.word ? (
+					{data && data[count].answer && data[count].answer.word ? (
 						<Text fontSize="xl" pb="2">
 							{data[count].answer.word}の意味を選んでください
 						</Text>
@@ -76,7 +78,11 @@ const Memorize: NextPage = () => {
 					{judge !== 0 ? (
 						<Flex justifyContent="space-around" mt={2}>
 							{judge === 1 ? "正解" : "不正解"}
-							<Button onClick={handleGoToNext}>次へ</Button>
+							{count !== data!.length - 1 ? (
+								<Button onClick={handleGoToNext}>次へ</Button>
+							) : (
+								<Box>終わり</Box>
+							)}
 						</Flex>
 					) : null}
 				</Box>
