@@ -1,4 +1,4 @@
-export type User = {
+export interface User {
 	id: string
 	name: string
 	description: string
@@ -6,7 +6,7 @@ export type User = {
 	updatedAt: string
 }
 
-export type Me = {
+export interface Me {
 	id: string
 	name: string
 	auth: boolean

@@ -1,6 +1,6 @@
-import { GoalFavorite } from './favorite'
+import { GoalFavorite } from "./favorite"
 
-export type GoalType = {
+export interface GoalType {
 	id: string
 	title: string
 	comment: string

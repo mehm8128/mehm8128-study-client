@@ -1,10 +1,10 @@
-export type RecordFavorite = {
+export interface RecordFavorite {
 	id: string
 	createdBy: string
 	createdAt: string
 	recordId: string
 }
-export type GoalFavorite = {
+export interface GoalFavorite {
 	id: string
 	createdBy: string
 	createdAt: string

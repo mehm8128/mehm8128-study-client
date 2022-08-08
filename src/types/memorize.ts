@@ -1,4 +1,4 @@
-export type MemorizeType = {
+export interface MemorizeType {
 	id: string
 	name: string
 	words: WordType[]
@@ -6,9 +6,14 @@ export type MemorizeType = {
 	updatedAt: string
 }
 
-export type WordType = {
+export interface WordType {
 	id: string
 	word: string
 	wordJp: string
 	createdAt: string
+}
+
+export interface QuizType {
+	answer: WordType
+	choices: WordType[]
 }

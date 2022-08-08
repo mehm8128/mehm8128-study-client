@@ -1,6 +1,6 @@
-import { RecordFavorite } from './favorite'
+import { RecordFavorite } from "./favorite"
 
-export type RecordType = {
+export interface RecordType {
 	id: string
 	title: string
 	page: number
