@@ -40,7 +40,7 @@
 				"reservedFirst": false,
 				"locale": "auto"
 			}
-		]
-	},
-	"import/no-unresolved": "off"
+		],
+		"import/no-unresolved": "off"
+	}
 }
