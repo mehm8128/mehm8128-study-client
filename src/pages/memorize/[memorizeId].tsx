@@ -53,7 +53,7 @@ const Memorize: NextPage = () => {
 					"データがありません。"
 				)}
 				<List
-					dataSource={data![count].choices}
+					dataSource={data && data![count].choices}
 					renderItem={(choice) => (
 						<List.Item key={choice.id}>
 							<Button
