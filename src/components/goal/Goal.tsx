@@ -1,8 +1,8 @@
-import { useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, Modal } from "antd"
 import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { GoalType } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
 import { UserContext } from "src/components/UserProvider"
@@ -15,7 +15,8 @@ type Props = {
 const Goal: React.FC<Props> = (props) => {
 	const router = useRouter()
 	const { me, getGoals, users } = useContext(UserContext)
-	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
+	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	function handleComplete() {
 		axios
 			.put(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id, {
@@ -53,14 +54,9 @@ const Goal: React.FC<Props> = (props) => {
 				<div className="flex justify-between">
 					<Link passHref href={"/user/" + props.goal.createdBy}>
 						<div className="flex items-center justify-center">
-							<div className="avatar placeholder mr-2">
-								<div className="w-12 rounded-full bg-green-300">
-									{createdByToString(props.goal.createdBy, users).substring(
-										0,
-										1
-									)}
-								</div>
-							</div>
+							<Avatar className="mr-2">
+								{createdByToString(props.goal.createdBy, users).substring(0, 1)}
+							</Avatar>
 							<span className="text-lg text-xl">
 								{createdByToString(props.goal.createdBy, users)}
 							</span>
@@ -71,31 +67,37 @@ const Goal: React.FC<Props> = (props) => {
 							<p className="mr-2">{dateFormatter(props.goal.createdAt)}</p>
 							{me.id === props.goal.createdBy ? (
 								<>
-									<label
-										className="border-full text-12 btn modal-button w-12 font-bold"
-										htmlFor="goalMenu"
+									<Button
+										className="border-full text-12 w-12 font-bold"
+										type="text"
+										onClick={() => setShouldShowMenuModal(true)}
 									>
 										・・・
-									</label>
-									<input
-										className="modal-toggle"
-										id="goalMenu"
-										type="checkbox"
-									/>
-									<label className="modal" htmlFor="goalMenu">
-										<ul className="modal-box menu">
+									</Button>
+									<Modal
+										className="absolute right-0 top-0"
+										footer={null}
+										mask={false}
+										visible={shouldShowMenuModal}
+										width={200}
+										onCancel={() => setShouldShowMenuModal(false)}
+									>
+										<ul>
 											<li>
-												<label htmlFor="goalMenu" onClick={onOpen}>
+												<Button
+													type="text"
+													onClick={() => setShouldShowFixModal(true)}
+												>
 													この目標を編集する
-												</label>
+												</Button>
 											</li>
 											<li>
-												<label htmlFor="goalMenu" onClick={handleDelete}>
+												<Button type="text" onClick={handleDelete}>
 													この目標を削除する
-												</label>
+												</Button>
 											</li>
 										</ul>
-									</label>
+									</Modal>
 								</>
 							) : null}
 						</div>
@@ -109,20 +111,20 @@ const Goal: React.FC<Props> = (props) => {
 				</div>
 				<div className="flex items-center justify-evenly">
 					{props.goal.isCompleted ? (
-						<button className="btn" disabled={true}>
-							完了済み
-						</button>
+						<Button disabled={true}>完了済み</Button>
 					) : (
-						<button className="btn" onClick={handleComplete}>
-							この目標を完了する
-						</button>
+						<Button onClick={handleComplete}>この目標を完了する</Button>
 					)}
-					<button className="btn" onClick={handleFavorite}>
+					<Button onClick={handleFavorite}>
 						いいね！ {props.goal.favoriteNum}
-					</button>
+					</Button>
 				</div>
 			</div>
-			<GoalFixModal goal={props.goal} isOpen={isOpen} onClose={onClose} />
+			<GoalFixModal
+				goal={props.goal}
+				setShouldShowFixModal={setShouldShowFixModal}
+				shoudShowFixModal={shouldShowFixModal}
+			/>
 		</>
 	)
 }

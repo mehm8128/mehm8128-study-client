@@ -1,41 +1,31 @@
-import {
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalHeader,
-	ModalOverlay,
-} from "@chakra-ui/react"
+import { Modal } from "antd"
 
 import { RecordType } from "../../types/record"
 import RecordFixForm from "./RecordFixForm"
 
 type Props = {
 	record: RecordType
-	isOpen: boolean
-	onClose: () => void
+	shoudShowFixModal: boolean
+	setShouldShowFixModal: (value: boolean) => void
 }
 const RecordFixModal: React.FC<Props> = (props) => {
 	return (
-		<>
-			<Modal isOpen={props.isOpen} size="xl" onClose={props.onClose}>
-				<ModalOverlay />
-				<ModalContent h="70%">
-					<ModalHeader>目標の編集</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
-						<RecordFixForm
-							defaultComment={props.record.comment}
-							defaultPage={props.record.page.toString()}
-							defaultTime={props.record.time.toString()}
-							defaultTitle={props.record.title}
-							id={props.record.id}
-							onClose={props.onClose}
-						/>
-					</ModalBody>
-				</ModalContent>
-			</Modal>
-		</>
+		<Modal
+			centered
+			footer={null}
+			title="記録の編集"
+			visible={props.shoudShowFixModal}
+			onCancel={() => props.setShouldShowFixModal(false)}
+		>
+			<RecordFixForm
+				defaultComment={props.record.comment}
+				defaultPage={props.record.page.toString()}
+				defaultTime={props.record.time.toString()}
+				defaultTitle={props.record.title}
+				id={props.record.id}
+				setShouldShowFixModal={props.setShouldShowFixModal}
+			/>
+		</Modal>
 	)
 }
 

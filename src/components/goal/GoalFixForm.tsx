@@ -10,7 +10,7 @@ type Props = {
 	defaultGoalDate: string
 	defaultComment: string
 	id: string
-	onClose: () => void
+	setShouldShowFixModal: (value: boolean) => void
 }
 
 const GoalFixForm: React.FC<Props> = ({
@@ -19,7 +19,7 @@ const GoalFixForm: React.FC<Props> = ({
 	defaultGoalDate,
 	defaultComment,
 	id,
-	onClose,
+	setShouldShowFixModal,
 }) => {
 	const { me, getGoals } = useContext(UserContext)
 	const [title, setTitle] = useState("")
@@ -50,7 +50,7 @@ const GoalFixForm: React.FC<Props> = ({
 				setTitle("")
 				setGoalDate("")
 				setComment("")
-				onClose()
+				setShouldShowFixModal(false)
 			})
 			.catch((err) => alert(err))
 	}
@@ -82,7 +82,7 @@ const GoalFixForm: React.FC<Props> = ({
 						<Button colorScheme="blue" type="submit" w={32}>
 							決定
 						</Button>
-						<Button w={32} onClick={onClose}>
+						<Button w={32} onClick={() => setShouldShowFixModal(false)}>
 							戻る
 						</Button>
 					</Flex>

@@ -1,8 +1,8 @@
-import { useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, Modal } from "antd"
 import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 import { RecordType } from "../../types/record"
 import { UserContext } from "../UserProvider"
@@ -16,7 +16,8 @@ type Props = {
 const Record: React.FC<Props> = (props) => {
 	const router = useRouter()
 	const { me, getRecords, users } = useContext(UserContext)
-	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
+	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	function handleFavorite() {
 		axios
 			.put(
@@ -44,14 +45,12 @@ const Record: React.FC<Props> = (props) => {
 				<div className="flex justify-between">
 					<Link passHref href={"/user/" + props.record.createdBy}>
 						<div className="flex items-center justify-center">
-							<div className="avatar placeholder mr-2">
-								<div className="w-12 rounded-full bg-green-300">
-									{createdByToString(props.record.createdBy, users).substring(
-										0,
-										1
-									)}
-								</div>
-							</div>
+							<Avatar className="mr-2">
+								{createdByToString(props.record.createdBy, users).substring(
+									0,
+									1
+								)}
+							</Avatar>
 							<span className="text-lg text-xl">
 								{createdByToString(props.record.createdBy, users)}
 							</span>
@@ -61,33 +60,39 @@ const Record: React.FC<Props> = (props) => {
 						<div className="flex items-center">
 							<p className="mr-2">{dateFormatter(props.record.createdAt)}</p>
 							{me.id === props.record.createdBy ? (
-								<>
-									<label
-										className="border-full text-12 btn modal-button w-12 font-bold"
-										htmlFor="recordMenu"
+								<div className="relative">
+									<Button
+										className="border-full text-12 relative w-12 font-bold"
+										type="text"
+										onClick={() => setShouldShowMenuModal(true)}
 									>
 										・・・
-									</label>
-									<input
-										className="modal-toggle"
-										id="recordMenu"
-										type="checkbox"
-									/>
-									<label className="modal" htmlFor="recordMenu">
-										<ul className="modal-box menu">
+									</Button>
+									<Modal
+										className="absolute right-0 top-0"
+										footer={null}
+										mask={false}
+										visible={shouldShowMenuModal}
+										width={200}
+										onCancel={() => setShouldShowMenuModal(false)}
+									>
+										<ul>
 											<li>
-												<label htmlFor="recordMenu" onClick={onOpen}>
+												<Button
+													type="text"
+													onClick={() => setShouldShowFixModal(true)}
+												>
 													この記録を編集する
-												</label>
+												</Button>
 											</li>
 											<li>
-												<label htmlFor="recordMenu" onClick={handleDelete}>
+												<Button type="text" onClick={handleDelete}>
 													この記録を削除する
-												</label>
+												</Button>
 											</li>
 										</ul>
-									</label>
-								</>
+									</Modal>
+								</div>
 							) : null}
 						</div>
 					</div>
@@ -102,12 +107,16 @@ const Record: React.FC<Props> = (props) => {
 					<p className="whitespace-pre-wrap">{props.record.comment}</p>
 				</div>
 				<div className="flex items-center justify-evenly">
-					<button className="btn" onClick={handleFavorite}>
+					<Button onClick={handleFavorite}>
 						いいね！ {props.record.favoriteNum}
-					</button>
+					</Button>
 				</div>
 			</div>
-			<RecordFixModal isOpen={isOpen} record={props.record} onClose={onClose} />
+			<RecordFixModal
+				record={props.record}
+				setShouldShowFixModal={setShouldShowFixModal}
+				shoudShowFixModal={shouldShowFixModal}
+			/>
 		</>
 	)
 }

@@ -9,7 +9,7 @@ type Props = {
 	defaultTime: string
 	defaultComment: string
 	id: string
-	onClose: () => void
+	setShouldShowFixModal: (value: boolean) => void
 }
 
 const RecordForm: React.FC<Props> = ({
@@ -18,7 +18,7 @@ const RecordForm: React.FC<Props> = ({
 	defaultTime,
 	defaultComment,
 	id = "",
-	onClose,
+	setShouldShowFixModal,
 }) => {
 	const { me, getRecords } = useContext(UserContext)
 	const [title, setTitle] = useState("")
@@ -52,7 +52,7 @@ const RecordForm: React.FC<Props> = ({
 				setPage("")
 				setTime("")
 				setComment("")
-				onClose()
+				setShouldShowFixModal(false)
 			})
 			.catch((err) => alert(err))
 	}
@@ -89,7 +89,7 @@ const RecordForm: React.FC<Props> = ({
 					<Button colorScheme="blue" type="submit" w={32}>
 						決定
 					</Button>
-					<Button w={32} onClick={onClose}>
+					<Button w={32} onClick={() => setShouldShowFixModal(false)}>
 						戻る
 					</Button>
 				</Flex>

@@ -1,3 +1,4 @@
+import { Button } from "antd"
 import Link from "next/link"
 import { useContext } from "react"
 
@@ -16,20 +17,18 @@ const Header: React.FC = () => {
 			</h1>
 			<div className="flex justify-around gap-4">
 				<Link passHref href="/memorize">
-					<button className="btn">単語暗記へ</button>
+					<Button>単語暗記へ</Button>
 				</Link>
 				{me.auth ? (
 					<>
-						<button className="btn" onClick={handleLogout}>
-							ログアウト
-						</button>
+						<Button onClick={handleLogout}>ログアウト</Button>
 						<Link passHref href="/user/me">
-							<button className="btn">{me.name}</button>
+							<Button>{me.name}</Button>
 						</Link>
 					</>
 				) : (
 					<Link passHref href="/login">
-						<button className="btn">ログイン画面へ</button>
+						<Button>ログイン画面へ</Button>
 					</Link>
 				)}
 			</div>
