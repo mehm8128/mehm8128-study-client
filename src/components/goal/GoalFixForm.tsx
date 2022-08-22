@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Text, Textarea } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 
@@ -12,6 +12,8 @@ type Props = {
 	id: string
 	setShouldShowFixModal: (value: boolean) => void
 }
+
+const { TextArea } = Input
 
 const GoalFixForm: React.FC<Props> = ({
 	isCompleted,
@@ -56,39 +58,33 @@ const GoalFixForm: React.FC<Props> = ({
 	}
 
 	return (
-		<>
-			<Box as="form" h="100%" onSubmit={handleSubmit}>
-				<Flex flexDirection="column" h="80%" justifyContent="space-around">
-					<Text>タイトル</Text>
-					<Input
-						placeholder="必須項目"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<Text>期限</Text>
-					<Input
-						placeholder="YYYY-MM-DD"
-						value={goalDate}
-						onChange={(e) => setGoalDate(e.target.value)}
-					/>
-					<Text>コメント</Text>
-					<Textarea
-						placeholder="任意"
-						resize="none"
-						value={comment}
-						onChange={(e) => setComment(e.target.value)}
-					/>
-					<Flex justifyContent="space-around" mt={4}>
-						<Button colorScheme="blue" type="submit" w={32}>
-							決定
-						</Button>
-						<Button w={32} onClick={() => setShouldShowFixModal(false)}>
-							戻る
-						</Button>
-					</Flex>
-				</Flex>
-			</Box>
-		</>
+		<Form onFinish={handleSubmit}>
+			<Form.Item label="タイトル" name="title">
+				<Input
+					placeholder="必須項目"
+					value={title}
+					onChange={(e) => setTitle(e.target.value)}
+				/>
+			</Form.Item>
+			<Form.Item label="期限" name="due">
+				<Input
+					placeholder="YYYY-MM-DD"
+					value={goalDate}
+					onChange={(e) => setGoalDate(e.target.value)}
+				/>
+			</Form.Item>
+			<Form.Item label="コメント" name="comment">
+				<TextArea
+					placeholder="任意"
+					rows={4}
+					value={comment}
+					onChange={(e) => setComment(e.target.value)}
+				/>
+			</Form.Item>
+			<Form.Item>
+				<Button htmlType="submit">目標を設定</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 

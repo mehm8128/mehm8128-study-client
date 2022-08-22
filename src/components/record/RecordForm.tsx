@@ -1,7 +1,9 @@
-import { Box, Button, Flex, Input, Text, Textarea } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useContext, useState } from "react"
 import { UserContext } from "src/components/UserProvider"
+
+const { TextArea } = Input
 
 const RecordForm: React.FC = () => {
 	const { me, getRecords } = useContext(UserContext)
@@ -35,36 +37,40 @@ const RecordForm: React.FC = () => {
 	}
 
 	return (
-		<Box as="form" h="100%" onSubmit={handleSubmit}>
-			<Flex flexDirection="column" h="80%" justifyContent="space-around">
-				<Text>タイトル</Text>
+		<Form onFinish={handleSubmit}>
+			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 				/>
-				<Text>ページ数</Text>
+			</Form.Item>
+			<Form.Item label="ページ数" name="pages">
 				<Input
 					placeholder="半角数字(任意)"
 					value={page}
 					onChange={(e) => setPage(e.target.value)}
 				/>
-				<Text>時間</Text>
+			</Form.Item>
+			<Form.Item label="時間" name="time">
 				<Input
 					placeholder="半角数字(任意)"
 					value={time}
 					onChange={(e) => setTime(e.target.value)}
 				/>
-				<Text>コメント</Text>
-				<Textarea
+			</Form.Item>
+			<Form.Item label="コメント" name="comment">
+				<TextArea
 					placeholder="任意"
-					resize="none"
+					rows={4}
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
 				/>
-				<Button type="submit">記録</Button>
-			</Flex>
-		</Box>
+			</Form.Item>
+			<Form.Item>
+				<Button htmlType="submit">記録する</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 

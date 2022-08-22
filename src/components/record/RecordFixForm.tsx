@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Text, Textarea } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "src/components/UserProvider"
@@ -11,6 +11,8 @@ type Props = {
 	id: string
 	setShouldShowFixModal: (value: boolean) => void
 }
+
+const { TextArea } = Input
 
 const RecordForm: React.FC<Props> = ({
 	defaultTitle,
@@ -58,43 +60,40 @@ const RecordForm: React.FC<Props> = ({
 	}
 
 	return (
-		<Box as="form" h="100%" onSubmit={handleSubmit}>
-			<Flex flexDirection="column" h="80%" justifyContent="space-around">
-				<Text>タイトル</Text>
+		<Form onFinish={handleSubmit}>
+			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 				/>
-				<Text>ページ数</Text>
+			</Form.Item>
+			<Form.Item label="ページ数" name="pages">
 				<Input
 					placeholder="半角数字(任意)"
 					value={page}
 					onChange={(e) => setPage(e.target.value)}
 				/>
-				<Text>時間</Text>
+			</Form.Item>
+			<Form.Item label="時間" name="time">
 				<Input
 					placeholder="半角数字(任意)"
 					value={time}
 					onChange={(e) => setTime(e.target.value)}
 				/>
-				<Text>コメント</Text>
-				<Textarea
+			</Form.Item>
+			<Form.Item label="コメント" name="comment">
+				<TextArea
 					placeholder="任意"
-					resize="none"
+					rows={4}
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
 				/>
-				<Flex justifyContent="space-around" mt={4}>
-					<Button colorScheme="blue" type="submit" w={32}>
-						決定
-					</Button>
-					<Button w={32} onClick={() => setShouldShowFixModal(false)}>
-						戻る
-					</Button>
-				</Flex>
-			</Flex>
-		</Box>
+			</Form.Item>
+			<Form.Item>
+				<Button htmlType="submit">記録する</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 

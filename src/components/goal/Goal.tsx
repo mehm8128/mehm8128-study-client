@@ -17,6 +17,11 @@ const Goal: React.FC<Props> = (props) => {
 	const { me, getGoals, users } = useContext(UserContext)
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
+
+	function handleClick() {
+		setShouldShowFixModal(true)
+		setShouldShowMenuModal(false)
+	}
 	function handleComplete() {
 		axios
 			.put(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id, {
@@ -41,12 +46,11 @@ const Goal: React.FC<Props> = (props) => {
 			.catch((err) => alert(err))
 	}
 	function handleDelete() {
-		if (me.id === props.goal.createdBy) {
-			axios
-				.delete(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id)
-				.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
-				.catch((err) => alert(err))
-		}
+		axios
+			.delete(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id)
+			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+			.catch((err) => alert(err))
+		setShouldShowMenuModal(false)
 	}
 	return (
 		<>
@@ -84,10 +88,7 @@ const Goal: React.FC<Props> = (props) => {
 									>
 										<ul>
 											<li>
-												<Button
-													type="text"
-													onClick={() => setShouldShowFixModal(true)}
-												>
+												<Button type="text" onClick={handleClick}>
 													この目標を編集する
 												</Button>
 											</li>

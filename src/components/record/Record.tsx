@@ -18,6 +18,11 @@ const Record: React.FC<Props> = (props) => {
 	const { me, getRecords, users } = useContext(UserContext)
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
+
+	function handleClick() {
+		setShouldShowFixModal(true)
+		setShouldShowMenuModal(false)
+	}
 	function handleFavorite() {
 		axios
 			.put(
@@ -32,12 +37,11 @@ const Record: React.FC<Props> = (props) => {
 			.catch((err) => alert(err))
 	}
 	function handleDelete() {
-		if (me.id === props.record.createdBy) {
-			axios
-				.delete(process.env.NEXT_PUBLIC_URL + "/api/records/" + props.record.id)
-				.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
-				.catch((err) => alert(err))
-		}
+		axios
+			.delete(process.env.NEXT_PUBLIC_URL + "/api/records/" + props.record.id)
+			.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
+			.catch((err) => alert(err))
+		setShouldShowMenuModal(false)
 	}
 	return (
 		<>
@@ -78,10 +82,7 @@ const Record: React.FC<Props> = (props) => {
 									>
 										<ul>
 											<li>
-												<Button
-													type="text"
-													onClick={() => setShouldShowFixModal(true)}
-												>
+												<Button type="text" onClick={handleClick}>
 													この記録を編集する
 												</Button>
 											</li>

@@ -1,8 +1,10 @@
-import { Box, Button, Flex, Input, Text, Textarea } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useContext, useState } from "react"
 
 import { UserContext } from "../UserProvider"
+
+const { TextArea } = Input
 
 const GoalSettingForm: React.FC = () => {
 	const { me, getGoals } = useContext(UserContext)
@@ -34,30 +36,33 @@ const GoalSettingForm: React.FC = () => {
 	}
 
 	return (
-		<Box as="form" h="100%" onSubmit={handleSubmit}>
-			<Flex flexDirection="column" h="80%" justifyContent="space-around">
-				<Text>タイトル</Text>
+		<Form onFinish={handleSubmit}>
+			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 				/>
-				<Text>期限</Text>
+			</Form.Item>
+			<Form.Item label="期限" name="due">
 				<Input
 					placeholder="YYYY-MM-DD"
 					value={goalDate}
 					onChange={(e) => setGoalDate(e.target.value)}
 				/>
-				<Text>コメント</Text>
-				<Textarea
+			</Form.Item>
+			<Form.Item label="コメント" name="comment">
+				<TextArea
 					placeholder="任意"
-					resize="none"
+					rows={4}
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
 				/>
-				<Button type="submit">目標を設定</Button>
-			</Flex>
-		</Box>
+			</Form.Item>
+			<Form.Item>
+				<Button htmlType="submit">目標を設定</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 
