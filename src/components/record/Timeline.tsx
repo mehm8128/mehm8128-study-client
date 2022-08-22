@@ -16,7 +16,7 @@ const Timeline: React.FC<Props> = (props) => {
 	}, [router.asPath])
 
 	return (
-		<div className="w-full md:w-3/5">
+		<div className="w-full">
 			<ul>
 				{records.map((record) => (
 					<li className="mb-4" key={record.id}>

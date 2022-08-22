@@ -1,10 +1,10 @@
-import { ListItem, UnorderedList } from "@chakra-ui/react"
+import { List } from "antd"
 import axios from "axios"
 
 import type { NextPage } from "next"
+import Link from "next/link"
 import { useState, useEffect } from "react"
 import type { MemorizeType } from "../../types/memorize"
-import LinkComponent from "src/components/common/LinkComponent"
 
 const MemorizePortal: NextPage = () => {
 	const [memorizes, setMemorizes] = useState<MemorizeType[]>()
@@ -18,18 +18,18 @@ const MemorizePortal: NextPage = () => {
 	}, [])
 
 	return (
-		<>
-			<UnorderedList p="12">
-				{memorizes &&
-					memorizes.map((memorize) => (
-						<ListItem key={memorize.id} mb="4">
-							<LinkComponent href={`/memorize/${memorize.id}`}>
-								{memorize.name}の暗記へ
-							</LinkComponent>
-						</ListItem>
-					))}
-			</UnorderedList>
-		</>
+		<List
+			className="list-disc p-12"
+			dataSource={memorizes}
+			renderItem={(memorize) => (
+				<List.Item className="mb-4" key={memorize.id}>
+					<Link href={`/memorize/${memorize.id}`}>
+						<a>{memorize.name}の暗記へ</a>
+					</Link>
+				</List.Item>
+			)}
+			split={false}
+		/>
 	)
 }
 

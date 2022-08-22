@@ -1,12 +1,4 @@
-import {
-	Box,
-	Button,
-	Flex,
-	Heading,
-	List,
-	ListItem,
-	Text,
-} from "@chakra-ui/react"
+import { List, Button } from "antd"
 import axios from "axios"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
@@ -50,44 +42,43 @@ const Memorize: NextPage = () => {
 	}, [router.query])
 
 	return (
-		<>
-			<Box p="8">
-				<Heading as="h1" pb="8" size="lg">
-					タイトル名前表示する
-				</Heading>
-				<Box w={{ base: "", md: "20%" }}>
-					{data && data[count].answer && data[count].answer.word ? (
-						<Text fontSize="xl" pb="2">
-							{data[count].answer.word}の意味を選んでください
-						</Text>
-					) : (
-						"データがありません。"
+		<div className="p-8">
+			<h1 className="pb-8 text-2xl">タイトル</h1>
+			<div className="md:w-1/5">
+				{data && data[count].answer && data[count].answer.word ? (
+					<p className="pb-2 text-xl">
+						{data[count].answer.word}の意味を選んでください
+					</p>
+				) : (
+					"データがありません。"
+				)}
+				<List
+					dataSource={data![count].choices}
+					renderItem={(choice) => (
+						<List.Item key={choice.id}>
+							<Button
+								className="w-full"
+								onClick={() => handleAnswer(choice.id)}
+							>
+								{choice.wordJp}
+							</Button>
+						</List.Item>
 					)}
-					<List spacing={2}>
-						{data &&
-							data[count] &&
-							data[count].choices &&
-							data[count].choices.map((choice) => (
-								<ListItem key={choice.id}>
-									<Button w="100%" onClick={() => handleAnswer(choice.id)}>
-										{choice.wordJp}
-									</Button>
-								</ListItem>
-							))}
-					</List>
-					{judge !== 0 ? (
-						<Flex justifyContent="space-around" mt={2}>
-							{judge === 1 ? "正解" : "不正解"}
-							{count !== data!.length - 1 ? (
-								<Button onClick={handleGoToNext}>次へ</Button>
-							) : (
-								<Box>終わり</Box>
-							)}
-						</Flex>
-					) : null}
-				</Box>
-			</Box>
-		</>
+					split={false}
+				/>
+
+				{judge !== 0 ? (
+					<div className="mt-2 flex justify-around">
+						{judge === 1 ? "正解" : "不正解"}
+						{count !== data!.length - 1 ? (
+							<Button onClick={handleGoToNext}>次へ</Button>
+						) : (
+							<p>終わり</p>
+						)}
+					</div>
+				) : null}
+			</div>
+		</div>
 	)
 }
 
