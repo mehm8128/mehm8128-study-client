@@ -12,8 +12,7 @@ const GoalSettingForm: React.FC = () => {
 	const [goalDate, setGoalDate] = useState("")
 	const [comment, setComment] = useState("")
 
-	function handleSubmit(e: any) {
-		e.preventDefault()
+	function handleSubmit() {
 		if (title === "" || !/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(goalDate)) {
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return

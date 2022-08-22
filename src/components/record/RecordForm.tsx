@@ -12,8 +12,7 @@ const RecordForm: React.FC = () => {
 	const [time, setTime] = useState("")
 	const [comment, setComment] = useState("")
 
-	function handleSubmit(e: any) {
-		e.preventDefault()
+	function handleSubmit() {
 		if (title === "" || (!/[0-9]+/.test(time) && !/[0-9]+/.test(page))) {
 			alert("タイトルは必須です。ページと時間は半角数字で入力してください。")
 			return

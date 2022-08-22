@@ -34,8 +34,7 @@ const RecordForm: React.FC<Props> = ({
 		setComment(defaultComment)
 	}, [defaultTitle, defaultPage, defaultTime, defaultComment]) //propsからuseStateに入れるときはこれしないといけないみたいなやつ
 
-	function handleSubmit(e: any) {
-		e.preventDefault()
+	function handleSubmit() {
 		if (title === "" || (!/[0-9]+/.test(time) && !/[0-9]+/.test(page))) {
 			alert("タイトルは必須です。ページと時間は半角数字で入力してください。")
 			return

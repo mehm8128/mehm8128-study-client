@@ -30,11 +30,11 @@ const User: NextPage = () => {
 			{user !== undefined ? <UserIntro user={user} /> : null}
 			<div className="flex justify-around">
 				<div className="h-1/5 w-2/5">
-					<h2 className="align-center mb-4 text-2xl">勉強の記録</h2>
+					<h2 className="mb-4 text-center text-2xl">勉強の記録</h2>
 					<Timeline userid={id && id.toString()} />
 				</div>
 				<div className="h-1/5 w-2/5">
-					<h2 className="align-center mb-4 text-2xl">目標</h2>
+					<h2 className="mb-4 text-center text-2xl">目標</h2>
 					<GoalList userid={id && id.toString()} />
 				</div>
 			</div>

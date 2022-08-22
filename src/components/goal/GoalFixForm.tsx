@@ -33,8 +33,7 @@ const GoalFixForm: React.FC<Props> = ({
 		setComment(defaultComment)
 	}, [defaultTitle, defaultGoalDate, defaultComment]) //propsからuseStateに入れるときはこれしないといけないみたいなやつ
 
-	function handleSubmit(e: any) {
-		e.preventDefault()
+	function handleSubmit() {
 		if (title === "" || !/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(goalDate)) {
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return
