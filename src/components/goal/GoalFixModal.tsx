@@ -1,9 +1,9 @@
 import { Modal } from "antd"
-import { GoalType } from "../../types/goal"
+import type { Goal } from "../../types/goal"
 import GoalFixForm from "./GoalFixForm"
 
 type Props = {
-	goal: GoalType
+	goal: Goal
 	shoudShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void
 }

@@ -1,16 +1,16 @@
 import { List, Button } from "antd"
-import axios from "axios"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { QuizType } from "src/types/memorize"
+import { getQuiz } from "src/components/apis/memorize"
+import type { Quiz } from "src/types/memorize"
 
 type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解
 
 const Memorize: NextPage = () => {
 	const router = useRouter()
 	const id = router.query.memorizeId
-	const [data, setData] = useState<QuizType[]>()
+	const [data, setData] = useState<Quiz[]>()
 	const [count, setCount] = useState(0)
 	const [judge, setJudge] = useState<Judge>(0)
 
@@ -32,13 +32,8 @@ const Memorize: NextPage = () => {
 		if (!router.isReady) {
 			return
 		}
-		axios
-			.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes/" + id + "/quiz")
-			.then((res) => {
-				setData(res.data)
-				console.log(res.data)
-			})
-			.catch((err) => alert(err))
+
+		setData(getQuiz(id)) //react queryでなんとかする
 	}, [router.query])
 
 	return (

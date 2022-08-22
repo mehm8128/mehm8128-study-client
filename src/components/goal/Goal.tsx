@@ -3,14 +3,14 @@ import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
-import { GoalType } from "../../types/goal"
+import type { Goal } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
 import { UserContext } from "src/components/UserProvider"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
 
 type Props = {
-	goal: GoalType
+	goal: Goal
 }
 const Goal: React.FC<Props> = (props) => {
 	const router = useRouter()

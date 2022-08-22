@@ -1,19 +1,24 @@
-export interface MemorizeType {
+export interface Memorize {
 	id: string
 	name: string
-	words: WordType[]
+	words: Word[]
 	createdAt: string
 	updatedAt: string
 }
 
-export interface WordType {
+export interface Word {
 	id: string
 	word: string
 	wordJp: string
 	createdAt: string
 }
 
-export interface QuizType {
-	answer: WordType
-	choices: WordType[]
+export interface WordRequest {
+	word: string
+	wordJp: string
+}
+
+export interface Quiz {
+	answer: Word
+	choices: Word[]
 }

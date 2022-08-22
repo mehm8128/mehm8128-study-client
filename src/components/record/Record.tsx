@@ -4,14 +4,14 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 
-import { RecordType } from "../../types/record"
+import type { Record } from "../../types/record"
 import { UserContext } from "../UserProvider"
 import RecordFixModal from "./RecordFixModal"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
 
 type Props = {
-	record: RecordType
+	record: Record
 }
 const Record: React.FC<Props> = (props) => {
 	const router = useRouter()

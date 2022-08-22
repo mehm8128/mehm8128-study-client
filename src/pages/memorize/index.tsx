@@ -1,20 +1,15 @@
 import { List } from "antd"
-import axios from "axios"
 
 import type { NextPage } from "next"
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import type { MemorizeType } from "../../types/memorize"
+import type { Memorize } from "../../types/memorize"
+import { getMemorizes } from "src/components/apis/memorize"
 
 const MemorizePortal: NextPage = () => {
-	const [memorizes, setMemorizes] = useState<MemorizeType[]>()
+	const [memorizes, setMemorizes] = useState<Memorize[]>()
 	useEffect(() => {
-		axios
-			.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes")
-			.then((res) => {
-				setMemorizes(res.data)
-			})
-			.catch((err) => alert(err))
+		setMemorizes(getMemorizes()) //react queryでなんとかする
 	}, [])
 
 	return (

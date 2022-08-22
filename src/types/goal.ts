@@ -1,6 +1,6 @@
 import { GoalFavorite } from "./favorite"
 
-export interface GoalType {
+export interface Goal {
 	id: string
 	title: string
 	comment: string
