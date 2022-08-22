@@ -2,25 +2,25 @@ import { useRouter } from "next/router"
 import { useContext, useEffect } from "react"
 
 import { UserContext } from "../UserProvider"
-import Goal from "./Goal"
+import Record from "./Record"
 
 type Props = {
 	userid?: string
 }
 
-const GoalList: React.FC<Props> = (props) => {
+const Timeline: React.FC<Props> = (props) => {
 	const router = useRouter()
-	const { goals, getGoals } = useContext(UserContext)
+	const { records, getRecords } = useContext(UserContext)
 	useEffect(() => {
-		getGoals(props.userid ? props.userid : "")
+		getRecords(props.userid ? props.userid : "")
 	}, [router.asPath])
 
 	return (
 		<div className="w-full md:w-3/5">
 			<ul>
-				{goals.map((goal) => (
-					<li className="mb-4" key={goal.id}>
-						<Goal goal={goal} />
+				{records.map((record) => (
+					<li className="mb-4" key={record.id}>
+						<Record record={record} />
 					</li>
 				))}
 			</ul>
@@ -28,4 +28,4 @@ const GoalList: React.FC<Props> = (props) => {
 	)
 }
 
-export default GoalList
+export default Timeline

@@ -1,22 +1,15 @@
-import { Flex, Box, Heading } from "@chakra-ui/react"
-
 import GoalList from "../goal/GoalList"
 import GoalSettingForm from "../goal/GoalSettingForm"
 
 const GoalListContainer: React.FC = () => {
 	return (
-		<>
-			<Flex
-				direction={{ base: "column-reverse", md: "row" }}
-				justifyContent="space-around"
-			>
-				<GoalList w={{ base: "100%", md: "60%" }} />
-				<Box borderWidth={2} h={500} p={8} w={{ base: "100%", md: "30%" }}>
-					<Heading>目標の設定</Heading>
-					<GoalSettingForm />
-				</Box>
-			</Flex>
-		</>
+		<div className="flex flex-col-reverse justify-around p-4 md:flex-row">
+			<GoalList />
+			<div className="md:w-3/10 h-4/5 w-full border-2 p-8">
+				<h2>目標の設定</h2>
+				<GoalSettingForm />
+			</div>
+		</div>
 	)
 }
 

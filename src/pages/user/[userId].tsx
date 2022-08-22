@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react"
 import UserIntro from "src/components/UserIntro"
 import { UserContext } from "src/components/UserProvider"
 import GoalList from "src/components/goal/GoalList"
-import TimeLine from "src/components/record/TimeLine"
+import Timeline from "src/components/record/Timeline"
 import { User } from "src/types/user"
 
 const User: NextPage = () => {
@@ -35,7 +35,7 @@ const User: NextPage = () => {
 						<Heading mb={4} textAlign="center">
 							勉強の記録
 						</Heading>
-						<TimeLine
+						<Timeline
 							h="full"
 							overflowY="scroll"
 							p={2}
