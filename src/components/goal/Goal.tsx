@@ -1,21 +1,9 @@
-import {
-	Avatar,
-	Box,
-	Button,
-	Center,
-	Flex,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Text,
-	useDisclosure,
-} from "@chakra-ui/react"
+import { Avatar, Button, Modal } from "antd"
 import axios from "axios"
+import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { GoalType } from "../../types/goal"
-import LinkComponent from "../common/LinkComponent"
 import GoalFixModal from "./GoalFixModal"
 import { UserContext } from "src/components/UserProvider"
 import { createdByToString } from "src/utils/createdByToString"
@@ -27,7 +15,13 @@ type Props = {
 const Goal: React.FC<Props> = (props) => {
 	const router = useRouter()
 	const { me, getGoals, users } = useContext(UserContext)
-	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
+	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
+
+	function handleClick() {
+		setShouldShowFixModal(true)
+		setShouldShowMenuModal(false)
+	}
 	function handleComplete() {
 		axios
 			.put(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id, {
@@ -52,65 +46,71 @@ const Goal: React.FC<Props> = (props) => {
 			.catch((err) => alert(err))
 	}
 	function handleDelete() {
-		if (me.id === props.goal.createdBy) {
-			axios
-				.delete(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id)
-				.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
-				.catch((err) => alert(err))
-		}
+		axios
+			.delete(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id)
+			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+			.catch((err) => alert(err))
+		setShouldShowMenuModal(false)
 	}
 	return (
 		<>
-			<Box borderWidth={2} p={2}>
-				<Flex justifyContent="space-between">
-					<LinkComponent href={"/user/" + props.goal.createdBy}>
-						<Center>
-							<Avatar
-								mr={2}
-								name={createdByToString(props.goal.createdBy, users)}
-								src={""}
-							></Avatar>
-							<Text fontSize={20}>
+			<div className="border-2 p-2">
+				<div className="flex justify-between">
+					<Link passHref href={"/user/" + props.goal.createdBy}>
+						<div className="flex items-center justify-center">
+							<Avatar className="mr-2">
+								{createdByToString(props.goal.createdBy, users).substring(0, 1)}
+							</Avatar>
+							<span className="text-lg text-xl">
 								{createdByToString(props.goal.createdBy, users)}
-							</Text>
-						</Center>
-					</LinkComponent>
-					<Flex alignItems="center">
-						<Text mr={4}>{dateFormatter(props.goal.createdAt)}</Text>
-						{me.id === props.goal.createdBy ? (
-							<>
-								<Menu>
-									<MenuButton
-										_hover={{ backgroundColor: "gray.200" }}
-										borderRadius="50%"
-										h={12}
-										opacity="50%"
-										w={12}
+							</span>
+						</div>
+					</Link>
+					<div className="flex">
+						<div className="flex items-center">
+							<p className="mr-2">{dateFormatter(props.goal.createdAt)}</p>
+							{me.id === props.goal.createdBy ? (
+								<>
+									<Button
+										className="border-full text-12 w-12 font-bold"
+										type="text"
+										onClick={() => setShouldShowMenuModal(true)}
 									>
-										<Center>
-											<Text fontSize={12} fontWeight="bold">
-												・・・
-											</Text>
-										</Center>
-									</MenuButton>
-									<MenuList>
-										<MenuItem onClick={onOpen}>この目標を編集する</MenuItem>
-										<MenuItem onClick={handleDelete}>
-											この目標を削除する
-										</MenuItem>
-									</MenuList>
-								</Menu>
-							</>
-						) : null}
-					</Flex>
-				</Flex>
-				<Box mb={4} ml={12}>
-					<Text>目標を設定しました！</Text>
-					<Text>{props.goal.title}</Text>
-					<Text>期限：{props.goal.goalDate}</Text>
-					<Text whiteSpace="pre-wrap">{props.goal.comment}</Text>
-				</Box>
-				<Center justifyContent="space-evenly">
+										・・・
+									</Button>
+									<Modal
+										className="absolute right-0 top-0"
+										footer={null}
+										mask={false}
+										visible={shouldShowMenuModal}
+										width={200}
+										onCancel={() => setShouldShowMenuModal(false)}
+									>
+										<ul>
+											<li>
+												<Button type="text" onClick={handleClick}>
+													この目標を編集する
+												</Button>
+											</li>
+											<li>
+												<Button type="text" onClick={handleDelete}>
+													この目標を削除する
+												</Button>
+											</li>
+										</ul>
+									</Modal>
+								</>
+							) : null}
+						</div>
+					</div>
+				</div>
+				<div className="mb-4 ml-12">
+					<p>目標を設定しました！</p>
+					<h3>{props.goal.title}</h3>
+					<p>期限：{props.goal.goalDate}</p>
+					<p className="whitespace-pre-wrap">{props.goal.comment}</p>
+				</div>
+				<div className="flex items-center justify-evenly">
 					{props.goal.isCompleted ? (
 						<Button disabled={true}>完了済み</Button>
 					) : (
@@ -119,9 +119,13 @@ const Goal: React.FC<Props> = (props) => {
 					<Button onClick={handleFavorite}>
 						いいね！ {props.goal.favoriteNum}
 					</Button>
-				</Center>
-			</Box>
-			<GoalFixModal goal={props.goal} isOpen={isOpen} onClose={onClose} />
+				</div>
+			</div>
+			<GoalFixModal
+				goal={props.goal}
+				setShouldShowFixModal={setShouldShowFixModal}
+				shoudShowFixModal={shouldShowFixModal}
+			/>
 		</>
 	)
 }

@@ -1,16 +1,11 @@
-import {
-	Box,
-	Button,
-	Flex,
-	Heading,
-	Input,
-	Textarea,
-} from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 
 import { UserContext } from "../UserProvider"
+
+const { TextArea } = Input
 
 const SignUp: React.FC = () => {
 	const router = useRouter()
@@ -20,8 +15,7 @@ const SignUp: React.FC = () => {
 	const [passwordConfirm, setPasswordConfirm] = useState("")
 	const [description, setDescription] = useState("")
 
-	function handleRegister(e: any) {
-		e.preventDefault()
+	function handleRegister() {
 		if (
 			password !== passwordConfirm ||
 			userName.length === 0 ||
@@ -50,45 +44,43 @@ const SignUp: React.FC = () => {
 	}
 
 	return (
-		<>
-			<Box
-				borderColor="gray.200"
-				borderWidth={4}
-				mb={{ base: 12 }}
-				w={{ base: "100%", md: "40%" }}
-			>
-				<Heading mt={2} textAlign="center">
-					新規登録
-				</Heading>
-				<Box as="form" h="90%" onSubmit={handleRegister}>
-					<Flex flexDirection="column" h="100%" justifyContent="space-around">
-						<Input
-							placeholder="ユーザー名"
-							value={userName}
-							onChange={(e) => setUserName(e.target.value)}
-						/>
-						<Input
-							placeholder="パスワード"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-						<Input
-							placeholder="パスワード(確認)"
-							value={passwordConfirm}
-							onChange={(e) => setPasswordConfirm(e.target.value)}
-						/>
-						<Textarea
-							h={32}
-							placeholder="自己紹介"
-							resize="none"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-						/>
-						<Button type="submit">登録</Button>
-					</Flex>
-				</Box>
-			</Box>
-		</>
+		<div className="mb-12 w-full border border-4 border-gray-200 px-4 md:w-2/5">
+			<h1 className="mt-2 text-center text-xl">新規登録</h1>
+			<Form className="py-2" onFinish={handleRegister}>
+				<Form.Item label="ユーザー名" name="username">
+					<Input
+						placeholder="ユーザー名"
+						value={userName}
+						onChange={(e) => setUserName(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item label="パスワード" name="password">
+					<Input
+						placeholder="パスワード"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item label="パスワード(確認)" name="passwordConfirm">
+					<Input
+						placeholder="パスワード(確認)"
+						value={passwordConfirm}
+						onChange={(e) => setPasswordConfirm(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item label="自己紹介" name="description">
+					<TextArea
+						placeholder="自己紹介"
+						rows={5}
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button htmlType="submit">登録</Button>
+				</Form.Item>
+			</Form>
+		</div>
 	)
 }
 

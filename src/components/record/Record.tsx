@@ -1,23 +1,11 @@
-import {
-	Avatar,
-	Box,
-	Button,
-	Center,
-	Flex,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Text,
-	useDisclosure,
-} from "@chakra-ui/react"
+import { Avatar, Button, Modal } from "antd"
 import axios from "axios"
+import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 import { RecordType } from "../../types/record"
 import { UserContext } from "../UserProvider"
-import LinkComponent from "../common/LinkComponent"
 import RecordFixModal from "./RecordFixModal"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
@@ -28,7 +16,13 @@ type Props = {
 const Record: React.FC<Props> = (props) => {
 	const router = useRouter()
 	const { me, getRecords, users } = useContext(UserContext)
-	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
+	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
+
+	function handleClick() {
+		setShouldShowFixModal(true)
+		setShouldShowMenuModal(false)
+	}
 	function handleFavorite() {
 		axios
 			.put(
@@ -43,76 +37,87 @@ const Record: React.FC<Props> = (props) => {
 			.catch((err) => alert(err))
 	}
 	function handleDelete() {
-		if (me.id === props.record.createdBy) {
-			axios
-				.delete(process.env.NEXT_PUBLIC_URL + "/api/records/" + props.record.id)
-				.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
-				.catch((err) => alert(err))
-		}
+		axios
+			.delete(process.env.NEXT_PUBLIC_URL + "/api/records/" + props.record.id)
+			.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
+			.catch((err) => alert(err))
+		setShouldShowMenuModal(false)
 	}
 	return (
 		<>
-			<Box borderWidth={2} p={2}>
-				<Flex justifyContent="space-between">
-					<LinkComponent href={"/user/" + props.record.createdBy}>
-						<Center>
-							<Avatar
-								mr={2}
-								name={createdByToString(props.record.createdBy, users)}
-								src={""}
-							></Avatar>
-							<Text fontSize={20}>
+			<div className="border-2 p-2">
+				<div className="flex justify-between">
+					<Link passHref href={"/user/" + props.record.createdBy}>
+						<div className="flex items-center justify-center">
+							<Avatar className="mr-2">
+								{createdByToString(props.record.createdBy, users).substring(
+									0,
+									1
+								)}
+							</Avatar>
+							<span className="text-lg text-xl">
 								{createdByToString(props.record.createdBy, users)}
-							</Text>
-						</Center>
-					</LinkComponent>
-					<Flex>
-						<Flex alignItems="center">
-							<Text mr={4}>{dateFormatter(props.record.createdAt)}</Text>
+							</span>
+						</div>
+					</Link>
+					<div className="flex">
+						<div className="flex items-center">
+							<p className="mr-2">{dateFormatter(props.record.createdAt)}</p>
 							{me.id === props.record.createdBy ? (
-								<>
-									<Menu>
-										<MenuButton
-											_hover={{ backgroundColor: "gray.200" }}
-											borderRadius="50%"
-											h={12}
-											opacity="50%"
-											w={12}
-										>
-											<Center>
-												<Text fontSize={12} fontWeight="bold">
-													・・・
-												</Text>
-											</Center>
-										</MenuButton>
-										<MenuList>
-											<MenuItem onClick={onOpen}>この記録を編集する</MenuItem>
-											<MenuItem onClick={handleDelete}>
-												この記録を削除する
-											</MenuItem>
-										</MenuList>
-									</Menu>
-								</>
+								<div className="relative">
+									<Button
+										className="border-full text-12 relative w-12 font-bold"
+										type="text"
+										onClick={() => setShouldShowMenuModal(true)}
+									>
+										・・・
+									</Button>
+									<Modal
+										className="absolute right-0 top-0"
+										footer={null}
+										mask={false}
+										visible={shouldShowMenuModal}
+										width={200}
+										onCancel={() => setShouldShowMenuModal(false)}
+									>
+										<ul>
+											<li>
+												<Button type="text" onClick={handleClick}>
+													この記録を編集する
+												</Button>
+											</li>
+											<li>
+												<Button type="text" onClick={handleDelete}>
+													この記録を削除する
+												</Button>
+											</li>
+										</ul>
+									</Modal>
+								</div>
 							) : null}
-						</Flex>
-					</Flex>
-				</Flex>
-				<Box mb={4} ml={12}>
-					<Text>{props.record.title}</Text>
-					<Text>
+						</div>
+					</div>
+				</div>
+				<div className="mb-4 ml-12">
+					<h3>{props.record.title}</h3>
+					<p>
 						{props.record.time ? props.record.time + "分、" : ""}
 						{props.record.page ? props.record.page + "ページ " : ""}
 						勉強しました！
-					</Text>
-					<Text whiteSpace="pre-wrap">{props.record.comment}</Text>
-				</Box>
-				<Center justifyContent="space-evenly">
+					</p>
+					<p className="whitespace-pre-wrap">{props.record.comment}</p>
+				</div>
+				<div className="flex items-center justify-evenly">
 					<Button onClick={handleFavorite}>
 						いいね！ {props.record.favoriteNum}
 					</Button>
-				</Center>
-			</Box>
-			<RecordFixModal isOpen={isOpen} record={props.record} onClose={onClose} />
+				</div>
+			</div>
+			<RecordFixModal
+				record={props.record}
+				setShouldShowFixModal={setShouldShowFixModal}
+				shoudShowFixModal={shouldShowFixModal}
+			/>
 		</>
 	)
 }

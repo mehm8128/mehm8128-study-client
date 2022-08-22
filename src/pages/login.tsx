@@ -1,5 +1,3 @@
-import { Flex, Heading } from "@chakra-ui/react"
-
 import type { NextPage } from "next"
 import Login from "../components/login/Login"
 import SignUp from "../components/login/SignUp"
@@ -7,19 +5,11 @@ import SignUp from "../components/login/SignUp"
 const LoginPage: NextPage = () => {
 	return (
 		<>
-			<Heading mt={4} textAlign="center">
-				タイトル
-			</Heading>
-			<Flex
-				direction={{ base: "column", md: "row" }}
-				h={500}
-				justifyContent="space-around"
-				mt={12}
-				mx={4}
-			>
+			<h1 className="mt-4 text-center text-2xl">タイトル</h1>
+			<div className="mx-4 mt-12 flex h-2/3 flex-col justify-around md:flex-row">
 				<Login />
 				<SignUp />
-			</Flex>
+			</div>
 		</>
 	)
 }

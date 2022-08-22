@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Input } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
@@ -9,8 +9,8 @@ const Login: React.FC = () => {
 	const { login } = useContext(UserContext)
 	const [userName, setUserName] = useState("")
 	const [password, setPassword] = useState("")
-	function handleLogin(e: any) {
-		e.preventDefault()
+
+	function handleLogin() {
 		axios
 			.post(
 				process.env.NEXT_PUBLIC_URL + "/api/users/login",
@@ -32,33 +32,28 @@ const Login: React.FC = () => {
 			.catch((err) => alert(err))
 	}
 	return (
-		<>
-			<Box
-				borderColor="gray.200"
-				borderWidth={4}
-				h="70%"
-				w={{ base: "100%", md: "40%" }}
-			>
-				<Heading mt={2} textAlign="center">
-					ログイン
-				</Heading>
-				<Box as="form" h="80%" onSubmit={handleLogin}>
-					<Flex flexDirection="column" h="100%" justifyContent="space-around">
-						<Input
-							placeholder="ユーザー名"
-							value={userName}
-							onChange={(e) => setUserName(e.target.value)}
-						/>
-						<Input
-							placeholder="パスワード"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-						<Button type="submit">ログイン</Button>
-					</Flex>
-				</Box>
-			</Box>
-		</>
+		<div className="w-full border border-4 border-gray-200 px-4 md:w-2/5">
+			<h1 className="mt-2 text-center text-xl">ログイン</h1>
+			<Form className="py-2" onFinish={handleLogin}>
+				<Form.Item label="ユーザー名" name="username">
+					<Input
+						placeholder="ユーザー名"
+						value={userName}
+						onChange={(e) => setUserName(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item label="パスワード" name="password">
+					<Input
+						placeholder="パスワード"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button htmlType="submit">ログイン</Button>
+				</Form.Item>
+			</Form>
+		</div>
 	)
 }
 

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Text, Textarea } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 
@@ -10,8 +10,10 @@ type Props = {
 	defaultGoalDate: string
 	defaultComment: string
 	id: string
-	onClose: () => void
+	setShouldShowFixModal: (value: boolean) => void
 }
+
+const { TextArea } = Input
 
 const GoalFixForm: React.FC<Props> = ({
 	isCompleted,
@@ -19,7 +21,7 @@ const GoalFixForm: React.FC<Props> = ({
 	defaultGoalDate,
 	defaultComment,
 	id,
-	onClose,
+	setShouldShowFixModal,
 }) => {
 	const { me, getGoals } = useContext(UserContext)
 	const [title, setTitle] = useState("")
@@ -31,8 +33,7 @@ const GoalFixForm: React.FC<Props> = ({
 		setComment(defaultComment)
 	}, [defaultTitle, defaultGoalDate, defaultComment]) //propsからuseStateに入れるときはこれしないといけないみたいなやつ
 
-	function handleSubmit(e: any) {
-		e.preventDefault()
+	function handleSubmit() {
 		if (title === "" || !/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(goalDate)) {
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return
@@ -50,45 +51,39 @@ const GoalFixForm: React.FC<Props> = ({
 				setTitle("")
 				setGoalDate("")
 				setComment("")
-				onClose()
+				setShouldShowFixModal(false)
 			})
 			.catch((err) => alert(err))
 	}
 
 	return (
-		<>
-			<Box as="form" h="100%" onSubmit={handleSubmit}>
-				<Flex flexDirection="column" h="80%" justifyContent="space-around">
-					<Text>タイトル</Text>
-					<Input
-						placeholder="必須項目"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<Text>期限</Text>
-					<Input
-						placeholder="YYYY-MM-DD"
-						value={goalDate}
-						onChange={(e) => setGoalDate(e.target.value)}
-					/>
-					<Text>コメント</Text>
-					<Textarea
-						placeholder="任意"
-						resize="none"
-						value={comment}
-						onChange={(e) => setComment(e.target.value)}
-					/>
-					<Flex justifyContent="space-around" mt={4}>
-						<Button colorScheme="blue" type="submit" w={32}>
-							決定
-						</Button>
-						<Button w={32} onClick={onClose}>
-							戻る
-						</Button>
-					</Flex>
-				</Flex>
-			</Box>
-		</>
+		<Form onFinish={handleSubmit}>
+			<Form.Item label="タイトル" name="title">
+				<Input
+					placeholder="必須項目"
+					value={title}
+					onChange={(e) => setTitle(e.target.value)}
+				/>
+			</Form.Item>
+			<Form.Item label="期限" name="due">
+				<Input
+					placeholder="YYYY-MM-DD"
+					value={goalDate}
+					onChange={(e) => setGoalDate(e.target.value)}
+				/>
+			</Form.Item>
+			<Form.Item label="コメント" name="comment">
+				<TextArea
+					placeholder="任意"
+					rows={4}
+					value={comment}
+					onChange={(e) => setComment(e.target.value)}
+				/>
+			</Form.Item>
+			<Form.Item>
+				<Button htmlType="submit">目標を設定</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 

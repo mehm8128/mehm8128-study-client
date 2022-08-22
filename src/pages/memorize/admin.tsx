@@ -1,8 +1,10 @@
-import { Box, Button, Flex, Heading, Input, Select } from "@chakra-ui/react"
+import { Select, Input, Form, Button } from "antd"
 import axios from "axios"
 import type { NextPage } from "next"
 import { useEffect, useState } from "react"
 import type { MemorizeType } from "../../types/memorize"
+
+const { Option } = Select
 
 const Admin: NextPage = () => {
 	const [newWord, setNewWord] = useState<string>("")
@@ -10,7 +12,6 @@ const Admin: NextPage = () => {
 	const [memorizes, setMemorizes] = useState<MemorizeType[]>()
 	const [targetMemorize, setTargetMemorize] = useState<string>()
 	function handleRegister(e: any) {
-		e.preventDefault()
 		if (!/^[a-zA-Z]+$/.test(newWord)) {
 			alert("英単語はアルファベットで入力してください")
 			return
@@ -41,41 +42,44 @@ const Admin: NextPage = () => {
 	}, [])
 
 	return (
-		<>
-			<Box p="4" w={{ base: "", md: "20%" }}>
-				<Heading as="h1" pb="2" px="2" size="lg">
-					新しい単語を追加
-				</Heading>
-				<Box as="form" onSubmit={handleRegister}>
-					<Flex direction="column" gap="4">
-						<Select
-							placeholder="追加先"
-							value={targetMemorize}
-							onChange={(e) => setTargetMemorize(e.target.value)}
-						>
-							{memorizes !== undefined
-								? memorizes.map((memorize) => (
-										<option key={memorize.id} value={memorize.id}>
-											{memorize.name}
-										</option>
-								  ))
-								: null}
-						</Select>
-						<Input
-							placeholder="追加する単語(英語)"
-							value={newWord}
-							onChange={(e) => setNewWord(e.target.value)}
-						/>
-						<Input
-							placeholder="追加する単語(日本語)"
-							value={newWordJp}
-							onChange={(e) => setNewWordJp(e.target.value)}
-						/>
-						<Button type="submit">追加</Button>
-					</Flex>
-				</Box>
-			</Box>
-		</>
+		<div className="p-4 md:w-1/5">
+			<h1 className="px-2 pb-2 text-2xl">新しい単語を追加</h1>
+			<Form onFinish={handleRegister}>
+				<Form.Item label="追加先" name="memorize">
+					<Select
+						showSearch
+						placeholder="追加先"
+						value={targetMemorize}
+						onChange={(value) => setTargetMemorize(value)}
+					>
+						{memorizes !== undefined
+							? memorizes.map((memorize) => (
+									<Option key={memorize.id} value={memorize.id}>
+										{memorize.name}
+									</Option>
+							  ))
+							: null}
+					</Select>
+				</Form.Item>
+				<Form.Item label="追加する単語(英語)" name="english">
+					<Input
+						placeholder="追加する単語(英語)"
+						value={newWord}
+						onChange={(e) => setNewWord(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item label="追加する単語(日本語)" name="japanese">
+					<Input
+						placeholder="追加する単語(日本語)"
+						value={newWordJp}
+						onChange={(e) => setNewWordJp(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button htmlType="submit">追加</Button>
+				</Form.Item>
+			</Form>
+		</div>
 	)
 }
 

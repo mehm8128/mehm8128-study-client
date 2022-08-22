@@ -1,4 +1,3 @@
-import { Box, Flex, Heading } from "@chakra-ui/react"
 import axios from "axios"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
@@ -6,7 +5,7 @@ import { useContext, useEffect, useState } from "react"
 import UserIntro from "src/components/UserIntro"
 import { UserContext } from "src/components/UserProvider"
 import GoalList from "src/components/goal/GoalList"
-import TimeLine from "src/components/record/TimeLine"
+import Timeline from "src/components/record/Timeline"
 import { User } from "src/types/user"
 
 const User: NextPage = () => {
@@ -27,35 +26,19 @@ const User: NextPage = () => {
 	}, [router.query])
 
 	return (
-		<>
-			<Box h="full">
-				{user !== undefined ? <UserIntro user={user} /> : null}
-				<Flex>
-					<Box h={500} width="50%">
-						<Heading mb={4} textAlign="center">
-							勉強の記録
-						</Heading>
-						<TimeLine
-							h="full"
-							overflowY="scroll"
-							p={2}
-							userid={id && id.toString()}
-						/>
-					</Box>
-					<Box h={500} width="50%">
-						<Heading mb={4} textAlign="center">
-							目標
-						</Heading>
-						<GoalList
-							h="full"
-							overflowY="scroll"
-							p={2}
-							userid={id && id.toString()}
-						/>
-					</Box>
-				</Flex>
-			</Box>
-		</>
+		<div className="h-full">
+			{user !== undefined ? <UserIntro user={user} /> : null}
+			<div className="flex justify-around">
+				<div className="h-1/5 w-2/5">
+					<h2 className="mb-4 text-center text-2xl">勉強の記録</h2>
+					<Timeline userid={id && id.toString()} />
+				</div>
+				<div className="h-1/5 w-2/5">
+					<h2 className="mb-4 text-center text-2xl">目標</h2>
+					<GoalList userid={id && id.toString()} />
+				</div>
+			</div>
+		</div>
 	)
 }
 

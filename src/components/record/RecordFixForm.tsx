@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, Text, Textarea } from "@chakra-ui/react"
+import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "src/components/UserProvider"
@@ -9,8 +9,10 @@ type Props = {
 	defaultTime: string
 	defaultComment: string
 	id: string
-	onClose: () => void
+	setShouldShowFixModal: (value: boolean) => void
 }
+
+const { TextArea } = Input
 
 const RecordForm: React.FC<Props> = ({
 	defaultTitle,
@@ -18,7 +20,7 @@ const RecordForm: React.FC<Props> = ({
 	defaultTime,
 	defaultComment,
 	id = "",
-	onClose,
+	setShouldShowFixModal,
 }) => {
 	const { me, getRecords } = useContext(UserContext)
 	const [title, setTitle] = useState("")
@@ -32,8 +34,7 @@ const RecordForm: React.FC<Props> = ({
 		setComment(defaultComment)
 	}, [defaultTitle, defaultPage, defaultTime, defaultComment]) //propsからuseStateに入れるときはこれしないといけないみたいなやつ
 
-	function handleSubmit(e: any) {
-		e.preventDefault()
+	function handleSubmit() {
 		if (title === "" || (!/[0-9]+/.test(time) && !/[0-9]+/.test(page))) {
 			alert("タイトルは必須です。ページと時間は半角数字で入力してください。")
 			return
@@ -52,49 +53,46 @@ const RecordForm: React.FC<Props> = ({
 				setPage("")
 				setTime("")
 				setComment("")
-				onClose()
+				setShouldShowFixModal(false)
 			})
 			.catch((err) => alert(err))
 	}
 
 	return (
-		<Box as="form" h="100%" onSubmit={handleSubmit}>
-			<Flex flexDirection="column" h="80%" justifyContent="space-around">
-				<Text>タイトル</Text>
+		<Form onFinish={handleSubmit}>
+			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 				/>
-				<Text>ページ数</Text>
+			</Form.Item>
+			<Form.Item label="ページ数" name="pages">
 				<Input
 					placeholder="半角数字(任意)"
 					value={page}
 					onChange={(e) => setPage(e.target.value)}
 				/>
-				<Text>時間</Text>
+			</Form.Item>
+			<Form.Item label="時間" name="time">
 				<Input
 					placeholder="半角数字(任意)"
 					value={time}
 					onChange={(e) => setTime(e.target.value)}
 				/>
-				<Text>コメント</Text>
-				<Textarea
+			</Form.Item>
+			<Form.Item label="コメント" name="comment">
+				<TextArea
 					placeholder="任意"
-					resize="none"
+					rows={4}
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
 				/>
-				<Flex justifyContent="space-around" mt={4}>
-					<Button colorScheme="blue" type="submit" w={32}>
-						決定
-					</Button>
-					<Button w={32} onClick={onClose}>
-						戻る
-					</Button>
-				</Flex>
-			</Flex>
-		</Box>
+			</Form.Item>
+			<Form.Item>
+				<Button htmlType="submit">記録する</Button>
+			</Form.Item>
+		</Form>
 	)
 }
 

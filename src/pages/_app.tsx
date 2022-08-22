@@ -1,6 +1,5 @@
 import "../styles/globals.css"
-
-import { ChakraProvider } from "@chakra-ui/react"
+import "windi.css"
 
 import type { AppProps } from "next/app"
 import Header from "../components/common/Header"
@@ -9,12 +8,10 @@ import { UserProvider } from "src/components/UserProvider"
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<ChakraProvider>
-			<UserProvider>
-				<Header />
-				<Component {...pageProps} />
-			</UserProvider>
-		</ChakraProvider>
+		<UserProvider>
+			<Header />
+			<Component {...pageProps} />
+		</UserProvider>
 	)
 }
 
