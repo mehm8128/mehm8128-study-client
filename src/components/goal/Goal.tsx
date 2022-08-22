@@ -1,21 +1,9 @@
-import {
-	Avatar,
-	Box,
-	Button,
-	Center,
-	Flex,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Text,
-	useDisclosure,
-} from "@chakra-ui/react"
+import { useDisclosure } from "@chakra-ui/react"
 import axios from "axios"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext } from "react"
 import { GoalType } from "../../types/goal"
-import LinkComponent from "../common/LinkComponent"
 import GoalFixModal from "./GoalFixModal"
 import { UserContext } from "src/components/UserProvider"
 import { createdByToString } from "src/utils/createdByToString"
@@ -61,66 +49,79 @@ const Goal: React.FC<Props> = (props) => {
 	}
 	return (
 		<>
-			<Box borderWidth={2} p={2}>
-				<Flex justifyContent="space-between">
-					<LinkComponent href={"/user/" + props.goal.createdBy}>
-						<Center>
-							<Avatar
-								mr={2}
-								name={createdByToString(props.goal.createdBy, users)}
-								src={""}
-							></Avatar>
-							<Text fontSize={20}>
+			<div className="border-2 p-2">
+				<div className="flex justify-between">
+					<Link passHref href={"/user/" + props.goal.createdBy}>
+						<div className="flex items-center justify-center">
+							<div className="avatar placeholder mr-2">
+								<div className="w-12 rounded-full bg-green-300">
+									{createdByToString(props.goal.createdBy, users).substring(
+										0,
+										1
+									)}
+								</div>
+							</div>
+							<span className="text-lg text-xl">
 								{createdByToString(props.goal.createdBy, users)}
-							</Text>
-						</Center>
-					</LinkComponent>
-					<Flex alignItems="center">
-						<Text mr={4}>{dateFormatter(props.goal.createdAt)}</Text>
-						{me.id === props.goal.createdBy ? (
-							<>
-								<Menu>
-									<MenuButton
-										_hover={{ backgroundColor: "gray.200" }}
-										borderRadius="50%"
-										h={12}
-										opacity="50%"
-										w={12}
+							</span>
+						</div>
+					</Link>
+					<div className="flex">
+						<div className="flex items-center">
+							<p className="mr-2">{dateFormatter(props.goal.createdAt)}</p>
+							{me.id === props.goal.createdBy ? (
+								<>
+									<label
+										className="border-full text-12 btn modal-button w-12 font-bold"
+										htmlFor="goalMenu"
 									>
-										<Center>
-											<Text fontSize={12} fontWeight="bold">
-												・・・
-											</Text>
-										</Center>
-									</MenuButton>
-									<MenuList>
-										<MenuItem onClick={onOpen}>この目標を編集する</MenuItem>
-										<MenuItem onClick={handleDelete}>
-											この目標を削除する
-										</MenuItem>
-									</MenuList>
-								</Menu>
-							</>
-						) : null}
-					</Flex>
-				</Flex>
-				<Box mb={4} ml={12}>
-					<Text>目標を設定しました！</Text>
-					<Text>{props.goal.title}</Text>
-					<Text>期限：{props.goal.goalDate}</Text>
-					<Text whiteSpace="pre-wrap">{props.goal.comment}</Text>
-				</Box>
-				<Center justifyContent="space-evenly">
+										・・・
+									</label>
+									<input
+										className="modal-toggle"
+										id="goalMenu"
+										type="checkbox"
+									/>
+									<label className="modal" htmlFor="goalMenu">
+										<ul className="modal-box menu">
+											<li>
+												<label htmlFor="goalMenu" onClick={onOpen}>
+													この目標を編集する
+												</label>
+											</li>
+											<li>
+												<label htmlFor="goalMenu" onClick={handleDelete}>
+													この目標を削除する
+												</label>
+											</li>
+										</ul>
+									</label>
+								</>
+							) : null}
+						</div>
+					</div>
+				</div>
+				<div className="mb-4 ml-12">
+					<p>目標を設定しました！</p>
+					<h3>{props.goal.title}</h3>
+					<p>期限：{props.goal.goalDate}</p>
+					<p className="whitespace-pre-wrap">{props.goal.comment}</p>
+				</div>
+				<div className="flex items-center justify-evenly">
 					{props.goal.isCompleted ? (
-						<Button disabled={true}>完了済み</Button>
+						<button className="btn" disabled={true}>
+							完了済み
+						</button>
 					) : (
-						<Button onClick={handleComplete}>この目標を完了する</Button>
+						<button className="btn" onClick={handleComplete}>
+							この目標を完了する
+						</button>
 					)}
-					<Button onClick={handleFavorite}>
+					<button className="btn" onClick={handleFavorite}>
 						いいね！ {props.goal.favoriteNum}
-					</Button>
-				</Center>
-			</Box>
+					</button>
+				</div>
+			</div>
 			<GoalFixModal goal={props.goal} isOpen={isOpen} onClose={onClose} />
 		</>
 	)

@@ -1,23 +1,11 @@
-import {
-	Avatar,
-	Box,
-	Button,
-	Center,
-	Flex,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Text,
-	useDisclosure,
-} from "@chakra-ui/react"
+import { useDisclosure } from "@chakra-ui/react"
 import axios from "axios"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext } from "react"
 
 import { RecordType } from "../../types/record"
 import { UserContext } from "../UserProvider"
-import LinkComponent from "../common/LinkComponent"
 import RecordFixModal from "./RecordFixModal"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
@@ -52,66 +40,73 @@ const Record: React.FC<Props> = (props) => {
 	}
 	return (
 		<>
-			<Box borderWidth={2} p={2}>
-				<Flex justifyContent="space-between">
-					<LinkComponent href={"/user/" + props.record.createdBy}>
-						<Center>
-							<Avatar
-								mr={2}
-								name={createdByToString(props.record.createdBy, users)}
-								src={""}
-							></Avatar>
-							<Text fontSize={20}>
+			<div className="border-2 p-2">
+				<div className="flex justify-between">
+					<Link passHref href={"/user/" + props.record.createdBy}>
+						<div className="flex items-center justify-center">
+							<div className="avatar placeholder mr-2">
+								<div className="w-12 rounded-full bg-green-300">
+									{createdByToString(props.record.createdBy, users).substring(
+										0,
+										1
+									)}
+								</div>
+							</div>
+							<span className="text-lg text-xl">
 								{createdByToString(props.record.createdBy, users)}
-							</Text>
-						</Center>
-					</LinkComponent>
-					<Flex>
-						<Flex alignItems="center">
-							<Text mr={4}>{dateFormatter(props.record.createdAt)}</Text>
+							</span>
+						</div>
+					</Link>
+					<div className="flex">
+						<div className="flex items-center">
+							<p className="mr-2">{dateFormatter(props.record.createdAt)}</p>
 							{me.id === props.record.createdBy ? (
 								<>
-									<Menu>
-										<MenuButton
-											_hover={{ backgroundColor: "gray.200" }}
-											borderRadius="50%"
-											h={12}
-											opacity="50%"
-											w={12}
-										>
-											<Center>
-												<Text fontSize={12} fontWeight="bold">
-													・・・
-												</Text>
-											</Center>
-										</MenuButton>
-										<MenuList>
-											<MenuItem onClick={onOpen}>この記録を編集する</MenuItem>
-											<MenuItem onClick={handleDelete}>
-												この記録を削除する
-											</MenuItem>
-										</MenuList>
-									</Menu>
+									<label
+										className="border-full text-12 btn modal-button w-12 font-bold"
+										htmlFor="recordMenu"
+									>
+										・・・
+									</label>
+									<input
+										className="modal-toggle"
+										id="recordMenu"
+										type="checkbox"
+									/>
+									<label className="modal" htmlFor="recordMenu">
+										<ul className="modal-box menu">
+											<li>
+												<label htmlFor="recordMenu" onClick={onOpen}>
+													この記録を編集する
+												</label>
+											</li>
+											<li>
+												<label htmlFor="recordMenu" onClick={handleDelete}>
+													この記録を削除する
+												</label>
+											</li>
+										</ul>
+									</label>
 								</>
 							) : null}
-						</Flex>
-					</Flex>
-				</Flex>
-				<Box mb={4} ml={12}>
-					<Text>{props.record.title}</Text>
-					<Text>
+						</div>
+					</div>
+				</div>
+				<div className="mb-4 ml-12">
+					<h3>{props.record.title}</h3>
+					<p>
 						{props.record.time ? props.record.time + "分、" : ""}
 						{props.record.page ? props.record.page + "ページ " : ""}
 						勉強しました！
-					</Text>
-					<Text whiteSpace="pre-wrap">{props.record.comment}</Text>
-				</Box>
-				<Center justifyContent="space-evenly">
-					<Button onClick={handleFavorite}>
+					</p>
+					<p className="whitespace-pre-wrap">{props.record.comment}</p>
+				</div>
+				<div className="flex items-center justify-evenly">
+					<button className="btn" onClick={handleFavorite}>
 						いいね！ {props.record.favoriteNum}
-					</Button>
-				</Center>
-			</Box>
+					</button>
+				</div>
+			</div>
 			<RecordFixModal isOpen={isOpen} record={props.record} onClose={onClose} />
 		</>
 	)

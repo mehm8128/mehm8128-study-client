@@ -18,7 +18,7 @@ const Index: NextPage = () => {
 		<>
 			<div className="tabs mt-8 justify-center">
 				<button
-					className={`tab w-2/5 text-lg ${
+					className={`tab h-12 w-2/5 text-lg ${
 						currentTab === "timeline" && "border-b border-blue-300"
 					}`}
 					onClick={() => setCurrentTab("timeline")}
@@ -26,7 +26,7 @@ const Index: NextPage = () => {
 					タイムライン
 				</button>
 				<button
-					className={`tab w-2/5 text-lg ${
+					className={`tab h-12 w-2/5 text-lg ${
 						currentTab === "goals" && "border-b border-blue-300"
 					}`}
 					onClick={() => setCurrentTab("goals")}
