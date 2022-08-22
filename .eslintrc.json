@@ -41,5 +41,6 @@
 				"locale": "auto"
 			}
 		]
-	}
+	},
+	"import/no-unresolved": "off"
 }

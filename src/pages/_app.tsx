@@ -1,4 +1,5 @@
 import "../styles/globals.css"
+import "windi.css"
 
 import { ChakraProvider } from "@chakra-ui/react"
 
