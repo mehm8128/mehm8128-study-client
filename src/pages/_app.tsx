@@ -1,8 +1,9 @@
 import "../styles/globals.css"
 import "windi.css"
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import type { AppProps } from "next/app"
-import { QueryClient, QueryClientProvider } from "react-query"
+
 import { RecoilRoot } from "recoil"
 import Header from "../components/common/Header"
 import Wrapper from "src/components/common/Wrapper"

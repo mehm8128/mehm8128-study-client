@@ -1,6 +1,7 @@
+import { useQueries } from "@tanstack/react-query"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
-import { useQuery } from "react-query"
+
 import { useRecoilValue } from "recoil"
 import { fetchUser, fetchUsers } from "src/apis/user"
 import UserIntro from "src/components/UserIntro"
@@ -14,20 +15,19 @@ const User: NextPage = () => {
 	const router = useRouter()
 	const userId =
 		router.query.userId !== "me" ? paramToString(router.query.userId) : me.id
-	const { isLoading: isUsersLoading, isError: isUsersError } = useQuery(
-		["users"],
-		() => fetchUsers
-	)
-	const {
-		isLoading: isUserLoading,
-		isError: isUserError,
-		data: user,
-	} = useQuery(["user", userId], () => fetchUser(userId))
-
-	if (isUsersLoading || isUserLoading) {
+	const [
+		{ isLoading: isUsersLoading, isError: isUsersError },
+		{ isLoading: isUserLoading, isError: isUserError, data: user },
+	] = useQueries({
+		queries: [
+			{ queryKey: ["users"], queryFn: fetchUsers },
+			{ queryKey: ["user", userId], queryFn: () => fetchUser(userId) },
+		],
+	})
+	if (isUserLoading || isUsersLoading) {
 		return <div>Loading...</div>
 	}
-	if (isUsersError || isUserError) {
+	if (isUserError || isUsersError) {
 		return <div>Error!</div>
 	}
 	return (
@@ -36,11 +36,11 @@ const User: NextPage = () => {
 			<div className="flex justify-around">
 				<div className="h-1/5 w-2/5">
 					<h2 className="mb-4 text-center text-2xl">勉強の記録</h2>
-					<Timeline userid={userId.toString()} />
+					<Timeline userId={userId.toString()} />
 				</div>
 				<div className="h-1/5 w-2/5">
 					<h2 className="mb-4 text-center text-2xl">目標</h2>
-					<GoalList userid={userId.toString()} />
+					<GoalList userId={userId.toString()} />
 				</div>
 			</div>
 		</div>

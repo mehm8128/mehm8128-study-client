@@ -1,7 +1,8 @@
+import { useQuery } from "@tanstack/react-query"
 import { Select, Input, Form, Button } from "antd"
 import type { NextPage } from "next"
 import { useState } from "react"
-import { useQuery } from "react-query"
+
 import type { WordRequest } from "../../types/memorize"
 import { fetchMemorizes, postWords } from "src/apis/memorize"
 

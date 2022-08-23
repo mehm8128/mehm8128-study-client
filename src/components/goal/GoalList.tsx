@@ -1,9 +1,10 @@
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
+
 import { fetchGoals } from "../../apis/goal"
 import Goal from "./Goal"
 
 type Props = {
-	userid?: string
+	userId?: string
 }
 
 const GoalList: React.FC<Props> = (props) => {
@@ -11,7 +12,7 @@ const GoalList: React.FC<Props> = (props) => {
 		isLoading,
 		isError,
 		data: goals,
-	} = useQuery("goals", () => fetchGoals(props.userid || ""))
+	} = useQuery(["goals", props.userId], () => fetchGoals(props.userId || ""))
 
 	if (isLoading) {
 		return <div>Loading...</div>

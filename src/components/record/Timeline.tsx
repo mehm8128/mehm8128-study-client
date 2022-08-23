@@ -1,10 +1,11 @@
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
+
 import { fetchRecords } from "../../apis/record"
 
 import Record from "./Record"
 
 type Props = {
-	userid?: string
+	userId?: string
 }
 
 const Timeline: React.FC<Props> = (props) => {
@@ -12,7 +13,9 @@ const Timeline: React.FC<Props> = (props) => {
 		isLoading,
 		isError,
 		data: records,
-	} = useQuery("records", () => fetchRecords(props.userid || ""))
+	} = useQuery(["records", props.userId], () =>
+		fetchRecords(props.userId || "")
+	)
 
 	if (isLoading) {
 		return <div>Loading...</div>

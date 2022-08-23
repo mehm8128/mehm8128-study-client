@@ -1,8 +1,9 @@
+import { useQuery } from "@tanstack/react-query"
 import { List, Button } from "antd"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { useQuery } from "react-query"
+
 import { fetchQuiz } from "src/apis/memorize"
 import { paramToString } from "src/utils/paramsToString"
 
@@ -10,9 +11,9 @@ type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解
 
 const Memorize: NextPage = () => {
 	const router = useRouter()
-	const id = router.query.memorizeId
-	const { isLoading, isError, data } = useQuery(["quize"], () =>
-		fetchQuiz(paramToString(id))
+	const id = paramToString(router.query.memorizeId)
+	const { isLoading, isError, data } = useQuery(["quize", id], () =>
+		fetchQuiz(id)
 	)
 	const [count, setCount] = useState(0)
 	const [judge, setJudge] = useState<Judge>(0)
