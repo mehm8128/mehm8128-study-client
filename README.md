@@ -1,4 +1,4 @@
-# mehm8128_study_client
+# mehm8128-study-client
 
 勉強記録管理用アプリのクライアントです(制作中)。
 
