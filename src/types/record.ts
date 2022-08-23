@@ -19,7 +19,7 @@ export interface RecordPostRequest {
 	page: number
 	time: number
 	comment: string
-	fileId?: string
+	fileId: string | null
 	createdBy: string
 }
 
