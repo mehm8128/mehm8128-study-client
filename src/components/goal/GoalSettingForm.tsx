@@ -36,7 +36,7 @@ const GoalSettingForm: React.FC = () => {
 	}
 
 	return (
-		<Form onFinish={handleSubmit}>
+		<Form labelCol={{ span: 4 }} onFinish={handleSubmit}>
 			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"

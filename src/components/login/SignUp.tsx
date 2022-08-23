@@ -53,7 +53,7 @@ const SignUp: React.FC = () => {
 	return (
 		<div className="mb-12 w-full border border-4 border-gray-200 px-4 md:w-2/5">
 			<h1 className="mt-2 text-center text-xl">新規登録</h1>
-			<Form className="py-2" onFinish={handleRegister}>
+			<Form className="py-2" labelCol={{ span: 4 }} onFinish={handleRegister}>
 				<Form.Item label="ユーザー名" name="username">
 					<Input
 						placeholder="ユーザー名"

@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 	return (
 		<div className="w-full border border-4 border-gray-200 px-4 md:w-2/5">
 			<h1 className="mt-2 text-center text-xl">ログイン</h1>
-			<Form className="py-2" onFinish={handleLogin}>
+			<Form className="py-2" labelCol={{ span: 3 }} onFinish={handleLogin}>
 				<Form.Item label="ユーザー名" name="username">
 					<Input
 						placeholder="ユーザー名"

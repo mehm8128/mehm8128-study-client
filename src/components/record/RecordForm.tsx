@@ -38,7 +38,7 @@ const RecordForm: React.FC = () => {
 	}
 
 	return (
-		<Form onFinish={handleSubmit}>
+		<Form labelCol={{ span: 5 }} onFinish={handleSubmit}>
 			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
