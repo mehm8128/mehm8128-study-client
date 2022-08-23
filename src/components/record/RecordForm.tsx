@@ -37,12 +37,11 @@ const RecordForm: React.FC = () => {
 			alert("タイトルは必須です。ページと時間は半角数字で入力してください。")
 			return
 		}
-		const data: RecordPostRequest = {
+		let data: RecordPostRequest = {
 			title: title,
 			page: Number(page),
 			time: Number(time),
 			comment: comment,
-			fileId: "",
 			createdBy: me.id,
 		}
 		if (file) {
@@ -50,7 +49,7 @@ const RecordForm: React.FC = () => {
 			formData.append("file", file as RcFile)
 			formData.append("userID", me.id)
 			const res = await postFile(formData)
-			data.fileId = res.id
+			data = { ...data, fileId: res.id }
 		}
 
 		await postRecord(data)
