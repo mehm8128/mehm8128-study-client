@@ -1,19 +1,21 @@
 import { Tabs } from "antd"
 import type { NextPage } from "next"
-import { useContext, useEffect } from "react"
-import { UserContext } from "src/components/UserProvider"
+import { useQuery } from "react-query"
+import { fetchUsers } from "src/components/apis/user"
 import GoalListContainer from "src/components/container/GoalListContainer"
 import TimelineContainer from "src/components/container/TimelineContainer"
 
 const { TabPane } = Tabs
 
 const Index: NextPage = () => {
-	const { getUsers } = useContext(UserContext)
+	const { isLoading, error } = useQuery(["users"], fetchUsers)
 
-	useEffect(() => {
-		getUsers()
-	}, [])
-
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 	return (
 		<div>
 			<Tabs

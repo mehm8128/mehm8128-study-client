@@ -2,19 +2,22 @@ import { Avatar, Button, Modal } from "antd"
 import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
-import type { Goal } from "../../types/goal"
+import { useState } from "react"
+import { useRecoilValue } from "recoil"
+import type { GoalResponse } from "../../types/goal"
+import { getGoals } from "../apis/goal"
 import GoalFixModal from "./GoalFixModal"
-import { UserContext } from "src/components/UserProvider"
+import { meState, usersState } from "src/recoil/atoms/user"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
 
 type Props = {
-	goal: Goal
+	goal: GoalResponse
 }
 const Goal: React.FC<Props> = (props) => {
 	const router = useRouter()
-	const { me, getGoals, users } = useContext(UserContext)
+	const me = useRecoilValue(meState)
+	const users = useRecoilValue(usersState)
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 

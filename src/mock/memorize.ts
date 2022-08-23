@@ -1,6 +1,6 @@
-import { Memorize } from "../types/memorize"
+import type { MemorizeResponse } from "../types/memorize"
 
-export const memorizeData: Memorize = {
+export const memorizeData: MemorizeResponse = {
 	id: "3fa85f64-5717-4662-b3fc-2c963f66afb6",
 	name: "TOEIC キクタン990",
 	words: [

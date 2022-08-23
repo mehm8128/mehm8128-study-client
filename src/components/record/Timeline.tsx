@@ -1,7 +1,6 @@
-import { useRouter } from "next/router"
-import { useContext, useEffect } from "react"
+import { useQuery } from "react-query"
+import { getRecords } from "../apis/record"
 
-import { UserContext } from "../UserProvider"
 import Record from "./Record"
 
 type Props = {
@@ -9,16 +8,22 @@ type Props = {
 }
 
 const Timeline: React.FC<Props> = (props) => {
-	const router = useRouter()
-	const { records, getRecords } = useContext(UserContext)
-	useEffect(() => {
-		getRecords(props.userid ? props.userid : "")
-	}, [router.asPath])
+	const {
+		isLoading,
+		error,
+		data: records,
+	} = useQuery("records", () => getRecords(props.userid || ""))
 
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 	return (
 		<div className="w-full">
 			<ul>
-				{records.map((record) => (
+				{records!.map((record) => (
 					<li className="mb-4" key={record.id}>
 						<Record record={record} />
 					</li>

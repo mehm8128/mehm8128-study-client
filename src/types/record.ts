@@ -1,6 +1,6 @@
 import { RecordFavorite } from "./favorite"
 
-export interface Record {
+export interface RecordResponse {
 	id: string
 	title: string
 	page: number

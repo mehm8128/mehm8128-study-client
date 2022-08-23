@@ -1,7 +1,7 @@
 import { atom } from "recoil"
-import type { Goal } from "src/types/goal"
+import type { GoalResponse } from "src/types/goal"
 
-export const goalState = atom<Goal[]>({
-	key: "goalState",
-	default: new Array<Goal>(),
+export const goalsState = atom<GoalResponse[]>({
+	key: "goalsState",
+	default: new Array<GoalResponse>(),
 })

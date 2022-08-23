@@ -1,7 +1,9 @@
 import { Button, Form, Input } from "antd"
 import axios from "axios"
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "src/components/UserProvider"
+import { useEffect, useState } from "react"
+import { useRecoilValue } from "recoil"
+import { getRecords } from "../apis/record"
+import { meState } from "src/recoil/atoms/user"
 
 type Props = {
 	defaultTitle: string
@@ -22,7 +24,7 @@ const RecordForm: React.FC<Props> = ({
 	id = "",
 	setShouldShowFixModal,
 }) => {
-	const { me, getRecords } = useContext(UserContext)
+	const me = useRecoilValue(meState)
 	const [title, setTitle] = useState("")
 	const [page, setPage] = useState("")
 	const [time, setTime] = useState("")

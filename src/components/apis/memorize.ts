@@ -1,8 +1,12 @@
 import axios from "axios"
-import { Memorize, Quiz, WordRequest } from "src/types/memorize"
+import type {
+	MemorizeResponse,
+	QuizResponse,
+	WordRequest,
+} from "src/types/memorize"
 
 export const getQuiz = async (id: string) => {
-	const quiz: Quiz[] = (
+	const quiz: QuizResponse[] = (
 		await axios.get(
 			process.env.NEXT_PUBLIC_URL + "/api/memorizes/" + id + "/quiz"
 		)
@@ -11,7 +15,7 @@ export const getQuiz = async (id: string) => {
 }
 
 export const getMemorizes = async () => {
-	const memorizes: Memorize[] = (
+	const memorizes: MemorizeResponse[] = (
 		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes")
 	).data
 	return memorizes

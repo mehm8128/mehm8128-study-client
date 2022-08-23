@@ -1,8 +1,9 @@
 import { Button, Form, Input } from "antd"
 import axios from "axios"
-import { useContext, useEffect, useState } from "react"
-
-import { UserContext } from "../UserProvider"
+import { useEffect, useState } from "react"
+import { useRecoilValue } from "recoil"
+import { getGoals } from "../apis/goal"
+import { meState } from "src/recoil/atoms/user"
 
 type Props = {
 	isCompleted: boolean
@@ -23,7 +24,7 @@ const GoalFixForm: React.FC<Props> = ({
 	id,
 	setShouldShowFixModal,
 }) => {
-	const { me, getGoals } = useContext(UserContext)
+	const me = useRecoilValue(meState)
 	const [title, setTitle] = useState("")
 	const [goalDate, setGoalDate] = useState("")
 	const [comment, setComment] = useState("")

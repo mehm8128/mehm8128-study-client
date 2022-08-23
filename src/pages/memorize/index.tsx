@@ -2,16 +2,22 @@ import { List } from "antd"
 
 import type { NextPage } from "next"
 import Link from "next/link"
-import { useState, useEffect } from "react"
-import type { Memorize } from "../../types/memorize"
+import { useQuery } from "react-query"
 import { getMemorizes } from "src/components/apis/memorize"
 
 const MemorizePortal: NextPage = () => {
-	const [memorizes, setMemorizes] = useState<Memorize[]>()
-	useEffect(() => {
-		setMemorizes(getMemorizes()) //react queryでなんとかする
-	}, [])
+	const {
+		isLoading,
+		error,
+		data: memorizes,
+	} = useQuery(["memorizes"], getMemorizes)
 
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 	return (
 		<List
 			className="list-disc p-12"

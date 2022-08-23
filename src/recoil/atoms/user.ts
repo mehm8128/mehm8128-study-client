@@ -1,5 +1,5 @@
 import { atom } from "recoil"
-import type { Me, User } from "src/types/user"
+import type { Me, UserResponse } from "src/types/user"
 
 export const meState = atom<Me>({
 	key: "meState",
@@ -10,7 +10,7 @@ export const meState = atom<Me>({
 	},
 })
 
-export const userState = atom<User[]>({
-	key: "userState",
-	default: new Array<User>(),
+export const usersState = atom<UserResponse[]>({
+	key: "usersState",
+	default: new Array<UserResponse>(),
 })

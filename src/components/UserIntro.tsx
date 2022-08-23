@@ -1,15 +1,17 @@
 import { Avatar } from "antd"
-import { useContext } from "react"
-import { UserContext } from "src/components/UserProvider"
-import { User } from "src/types/user"
+import { useRecoilValue } from "recoil"
+import { recordsState } from "src/recoil/atoms/record"
+import { usersState } from "src/recoil/atoms/user"
+import type { UserResponse } from "src/types/user"
 import { createdByToString } from "src/utils/createdByToString"
 import { minutesToHoursAndMinutes } from "src/utils/minutesToHoursAndMinutes"
 
 type Props = {
-	user: User
+	user: UserResponse
 }
 const UserIntro: React.FC<Props> = (props) => {
-	const { users, records } = useContext(UserContext)
+	const users = useRecoilValue(usersState)
+	const records = useRecoilValue(recordsState)
 	const fullStudyTime = records.reduce((acc, record) => {
 		return acc + record.time
 	}, 0)

@@ -1,7 +1,8 @@
 import { Select, Input, Form, Button } from "antd"
 import type { NextPage } from "next"
-import { useEffect, useState } from "react"
-import type { Memorize, WordRequest } from "../../types/memorize"
+import { useState } from "react"
+import { useQuery } from "react-query"
+import type { WordRequest } from "../../types/memorize"
 import { getMemorizes, postWords } from "src/components/apis/memorize"
 
 const { Option } = Select
@@ -9,7 +10,11 @@ const { Option } = Select
 const Admin: NextPage = () => {
 	const [newWord, setNewWord] = useState<string>("")
 	const [newWordJp, setNewWordJp] = useState<string>("")
-	const [memorizes, setMemorizes] = useState<Memorize[]>()
+	const {
+		isLoading,
+		error,
+		data: memorizes,
+	} = useQuery(["memorizes"], getMemorizes)
 	const [targetMemorize, setTargetMemorize] = useState<string>()
 	async function handleRegister() {
 		if (!/^[a-zA-Z]+$/.test(newWord)) {
@@ -30,9 +35,12 @@ const Admin: NextPage = () => {
 			setNewWordJp("")
 		}
 	}
-	useEffect(() => {
-		setMemorizes(getMemorizes()) //react queryでなんとかする
-	}, [])
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 
 	return (
 		<div className="p-4 md:w-1/5">

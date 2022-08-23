@@ -2,23 +2,23 @@ import "../styles/globals.css"
 import "windi.css"
 
 import type { AppProps } from "next/app"
-import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { QueryClient, QueryClientProvider } from "react-query"
+import { RecoilRoot } from "recoil"
 import Header from "../components/common/Header"
-import { getMe } from "src/components/apis/user"
+import Wrapper from "src/components/common/Wrapper"
+
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
-	const router = useRouter()
-
-	useEffect(() => {
-		getMe()
-	}, [router.pathname])
-
 	return (
-		<>
-			<Header />
-			<Component {...pageProps} />
-		</>
+		<RecoilRoot>
+			<QueryClientProvider client={queryClient}>
+				<Wrapper>
+					<Header />
+					<Component {...pageProps} />
+				</Wrapper>
+			</QueryClientProvider>
+		</RecoilRoot>
 	)
 }
 

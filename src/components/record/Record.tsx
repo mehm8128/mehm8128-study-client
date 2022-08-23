@@ -2,20 +2,23 @@ import { Avatar, Button, Modal } from "antd"
 import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
+import { useState } from "react"
 
-import type { Record } from "../../types/record"
-import { UserContext } from "../UserProvider"
+import { useRecoilValue } from "recoil"
+import type { RecordResponse } from "../../types/record"
+import { getRecords } from "../apis/record"
 import RecordFixModal from "./RecordFixModal"
+import { meState, usersState } from "src/recoil/atoms/user"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
 
 type Props = {
-	record: Record
+	record: RecordResponse
 }
 const Record: React.FC<Props> = (props) => {
 	const router = useRouter()
-	const { me, getRecords, users } = useContext(UserContext)
+	const me = useRecoilValue(meState)
+	const users = useRecoilValue(usersState)
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 

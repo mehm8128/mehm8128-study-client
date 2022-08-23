@@ -1,4 +1,4 @@
-export interface Memorize {
+export interface MemorizeResponse {
 	id: string
 	name: string
 	words: Word[]
@@ -6,7 +6,7 @@ export interface Memorize {
 	updatedAt: string
 }
 
-export interface Word {
+export interface WordResponse {
 	id: string
 	word: string
 	wordJp: string
@@ -18,7 +18,7 @@ export interface WordRequest {
 	wordJp: string
 }
 
-export interface Quiz {
-	answer: Word
-	choices: Word[]
+export interface QuizResponse {
+	answer: WordResponse
+	choices: WordResponse[]
 }

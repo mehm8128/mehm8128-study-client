@@ -1,39 +1,28 @@
 import axios from "axios"
-import { User } from "src/types/user"
+import type { Me, UserResponse } from "src/types/user"
 
-export const getUsers = async (id?: string) => {
-	const userId = id ? "/" + id : ""
-	const users: User[] = (
-		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users" + userId)
+export const fetchUsers = async () => {
+	const users: UserResponse[] = (
+		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users")
 	).data
 	return users
 }
 
-export const getMe = async () => {
-	const users: User[] = (
+export const fetchUser = async (userId: string) => {
+	const user: UserResponse = (
+		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users/" + userId)
+	).data
+	return user
+}
+
+export const fetchMe = async () => {
+	const me: Me = (
 		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users/me", {
 			withCredentials: true,
 		})
 	).data
-	return users
+	return me
 }
-
-// const getMe = () => {
-// 	axios
-// 		.get(process.env.NEXT_PUBLIC_URL + "/api/users/me", {
-// 			withCredentials: true,
-// 		})
-// 		.then((res) => {
-// 			setMe({
-// 				id: res.data.id,
-// 				name: res.data.name,
-// 				auth: true,
-// 			})
-// 		})
-// 		.catch(() => {
-// 			if (!me.auth) router.replace("/login")
-// 		})
-// }
 
 export const postLogout = async () => {
 	const res = await axios.post(
@@ -45,16 +34,3 @@ export const postLogout = async () => {
 	)
 	return res
 }
-//  axios
-// 		.post(
-// 			process.env.NEXT_PUBLIC_URL + "/api/users/logout",
-// 			{},
-// 			{
-// 				withCredentials: true,
-// 			}
-// 		)
-// 		.then(() => {
-// 			setMe({ id: "", name: "", auth: false })
-// 			router.push("/login")
-// 		})
-// 		.catch((err) => alert(err))

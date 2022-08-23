@@ -1,12 +1,14 @@
 import { Button, Form, Input } from "antd"
 import axios from "axios"
-import { useContext, useState } from "react"
-import { UserContext } from "src/components/UserProvider"
+import { useState } from "react"
+import { useRecoilValue } from "recoil"
+import { getRecords } from "../apis/record"
+import { meState } from "src/recoil/atoms/user"
 
 const { TextArea } = Input
 
 const RecordForm: React.FC = () => {
-	const { me, getRecords } = useContext(UserContext)
+	const me = useRecoilValue(meState)
 	const [title, setTitle] = useState("")
 	const [page, setPage] = useState("")
 	const [time, setTime] = useState("")

@@ -1,9 +1,9 @@
 import axios from "axios"
-import { Record } from "src/types/record"
+import type { RecordResponse } from "src/types/record"
 
 export const getRecords = async (id?: string) => {
 	const userId = id ? "/user/" + id : ""
-	const records: Record[] = (
+	const records: RecordResponse[] = (
 		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/records" + userId)
 	).data
 	return records

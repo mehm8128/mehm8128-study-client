@@ -1,13 +1,14 @@
 import { Button, Form, Input } from "antd"
 import axios from "axios"
-import { useContext, useState } from "react"
-
-import { UserContext } from "../UserProvider"
+import { useState } from "react"
+import { useRecoilValue } from "recoil"
+import { getGoals } from "../apis/goal"
+import { meState } from "src/recoil/atoms/user"
 
 const { TextArea } = Input
 
 const GoalSettingForm: React.FC = () => {
-	const { me, getGoals } = useContext(UserContext)
+	const me = useRecoilValue(meState)
 	const [title, setTitle] = useState("")
 	const [goalDate, setGoalDate] = useState("")
 	const [comment, setComment] = useState("")
