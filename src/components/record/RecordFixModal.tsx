@@ -1,10 +1,10 @@
 import { Modal } from "antd"
 
-import { RecordType } from "../../types/record"
+import type { RecordResponse } from "../../types/record"
 import RecordFixForm from "./RecordFixForm"
 
 type Props = {
-	record: RecordType
+	record: RecordResponse
 	shoudShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void
 }

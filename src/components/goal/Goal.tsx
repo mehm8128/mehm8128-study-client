@@ -1,20 +1,29 @@
 import { Avatar, Button, Modal } from "antd"
-import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
-import { GoalType } from "../../types/goal"
+import { useState } from "react"
+import { useRecoilValue } from "recoil"
+import {
+	deleteGoal,
+	fetchGoals,
+	putGoal,
+	putGoalFavorite,
+} from "../../apis/goal"
+import type { GoalPutRequest, GoalResponse } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
-import { UserContext } from "src/components/UserProvider"
+import { meState, usersState } from "src/recoil/atoms/user"
+import type { GoalFavoritePutRequest } from "src/types/favorite"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
 
 type Props = {
-	goal: GoalType
+	goal: GoalResponse
 }
+
 const Goal: React.FC<Props> = (props) => {
 	const router = useRouter()
-	const { me, getGoals, users } = useContext(UserContext)
+	const me = useRecoilValue(meState)
+	const users = useRecoilValue(usersState)
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 
@@ -22,33 +31,29 @@ const Goal: React.FC<Props> = (props) => {
 		setShouldShowFixModal(true)
 		setShouldShowMenuModal(false)
 	}
-	function handleComplete() {
-		axios
-			.put(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id, {
-				title: props.goal.title,
-				comment: props.goal.comment,
-				goalDate: props.goal.goalDate,
-				isCompleted: true,
-				createdBy: me.id,
-			})
-			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+	async function handleComplete() {
+		const data: GoalPutRequest = {
+			title: props.goal.title,
+			comment: props.goal.comment,
+			goalDate: props.goal.goalDate,
+			isCompleted: true,
+			createdBy: me.id,
+		}
+		await putGoal(props.goal.id, data)
+			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 	}
-	function handleFavorite() {
-		axios
-			.put(
-				process.env.NEXT_PUBLIC_URL + "/api/goals/favorite/" + props.goal.id,
-				{
-					createdBy: me.id,
-				}
-			)
-			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+	async function handleFavorite() {
+		const data: GoalFavoritePutRequest = {
+			createdBy: me.id,
+		}
+		await putGoalFavorite(props.goal.id, data)
+			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 	}
-	function handleDelete() {
-		axios
-			.delete(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id)
-			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+	async function handleDelete() {
+		await deleteGoal(props.goal.id)
+			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 		setShouldShowMenuModal(false)
 	}

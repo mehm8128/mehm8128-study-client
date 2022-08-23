@@ -1,14 +1,20 @@
 import { Button } from "antd"
 import Link from "next/link"
-import { useContext } from "react"
-
-import { UserContext } from "../UserProvider"
+import router from "next/router"
+import { useRecoilState } from "recoil"
+import { postLogout } from "../../apis/user"
+import { meState } from "src/recoil/atoms/user"
 
 const Header: React.FC = () => {
-	const { me, logout } = useContext(UserContext)
+	const [me, setMe] = useRecoilState(meState)
 
 	function handleLogout() {
-		logout()
+		postLogout()
+			.then(() => {
+				setMe({ id: "", name: "", auth: false })
+				router.push("/login")
+			})
+			.catch((err) => alert(err))
 	}
 	return (
 		<div className="flex h-16 items-center justify-between bg-gray-200 px-4">

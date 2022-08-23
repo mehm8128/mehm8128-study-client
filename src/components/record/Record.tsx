@@ -1,21 +1,28 @@
 import { Avatar, Button, Modal } from "antd"
-import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
+import { useState } from "react"
 
-import { RecordType } from "../../types/record"
-import { UserContext } from "../UserProvider"
+import { useRecoilValue } from "recoil"
+import {
+	deleteRecord,
+	fetchRecords,
+	putRecordFavorite,
+} from "../../apis/record"
+import type { RecordResponse } from "../../types/record"
 import RecordFixModal from "./RecordFixModal"
+import { meState, usersState } from "src/recoil/atoms/user"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
 
 type Props = {
-	record: RecordType
+	record: RecordResponse
 }
+
 const Record: React.FC<Props> = (props) => {
 	const router = useRouter()
-	const { me, getRecords, users } = useContext(UserContext)
+	const me = useRecoilValue(meState)
+	const users = useRecoilValue(usersState)
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 
@@ -23,23 +30,17 @@ const Record: React.FC<Props> = (props) => {
 		setShouldShowFixModal(true)
 		setShouldShowMenuModal(false)
 	}
-	function handleFavorite() {
-		axios
-			.put(
-				process.env.NEXT_PUBLIC_URL +
-					"/api/records/favorite/" +
-					props.record.id,
-				{
-					createdBy: me.id,
-				}
-			)
-			.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
+	async function handleFavorite() {
+		const data = {
+			createdBy: me.id,
+		}
+		await putRecordFavorite(props.record.id, data)
+			.then(() => fetchRecords(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 	}
-	function handleDelete() {
-		axios
-			.delete(process.env.NEXT_PUBLIC_URL + "/api/records/" + props.record.id)
-			.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
+	async function handleDelete() {
+		await deleteRecord(props.record.id)
+			.then(() => fetchRecords(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 		setShouldShowMenuModal(false)
 	}

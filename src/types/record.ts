@@ -1,6 +1,6 @@
 import { RecordFavorite } from "./favorite"
 
-export interface RecordType {
+export interface RecordResponse {
 	id: string
 	title: string
 	page: number
@@ -11,4 +11,20 @@ export interface RecordType {
 	createdBy: string
 	createdAt: string
 	updatedAt: string
+}
+
+export interface RecordPostRequest {
+	title: string
+	page: number
+	time: number
+	comment: string
+	createdBy: string
+}
+
+export interface RecordPutRequest {
+	title: string
+	page: number
+	time: number
+	comment: string
+	createdBy: string
 }

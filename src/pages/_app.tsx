@@ -2,16 +2,23 @@ import "../styles/globals.css"
 import "windi.css"
 
 import type { AppProps } from "next/app"
+import { QueryClient, QueryClientProvider } from "react-query"
+import { RecoilRoot } from "recoil"
 import Header from "../components/common/Header"
+import Wrapper from "src/components/common/Wrapper"
 
-import { UserProvider } from "src/components/UserProvider"
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<UserProvider>
-			<Header />
-			<Component {...pageProps} />
-		</UserProvider>
+		<RecoilRoot>
+			<QueryClientProvider client={queryClient}>
+				<Wrapper>
+					<Header />
+					<Component {...pageProps} />
+				</Wrapper>
+			</QueryClientProvider>
+		</RecoilRoot>
 	)
 }
 

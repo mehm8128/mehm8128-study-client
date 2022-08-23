@@ -1,15 +1,21 @@
 import { Button, Form, Input } from "antd"
-import axios from "axios"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
-
-import { UserContext } from "../UserProvider"
+import { useState } from "react"
+import { useSetRecoilState } from "recoil"
+import { postSignup } from "../../apis/user"
+import { meState } from "src/recoil/atoms/user"
 
 const { TextArea } = Input
 
+export interface SignupData {
+	name: string
+	password: string
+	description: string
+}
+
 const SignUp: React.FC = () => {
 	const router = useRouter()
-	const { login } = useContext(UserContext)
+	const setMe = useSetRecoilState(meState)
 	const [userName, setUserName] = useState("")
 	const [password, setPassword] = useState("")
 	const [passwordConfirm, setPasswordConfirm] = useState("")
@@ -26,14 +32,15 @@ const SignUp: React.FC = () => {
 			)
 			return
 		}
-		axios
-			.post(process.env.NEXT_PUBLIC_URL + "/api/users/signup", {
-				name: userName,
-				password: password,
-				description: description,
-			})
+		const data: SignupData = {
+			name: userName,
+			password: password,
+			description: description,
+		}
+
+		postSignup(data)
 			.then((res) => {
-				login({
+				setMe({
 					id: res.data.id,
 					name: res.data.name,
 					auth: true,

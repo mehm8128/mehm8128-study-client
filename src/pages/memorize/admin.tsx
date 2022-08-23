@@ -1,45 +1,46 @@
 import { Select, Input, Form, Button } from "antd"
-import axios from "axios"
 import type { NextPage } from "next"
-import { useEffect, useState } from "react"
-import type { MemorizeType } from "../../types/memorize"
+import { useState } from "react"
+import { useQuery } from "react-query"
+import type { WordRequest } from "../../types/memorize"
+import { fetchMemorizes, postWords } from "src/apis/memorize"
 
 const { Option } = Select
 
 const Admin: NextPage = () => {
 	const [newWord, setNewWord] = useState<string>("")
 	const [newWordJp, setNewWordJp] = useState<string>("")
-	const [memorizes, setMemorizes] = useState<MemorizeType[]>()
+	const {
+		isLoading,
+		error,
+		data: memorizes,
+	} = useQuery(["memorizes"], fetchMemorizes)
 	const [targetMemorize, setTargetMemorize] = useState<string>()
-	function handleRegister(e: any) {
+	async function handleRegister() {
 		if (!/^[a-zA-Z]+$/.test(newWord)) {
 			alert("英単語はアルファベットで入力してください")
 			return
 		}
-		const data = {
+		if (targetMemorize === undefined) {
+			alert("暗記対象を選択してください")
+			return
+		}
+		const data: WordRequest = {
 			word: newWord,
 			wordJp: newWordJp,
 		}
-		axios
-			.post(
-				process.env.NEXT_PUBLIC_URL + `/api/memorizes/${targetMemorize}/words`,
-				data
-			)
-			.then(() => {
-				console.log("added!")
-				setNewWord("")
-				setNewWordJp("")
-			})
-			.catch((err) => alert(err))
+		const res = await postWords(targetMemorize, data)
+		if (res.status === 200) {
+			setNewWord("")
+			setNewWordJp("")
+		}
 	}
-	useEffect(() => {
-		axios
-			.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes")
-			.then((res) => {
-				setMemorizes(res.data)
-			})
-			.catch((err) => alert(err))
-	}, [])
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 
 	return (
 		<div className="p-4 md:w-1/5">

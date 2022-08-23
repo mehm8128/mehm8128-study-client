@@ -1,7 +1,5 @@
-import { useRouter } from "next/router"
-import { useContext, useEffect } from "react"
-
-import { UserContext } from "../UserProvider"
+import { useQuery } from "react-query"
+import { fetchGoals } from "../../apis/goal"
 import Goal from "./Goal"
 
 type Props = {
@@ -9,16 +7,23 @@ type Props = {
 }
 
 const GoalList: React.FC<Props> = (props) => {
-	const router = useRouter()
-	const { goals, getGoals } = useContext(UserContext)
-	useEffect(() => {
-		getGoals(props.userid ? props.userid : "")
-	}, [router.asPath])
+	const {
+		isLoading,
+		error,
+		data: goals,
+	} = useQuery("goals", () => fetchGoals(props.userid || ""))
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 
 	return (
 		<div className="w-full">
 			<ul>
-				{goals.map((goal) => (
+				{goals!.map((goal) => (
 					<li className="mb-4" key={goal.id}>
 						<Goal goal={goal} />
 					</li>

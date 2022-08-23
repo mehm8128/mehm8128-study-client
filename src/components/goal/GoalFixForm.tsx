@@ -1,8 +1,9 @@
 import { Button, Form, Input } from "antd"
-import axios from "axios"
-import { useContext, useEffect, useState } from "react"
-
-import { UserContext } from "../UserProvider"
+import { useEffect, useState } from "react"
+import { useRecoilValue } from "recoil"
+import { fetchGoals, putGoal } from "../../apis/goal"
+import { meState } from "src/recoil/atoms/user"
+import type { GoalPutRequest } from "src/types/goal"
 
 type Props = {
 	isCompleted: boolean
@@ -23,7 +24,7 @@ const GoalFixForm: React.FC<Props> = ({
 	id,
 	setShouldShowFixModal,
 }) => {
-	const { me, getGoals } = useContext(UserContext)
+	const me = useRecoilValue(meState)
 	const [title, setTitle] = useState("")
 	const [goalDate, setGoalDate] = useState("")
 	const [comment, setComment] = useState("")
@@ -38,16 +39,16 @@ const GoalFixForm: React.FC<Props> = ({
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return
 		}
-		axios
-			.put(process.env.NEXT_PUBLIC_URL + "/api/goals/" + id, {
-				title: title,
-				goalDate: goalDate,
-				comment: comment,
-				isCompleted: isCompleted,
-				createdBy: me.id,
-			})
+		const data: GoalPutRequest = {
+			title: title,
+			goalDate: goalDate,
+			comment: comment,
+			isCompleted: isCompleted,
+			createdBy: me.id,
+		}
+		putGoal(id, data)
 			.then(() => {
-				getGoals()
+				fetchGoals()
 				setTitle("")
 				setGoalDate("")
 				setComment("")

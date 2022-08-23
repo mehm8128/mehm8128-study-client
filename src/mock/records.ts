@@ -1,6 +1,6 @@
-import { RecordType } from '../types/record'
+import type { RecordResponse } from "../types/record"
 
-export const records: RecordType[] = [
+export const records: RecordResponse[] = [
 	{
 		id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 		title: "シス単",

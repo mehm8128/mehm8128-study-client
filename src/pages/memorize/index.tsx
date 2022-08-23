@@ -1,22 +1,23 @@
 import { List } from "antd"
-import axios from "axios"
 
 import type { NextPage } from "next"
 import Link from "next/link"
-import { useState, useEffect } from "react"
-import type { MemorizeType } from "../../types/memorize"
+import { useQuery } from "react-query"
+import { fetchMemorizes } from "src/apis/memorize"
 
 const MemorizePortal: NextPage = () => {
-	const [memorizes, setMemorizes] = useState<MemorizeType[]>()
-	useEffect(() => {
-		axios
-			.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes")
-			.then((res) => {
-				setMemorizes(res.data)
-			})
-			.catch((err) => alert(err))
-	}, [])
+	const {
+		isLoading,
+		error,
+		data: memorizes,
+	} = useQuery(["memorizes"], fetchMemorizes)
 
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 	return (
 		<List
 			className="list-disc p-12"

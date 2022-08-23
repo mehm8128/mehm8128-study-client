@@ -1,18 +1,28 @@
 import { List, Button } from "antd"
-import axios from "axios"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { QuizType } from "src/types/memorize"
+import { useState } from "react"
+import { useQuery } from "react-query"
+import { fetchQuiz } from "src/apis/memorize"
+import { paramToString } from "src/utils/paramsToString"
 
 type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解
 
 const Memorize: NextPage = () => {
 	const router = useRouter()
 	const id = router.query.memorizeId
-	const [data, setData] = useState<QuizType[]>()
+	const { isLoading, error, data } = useQuery(["quize"], () =>
+		fetchQuiz(paramToString(id))
+	)
 	const [count, setCount] = useState(0)
 	const [judge, setJudge] = useState<Judge>(0)
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 
 	function handleAnswer(id: string) {
 		if (id === data![count].answer.id) {
@@ -27,19 +37,6 @@ const Memorize: NextPage = () => {
 			setCount(count + 1)
 		}
 	}
-
-	useEffect(() => {
-		if (!router.isReady) {
-			return
-		}
-		axios
-			.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes/" + id + "/quiz")
-			.then((res) => {
-				setData(res.data)
-				console.log(res.data)
-			})
-			.catch((err) => alert(err))
-	}, [router.query])
 
 	return (
 		<div className="p-8">

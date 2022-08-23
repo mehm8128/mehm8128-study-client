@@ -1,6 +1,6 @@
 import { GoalFavorite } from "./favorite"
 
-export interface GoalType {
+export interface GoalResponse {
 	id: string
 	title: string
 	comment: string
@@ -11,4 +11,20 @@ export interface GoalType {
 	createdBy: string
 	createdAt: string
 	updatedAt: string
+}
+
+export interface GoalPostRequest {
+	title: string
+	goalDate: string
+	comment: string
+	isCompleted: boolean
+	createdBy: string
+}
+
+export interface GoalPutRequest {
+	title: string
+	comment: string
+	goalDate: string
+	isCompleted: boolean
+	createdBy: string
 }
