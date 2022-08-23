@@ -3,7 +3,7 @@ import type { NextPage } from "next"
 import { useState } from "react"
 import { useQuery } from "react-query"
 import type { WordRequest } from "../../types/memorize"
-import { fetchMemorizes, postWords } from "src/components/apis/memorize"
+import { fetchMemorizes, postWords } from "src/apis/memorize"
 
 const { Option } = Select
 

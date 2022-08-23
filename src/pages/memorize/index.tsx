@@ -3,7 +3,7 @@ import { List } from "antd"
 import type { NextPage } from "next"
 import Link from "next/link"
 import { useQuery } from "react-query"
-import { fetchMemorizes } from "src/components/apis/memorize"
+import { fetchMemorizes } from "src/apis/memorize"
 
 const MemorizePortal: NextPage = () => {
 	const {

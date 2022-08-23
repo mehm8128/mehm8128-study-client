@@ -1,9 +1,9 @@
 import { Button, Form, Input } from "antd"
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { fetchRecords } from "../apis/record"
+import { fetchRecords, putRecord } from "../../apis/record"
 import { meState } from "src/recoil/atoms/user"
+import type { RecordPutRequest } from "src/types/record"
 
 type Props = {
 	defaultTitle: string
@@ -36,19 +36,19 @@ const RecordForm: React.FC<Props> = ({
 		setComment(defaultComment)
 	}, [defaultTitle, defaultPage, defaultTime, defaultComment]) //propsからuseStateに入れるときはこれしないといけないみたいなやつ
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		if (title === "" || (!/[0-9]+/.test(time) && !/[0-9]+/.test(page))) {
 			alert("タイトルは必須です。ページと時間は半角数字で入力してください。")
 			return
 		}
-		axios
-			.put(process.env.NEXT_PUBLIC_URL + "/api/records/" + id, {
-				title: title,
-				page: Number(page),
-				time: Number(time),
-				comment: comment,
-				createdBy: me.id,
-			})
+		const data: RecordPutRequest = {
+			title: title,
+			page: Number(page),
+			time: Number(time),
+			comment: comment,
+			createdBy: me.id,
+		}
+		await putRecord(id, data)
 			.then(() => {
 				fetchRecords()
 				setTitle("")

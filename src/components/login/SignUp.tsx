@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useSetRecoilState } from "recoil"
-import { postSignup } from "../apis/user"
+import { postSignup } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
 
 const { TextArea } = Input

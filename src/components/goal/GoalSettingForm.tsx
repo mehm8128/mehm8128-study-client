@@ -1,9 +1,9 @@
 import { Button, Form, Input } from "antd"
-import axios from "axios"
 import { useState } from "react"
 import { useRecoilValue } from "recoil"
-import { fetchGoals } from "../apis/goal"
+import { fetchGoals, postGoal } from "../../apis/goal"
 import { meState } from "src/recoil/atoms/user"
+import type { GoalPostRequest } from "src/types/goal"
 
 const { TextArea } = Input
 
@@ -18,14 +18,14 @@ const GoalSettingForm: React.FC = () => {
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return
 		}
-		axios
-			.post(process.env.NEXT_PUBLIC_URL + "/api/goals", {
-				title: title,
-				goalDate: goalDate,
-				comment: comment,
-				isCompleted: false,
-				createdBy: me.id,
-			})
+		const data: GoalPostRequest = {
+			title: title,
+			goalDate: goalDate,
+			comment: comment,
+			isCompleted: false,
+			createdBy: me.id,
+		}
+		postGoal(data)
 			.then(() => {
 				fetchGoals()
 				setTitle("")

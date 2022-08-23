@@ -1,7 +1,7 @@
 import { Tabs } from "antd"
 import type { NextPage } from "next"
 import { useQuery } from "react-query"
-import { fetchUsers } from "src/components/apis/user"
+import { fetchUsers } from "src/apis/user"
 import GoalListContainer from "src/components/container/GoalListContainer"
 import TimelineContainer from "src/components/container/TimelineContainer"
 

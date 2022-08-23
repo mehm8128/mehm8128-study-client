@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { fetchRecords } from "../apis/record"
+import { fetchRecords } from "../../apis/record"
 
 import Record from "./Record"
 

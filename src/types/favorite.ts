@@ -10,3 +10,11 @@ export interface GoalFavorite {
 	createdAt: string
 	goalId: string
 }
+
+export interface RecordFavoritePutRequest {
+	createdBy: string
+}
+
+export interface GoalFavoritePutRequest {
+	createdBy: string
+}

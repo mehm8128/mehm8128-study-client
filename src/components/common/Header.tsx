@@ -2,7 +2,7 @@ import { Button } from "antd"
 import Link from "next/link"
 import router from "next/router"
 import { useRecoilState } from "recoil"
-import { postLogout } from "../apis/user"
+import { postLogout } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
 
 const Header: React.FC = () => {

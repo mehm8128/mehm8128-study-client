@@ -1,6 +1,6 @@
 import axios from "axios"
-import { LoginData } from "../login/Login"
-import { SignupData } from "../login/SignUp"
+import { LoginData } from "../components/login/Login"
+import { SignupData } from "../components/login/SignUp"
 import type { Me, UserResponse } from "src/types/user"
 
 export const fetchUsers = async () => {

@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { fetchGoals } from "../apis/goal"
+import { fetchGoals } from "../../apis/goal"
 import Goal from "./Goal"
 
 type Props = {

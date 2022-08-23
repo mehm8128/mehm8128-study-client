@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useSetRecoilState } from "recoil"
-import { postLogin } from "../apis/user"
+import { postLogin } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
 
 export interface LoginData {

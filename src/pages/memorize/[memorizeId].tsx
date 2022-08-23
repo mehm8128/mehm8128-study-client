@@ -3,7 +3,7 @@ import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useQuery } from "react-query"
-import { fetchQuiz } from "src/components/apis/memorize"
+import { fetchQuiz } from "src/apis/memorize"
 import { paramToString } from "src/utils/paramsToString"
 
 type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解

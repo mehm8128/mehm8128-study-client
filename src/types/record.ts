@@ -12,3 +12,19 @@ export interface RecordResponse {
 	createdAt: string
 	updatedAt: string
 }
+
+export interface RecordPostRequest {
+	title: string
+	page: number
+	time: number
+	comment: string
+	createdBy: string
+}
+
+export interface RecordPutRequest {
+	title: string
+	page: number
+	time: number
+	comment: string
+	createdBy: string
+}
