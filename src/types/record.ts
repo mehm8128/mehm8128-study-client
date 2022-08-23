@@ -8,6 +8,7 @@ export interface RecordResponse {
 	comment: string
 	favorites: RecordFavorite[]
 	favoriteNum: number
+	fileId: string
 	createdBy: string
 	createdAt: string
 	updatedAt: string
@@ -18,6 +19,7 @@ export interface RecordPostRequest {
 	page: number
 	time: number
 	comment: string
+	fileId: string
 	createdBy: string
 }
 

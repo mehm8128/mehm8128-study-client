@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { Avatar, Button, Popover } from "antd"
+import { Avatar, Button, Modal, Popover } from "antd"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -31,6 +32,7 @@ const Record: React.FC<Props> = (props) => {
 	} = useQuery(["users"], () => fetchUsers())
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
+	const [shouldShowImageModal, setShouldShowImageModal] = useState(false)
 
 	function handleClick() {
 		setShouldShowFixModal(true)
@@ -118,6 +120,33 @@ const Record: React.FC<Props> = (props) => {
 					</p>
 					<p className="whitespace-pre-wrap">{props.record.comment}</p>
 				</div>
+				{props.record.fileId !== "00000000-0000-0000-0000-000000000000" && (
+					<div className="ml-20">
+						<Button type="text" onClick={() => setShouldShowImageModal(true)}>
+							<Image
+								alt=""
+								className="object-cover"
+								height={120}
+								src={`${process.env.NEXT_PUBLIC_URL}/api/files/${props.record.fileId}`}
+								width={120}
+							/>
+						</Button>
+						<Modal
+							footer={null}
+							visible={shouldShowImageModal}
+							width={600}
+							onCancel={() => setShouldShowImageModal(false)}
+						>
+							<Image
+								alt=""
+								className="object-cover"
+								height={600}
+								src={`${process.env.NEXT_PUBLIC_URL}/api/files/${props.record.fileId}`}
+								width={600}
+							/>
+						</Modal>
+					</div>
+				)}
 				<div className="flex items-center justify-evenly">
 					<Button onClick={handleFavorite}>
 						いいね！ {props.record.favoriteNum}

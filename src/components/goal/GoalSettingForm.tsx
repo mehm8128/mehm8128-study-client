@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useState } from "react"
 import { useRecoilValue } from "recoil"
@@ -12,8 +13,10 @@ const GoalSettingForm: React.FC = () => {
 	const [title, setTitle] = useState("")
 	const [goalDate, setGoalDate] = useState("")
 	const [comment, setComment] = useState("")
+	const queryClient = useQueryClient()
+	const [form] = Form.useForm()
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		if (title === "" || !/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(goalDate)) {
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return
@@ -25,18 +28,17 @@ const GoalSettingForm: React.FC = () => {
 			isCompleted: false,
 			createdBy: me.id,
 		}
-		postGoal(data)
-			.then(() => {
-				fetchGoals()
-				setTitle("")
-				setGoalDate("")
-				setComment("")
-			})
-			.catch((err) => alert(err))
+		await postGoal(data)
+		fetchGoals()
+		setTitle("")
+		setGoalDate("")
+		setComment("")
+		form.resetFields()
+		queryClient.invalidateQueries(["goals"])
 	}
 
 	return (
-		<Form labelCol={{ span: 4 }} onFinish={handleSubmit}>
+		<Form form={form} labelCol={{ span: 4 }} onFinish={handleSubmit}>
 			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
