@@ -18,6 +18,8 @@ jobs:
         run: yarn install
       - name: yarn lint
         run: yarn lint
+        env:
+          NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
   type-check:
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +31,8 @@ jobs:
         run: yarn install
       - name: yarn type-check
         run: yarn type-check
+        env:
+          NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
   build:
     runs-on: ubuntu-latest
     steps:
@@ -40,3 +44,5 @@ jobs:
         run: yarn install
       - name: yarn build
         run: yarn build
+        env:
+          NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
