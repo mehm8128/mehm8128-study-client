@@ -1,27 +1,29 @@
 import { Button, Form, Input } from "antd"
-import axios from "axios"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
-import { UserContext } from "src/components/UserProvider"
+import { useState } from "react"
+import { useSetRecoilState } from "recoil"
+import { postLogin } from "../apis/user"
+import { meState } from "src/recoil/atoms/user"
+
+export interface LoginData {
+	name: string
+	password: string
+}
 
 const Login: React.FC = () => {
 	const router = useRouter()
-	const { login } = useContext(UserContext)
+	const setMe = useSetRecoilState(meState)
 	const [userName, setUserName] = useState("")
 	const [password, setPassword] = useState("")
 
 	function handleLogin() {
-		axios
-			.post(
-				process.env.NEXT_PUBLIC_URL + "/api/users/login",
-				{
-					name: userName,
-					password: password,
-				},
-				{ withCredentials: true }
-			)
+		const data: LoginData = {
+			name: userName,
+			password: password,
+		}
+		postLogin(data)
 			.then((res) => {
-				login({
+				setMe({
 					id: res.data.id,
 					name: res.data.name,
 					auth: true,

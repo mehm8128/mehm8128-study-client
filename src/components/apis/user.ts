@@ -1,4 +1,6 @@
 import axios from "axios"
+import { LoginData } from "../login/Login"
+import { SignupData } from "../login/SignUp"
 import type { Me, UserResponse } from "src/types/user"
 
 export const fetchUsers = async () => {
@@ -22,6 +24,23 @@ export const fetchMe = async () => {
 		})
 	).data
 	return me
+}
+
+export const postSignup = async (data: SignupData) => {
+	const res = await axios.post(
+		process.env.NEXT_PUBLIC_URL + "/api/users/signup",
+		data
+	)
+	return res
+}
+
+export const postLogin = async (data: LoginData) => {
+	const res = await axios.post(
+		process.env.NEXT_PUBLIC_URL + "/api/users/login",
+		data,
+		{ withCredentials: true }
+	)
+	return res
 }
 
 export const postLogout = async () => {
