@@ -1,7 +1,8 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { fetchRecords, putRecord } from "../../apis/record"
+import { putRecord } from "../../apis/record"
 import { meState } from "src/recoil/atoms/user"
 import type { RecordPutRequest } from "src/types/record"
 
@@ -29,6 +30,9 @@ const RecordForm: React.FC<Props> = ({
 	const [page, setPage] = useState("")
 	const [time, setTime] = useState("")
 	const [comment, setComment] = useState("")
+	const queryClient = useQueryClient()
+	const [form] = Form.useForm()
+
 	useEffect(() => {
 		setTitle(defaultTitle)
 		setPage(defaultPage)
@@ -49,19 +53,17 @@ const RecordForm: React.FC<Props> = ({
 			createdBy: me.id,
 		}
 		await putRecord(id, data)
-			.then(() => {
-				fetchRecords()
-				setTitle("")
-				setPage("")
-				setTime("")
-				setComment("")
-				setShouldShowFixModal(false)
-			})
-			.catch((err) => alert(err))
+		setTitle("")
+		setPage("")
+		setTime("")
+		setComment("")
+		setShouldShowFixModal(false)
+		form.resetFields()
+		queryClient.invalidateQueries(["records"])
 	}
 
 	return (
-		<Form labelCol={{ span: 3 }} onFinish={handleSubmit}>
+		<Form form={form} labelCol={{ span: 3 }} onFinish={handleSubmit}>
 			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"

@@ -1,7 +1,8 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { fetchGoals, putGoal } from "../../apis/goal"
+import { putGoal } from "../../apis/goal"
 import { meState } from "src/recoil/atoms/user"
 import type { GoalPutRequest } from "src/types/goal"
 
@@ -28,13 +29,16 @@ const GoalFixForm: React.FC<Props> = ({
 	const [title, setTitle] = useState("")
 	const [goalDate, setGoalDate] = useState("")
 	const [comment, setComment] = useState("")
+	const queryClient = useQueryClient()
+	const [form] = Form.useForm()
+
 	useEffect(() => {
 		setTitle(defaultTitle)
 		setGoalDate(defaultGoalDate)
 		setComment(defaultComment)
 	}, [defaultTitle, defaultGoalDate, defaultComment]) //propsからuseStateに入れるときはこれしないといけないみたいなやつ
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		if (title === "" || !/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(goalDate)) {
 			alert("タイトルは必須です。期限はyyyy-mm-ddの形式で入力してください。")
 			return
@@ -46,19 +50,17 @@ const GoalFixForm: React.FC<Props> = ({
 			isCompleted: isCompleted,
 			createdBy: me.id,
 		}
-		putGoal(id, data)
-			.then(() => {
-				fetchGoals()
-				setTitle("")
-				setGoalDate("")
-				setComment("")
-				setShouldShowFixModal(false)
-			})
-			.catch((err) => alert(err))
+		await putGoal(id, data)
+		setTitle("")
+		setGoalDate("")
+		setComment("")
+		setShouldShowFixModal(false)
+		form.resetFields()
+		queryClient.invalidateQueries(["goals"])
 	}
 
 	return (
-		<Form labelCol={{ span: 3 }} onFinish={handleSubmit}>
+		<Form form={form} labelCol={{ span: 3 }} onFinish={handleSubmit}>
 			<Form.Item label="タイトル" name="title">
 				<Input
 					placeholder="必須項目"
