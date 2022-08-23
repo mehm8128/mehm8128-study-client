@@ -5,7 +5,7 @@ import type {
 	WordRequest,
 } from "src/types/memorize"
 
-export const getQuiz = async (id: string) => {
+export const fetchQuiz = async (id: string) => {
 	const quiz: QuizResponse[] = (
 		await axios.get(
 			process.env.NEXT_PUBLIC_URL + "/api/memorizes/" + id + "/quiz"
@@ -14,7 +14,7 @@ export const getQuiz = async (id: string) => {
 	return quiz
 }
 
-export const getMemorizes = async () => {
+export const fetchMemorizes = async () => {
 	const memorizes: MemorizeResponse[] = (
 		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/memorizes")
 	).data

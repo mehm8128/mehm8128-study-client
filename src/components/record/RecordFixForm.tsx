@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { getRecords } from "../apis/record"
+import { fetchRecords } from "../apis/record"
 import { meState } from "src/recoil/atoms/user"
 
 type Props = {
@@ -50,7 +50,7 @@ const RecordForm: React.FC<Props> = ({
 				createdBy: me.id,
 			})
 			.then(() => {
-				getRecords()
+				fetchRecords()
 				setTitle("")
 				setPage("")
 				setTime("")

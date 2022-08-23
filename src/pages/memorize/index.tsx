@@ -3,14 +3,14 @@ import { List } from "antd"
 import type { NextPage } from "next"
 import Link from "next/link"
 import { useQuery } from "react-query"
-import { getMemorizes } from "src/components/apis/memorize"
+import { fetchMemorizes } from "src/components/apis/memorize"
 
 const MemorizePortal: NextPage = () => {
 	const {
 		isLoading,
 		error,
 		data: memorizes,
-	} = useQuery(["memorizes"], getMemorizes)
+	} = useQuery(["memorizes"], fetchMemorizes)
 
 	if (isLoading) {
 		return <div>Loading...</div>

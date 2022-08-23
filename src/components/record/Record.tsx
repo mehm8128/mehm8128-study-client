@@ -6,7 +6,7 @@ import { useState } from "react"
 
 import { useRecoilValue } from "recoil"
 import type { RecordResponse } from "../../types/record"
-import { getRecords } from "../apis/record"
+import { fetchRecords } from "../apis/record"
 import RecordFixModal from "./RecordFixModal"
 import { meState, usersState } from "src/recoil/atoms/user"
 import { createdByToString } from "src/utils/createdByToString"
@@ -36,13 +36,13 @@ const Record: React.FC<Props> = (props) => {
 					createdBy: me.id,
 				}
 			)
-			.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
+			.then(() => fetchRecords(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 	}
 	function handleDelete() {
 		axios
 			.delete(process.env.NEXT_PUBLIC_URL + "/api/records/" + props.record.id)
-			.then(() => getRecords(router.asPath === "/user/me" ? me.id : ""))
+			.then(() => fetchRecords(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 		setShouldShowMenuModal(false)
 	}

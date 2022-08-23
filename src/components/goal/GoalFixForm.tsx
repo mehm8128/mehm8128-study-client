@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { getGoals } from "../apis/goal"
+import { fetchGoals } from "../apis/goal"
 import { meState } from "src/recoil/atoms/user"
 
 type Props = {
@@ -48,7 +48,7 @@ const GoalFixForm: React.FC<Props> = ({
 				createdBy: me.id,
 			})
 			.then(() => {
-				getGoals()
+				fetchGoals()
 				setTitle("")
 				setGoalDate("")
 				setComment("")

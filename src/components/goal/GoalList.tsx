@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { getGoals } from "../apis/goal"
+import { fetchGoals } from "../apis/goal"
 import Goal from "./Goal"
 
 type Props = {
@@ -11,7 +11,7 @@ const GoalList: React.FC<Props> = (props) => {
 		isLoading,
 		error,
 		data: goals,
-	} = useQuery("goals", () => getGoals(props.userid || ""))
+	} = useQuery("goals", () => fetchGoals(props.userid || ""))
 
 	if (isLoading) {
 		return <div>Loading...</div>

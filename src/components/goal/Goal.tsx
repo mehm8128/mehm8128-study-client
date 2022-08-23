@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { useRecoilValue } from "recoil"
 import type { GoalResponse } from "../../types/goal"
-import { getGoals } from "../apis/goal"
+import { fetchGoals } from "../apis/goal"
 import GoalFixModal from "./GoalFixModal"
 import { meState, usersState } from "src/recoil/atoms/user"
 import { createdByToString } from "src/utils/createdByToString"
@@ -34,7 +34,7 @@ const Goal: React.FC<Props> = (props) => {
 				isCompleted: true,
 				createdBy: me.id,
 			})
-			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 	}
 	function handleFavorite() {
@@ -45,13 +45,13 @@ const Goal: React.FC<Props> = (props) => {
 					createdBy: me.id,
 				}
 			)
-			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 	}
 	function handleDelete() {
 		axios
 			.delete(process.env.NEXT_PUBLIC_URL + "/api/goals/" + props.goal.id)
-			.then(() => getGoals(router.asPath === "/user/me" ? me.id : ""))
+			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
 			.catch((err) => alert(err))
 		setShouldShowMenuModal(false)
 	}

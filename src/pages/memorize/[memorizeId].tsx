@@ -3,7 +3,7 @@ import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { useQuery } from "react-query"
-import { getQuiz } from "src/components/apis/memorize"
+import { fetchQuiz } from "src/components/apis/memorize"
 import { paramToString } from "src/utils/paramsToString"
 
 type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解
@@ -12,10 +12,17 @@ const Memorize: NextPage = () => {
 	const router = useRouter()
 	const id = router.query.memorizeId
 	const { isLoading, error, data } = useQuery(["quize"], () =>
-		getQuiz(paramToString(id))
+		fetchQuiz(paramToString(id))
 	)
 	const [count, setCount] = useState(0)
 	const [judge, setJudge] = useState<Judge>(0)
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (error) {
+		return <div>Error!</div>
+	}
 
 	function handleAnswer(id: string) {
 		if (id === data![count].answer.id) {
@@ -29,12 +36,6 @@ const Memorize: NextPage = () => {
 			setJudge(0)
 			setCount(count + 1)
 		}
-	}
-	if (isLoading) {
-		return <div>Loading...</div>
-	}
-	if (error) {
-		return <div>Error!</div>
 	}
 
 	return (

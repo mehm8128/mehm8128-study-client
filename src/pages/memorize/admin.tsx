@@ -3,7 +3,7 @@ import type { NextPage } from "next"
 import { useState } from "react"
 import { useQuery } from "react-query"
 import type { WordRequest } from "../../types/memorize"
-import { getMemorizes, postWords } from "src/components/apis/memorize"
+import { fetchMemorizes, postWords } from "src/components/apis/memorize"
 
 const { Option } = Select
 
@@ -14,7 +14,7 @@ const Admin: NextPage = () => {
 		isLoading,
 		error,
 		data: memorizes,
-	} = useQuery(["memorizes"], getMemorizes)
+	} = useQuery(["memorizes"], fetchMemorizes)
 	const [targetMemorize, setTargetMemorize] = useState<string>()
 	async function handleRegister() {
 		if (!/^[a-zA-Z]+$/.test(newWord)) {

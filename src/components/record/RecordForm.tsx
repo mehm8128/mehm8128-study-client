@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useState } from "react"
 import { useRecoilValue } from "recoil"
-import { getRecords } from "../apis/record"
+import { fetchRecords } from "../apis/record"
 import { meState } from "src/recoil/atoms/user"
 
 const { TextArea } = Input
@@ -28,7 +28,7 @@ const RecordForm: React.FC = () => {
 				createdBy: me.id,
 			})
 			.then(() => {
-				getRecords()
+				fetchRecords()
 				setTitle("")
 				setPage("")
 				setTime("")

@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { getRecords } from "../apis/record"
+import { fetchRecords } from "../apis/record"
 
 import Record from "./Record"
 
@@ -12,7 +12,7 @@ const Timeline: React.FC<Props> = (props) => {
 		isLoading,
 		error,
 		data: records,
-	} = useQuery("records", () => getRecords(props.userid || ""))
+	} = useQuery("records", () => fetchRecords(props.userid || ""))
 
 	if (isLoading) {
 		return <div>Loading...</div>

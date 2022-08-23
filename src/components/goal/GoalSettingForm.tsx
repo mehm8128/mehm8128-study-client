@@ -2,7 +2,7 @@ import { Button, Form, Input } from "antd"
 import axios from "axios"
 import { useState } from "react"
 import { useRecoilValue } from "recoil"
-import { getGoals } from "../apis/goal"
+import { fetchGoals } from "../apis/goal"
 import { meState } from "src/recoil/atoms/user"
 
 const { TextArea } = Input
@@ -27,7 +27,7 @@ const GoalSettingForm: React.FC = () => {
 				createdBy: me.id,
 			})
 			.then(() => {
-				getGoals()
+				fetchGoals()
 				setTitle("")
 				setGoalDate("")
 				setComment("")
