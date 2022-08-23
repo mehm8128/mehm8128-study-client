@@ -9,14 +9,14 @@ type Props = {
 const GoalList: React.FC<Props> = (props) => {
 	const {
 		isLoading,
-		error,
+		isError,
 		data: goals,
 	} = useQuery("goals", () => fetchGoals(props.userid || ""))
 
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (error) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 

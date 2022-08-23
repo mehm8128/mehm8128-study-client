@@ -8,12 +8,12 @@ import TimelineContainer from "src/components/container/TimelineContainer"
 const { TabPane } = Tabs
 
 const Index: NextPage = () => {
-	const { isLoading, error } = useQuery(["users"], fetchUsers)
+	const { isLoading, isError } = useQuery(["users"], fetchUsers)
 
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (error) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 	return (

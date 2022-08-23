@@ -14,20 +14,20 @@ const User: NextPage = () => {
 	const router = useRouter()
 	const userId =
 		router.query.userId !== "me" ? paramToString(router.query.userId) : me.id
-	const { isLoading: isUsersLoading, error: usersError } = useQuery(
+	const { isLoading: isUsersLoading, isError: isUsersError } = useQuery(
 		["users"],
 		() => fetchUsers
 	)
 	const {
 		isLoading: isUserLoading,
-		error: userError,
+		isError: isUserError,
 		data: user,
 	} = useQuery(["user", userId], () => fetchUser(userId))
 
 	if (isUsersLoading || isUserLoading) {
 		return <div>Loading...</div>
 	}
-	if (usersError || userError) {
+	if (isUsersError || isUserError) {
 		return <div>Error!</div>
 	}
 	return (

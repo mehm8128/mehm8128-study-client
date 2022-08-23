@@ -11,7 +11,7 @@ type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解
 const Memorize: NextPage = () => {
 	const router = useRouter()
 	const id = router.query.memorizeId
-	const { isLoading, error, data } = useQuery(["quize"], () =>
+	const { isLoading, isError, data } = useQuery(["quize"], () =>
 		fetchQuiz(paramToString(id))
 	)
 	const [count, setCount] = useState(0)
@@ -20,7 +20,7 @@ const Memorize: NextPage = () => {
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (error) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 

@@ -8,14 +8,14 @@ import { fetchMemorizes } from "src/apis/memorize"
 const MemorizePortal: NextPage = () => {
 	const {
 		isLoading,
-		error,
+		isError,
 		data: memorizes,
 	} = useQuery(["memorizes"], fetchMemorizes)
 
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (error) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 	return (

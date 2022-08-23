@@ -10,14 +10,14 @@ type Props = {
 const Timeline: React.FC<Props> = (props) => {
 	const {
 		isLoading,
-		error,
+		isError,
 		data: records,
 	} = useQuery("records", () => fetchRecords(props.userid || ""))
 
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (error) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 	return (

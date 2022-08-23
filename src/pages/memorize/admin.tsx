@@ -12,10 +12,11 @@ const Admin: NextPage = () => {
 	const [newWordJp, setNewWordJp] = useState<string>("")
 	const {
 		isLoading,
-		error,
+		isError,
 		data: memorizes,
 	} = useQuery(["memorizes"], fetchMemorizes)
 	const [targetMemorize, setTargetMemorize] = useState<string>()
+
 	async function handleRegister() {
 		if (!/^[a-zA-Z]+$/.test(newWord)) {
 			alert("英単語はアルファベットで入力してください")
@@ -38,7 +39,7 @@ const Admin: NextPage = () => {
 	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (error) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 
