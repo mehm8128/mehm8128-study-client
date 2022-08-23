@@ -26,7 +26,7 @@ const Timeline: React.FC<Props> = (props) => {
 	return (
 		<div className="w-full">
 			<ul>
-				{records!.map((record) => (
+				{records.map((record) => (
 					<li className="mb-4" key={record.id}>
 						<Record record={record} />
 					</li>

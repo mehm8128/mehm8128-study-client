@@ -1,22 +1,12 @@
-import { useQuery } from "@tanstack/react-query"
 import { Tabs } from "antd"
 import type { NextPage } from "next"
 
-import { fetchUsers } from "src/apis/user"
 import GoalListContainer from "src/components/container/GoalListContainer"
 import TimelineContainer from "src/components/container/TimelineContainer"
 
 const { TabPane } = Tabs
 
 const Index: NextPage = () => {
-	const { isLoading, isError } = useQuery(["users"], fetchUsers)
-
-	if (isLoading) {
-		return <div>Loading...</div>
-	}
-	if (isError) {
-		return <div>Error!</div>
-	}
 	return (
 		<div>
 			<Tabs

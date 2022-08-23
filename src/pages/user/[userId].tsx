@@ -1,9 +1,9 @@
-import { useQueries } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
 
 import { useRecoilValue } from "recoil"
-import { fetchUser, fetchUsers } from "src/apis/user"
+import { fetchUser } from "src/apis/user"
 import UserIntro from "src/components/UserIntro"
 import GoalList from "src/components/goal/GoalList"
 import Timeline from "src/components/record/Timeline"
@@ -15,19 +15,16 @@ const User: NextPage = () => {
 	const router = useRouter()
 	const userId =
 		router.query.userId !== "me" ? paramToString(router.query.userId) : me.id
-	const [
-		{ isLoading: isUsersLoading, isError: isUsersError },
-		{ isLoading: isUserLoading, isError: isUserError, data: user },
-	] = useQueries({
-		queries: [
-			{ queryKey: ["users"], queryFn: fetchUsers },
-			{ queryKey: ["user", userId], queryFn: () => fetchUser(userId) },
-		],
-	})
-	if (isUserLoading || isUsersLoading) {
+	const {
+		isLoading,
+		isError,
+		data: user,
+	} = useQuery(["user", userId], () => fetchUser(userId))
+
+	if (isLoading) {
 		return <div>Loading...</div>
 	}
-	if (isUserError || isUsersError) {
+	if (isError) {
 		return <div>Error!</div>
 	}
 	return (

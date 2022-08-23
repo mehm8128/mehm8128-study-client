@@ -24,7 +24,7 @@ const GoalList: React.FC<Props> = (props) => {
 	return (
 		<div className="w-full">
 			<ul>
-				{goals!.map((goal) => (
+				{goals.map((goal) => (
 					<li className="mb-4" key={goal.id}>
 						<Goal goal={goal} />
 					</li>

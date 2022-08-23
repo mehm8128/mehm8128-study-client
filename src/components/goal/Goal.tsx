@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query"
 import { Avatar, Button, Modal } from "antd"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -11,7 +12,8 @@ import {
 } from "../../apis/goal"
 import type { GoalPutRequest, GoalResponse } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
-import { meState, usersState } from "src/recoil/atoms/user"
+import { fetchUsers } from "src/apis/user"
+import { meState } from "src/recoil/atoms/user"
 import type { GoalFavoritePutRequest } from "src/types/favorite"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
@@ -23,7 +25,11 @@ type Props = {
 const Goal: React.FC<Props> = (props) => {
 	const router = useRouter()
 	const me = useRecoilValue(meState)
-	const users = useRecoilValue(usersState)
+	const {
+		isLoading,
+		isError,
+		data: users,
+	} = useQuery(["users"], () => fetchUsers())
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 
@@ -57,6 +63,14 @@ const Goal: React.FC<Props> = (props) => {
 			.catch((err) => alert(err))
 		setShouldShowMenuModal(false)
 	}
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (isError) {
+		return <div>Error!</div>
+	}
+
 	return (
 		<>
 			<div className="border-2 p-2">

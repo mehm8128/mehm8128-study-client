@@ -43,7 +43,7 @@ const Memorize: NextPage = () => {
 		<div className="p-8">
 			<h1 className="pb-8 text-2xl">タイトル</h1>
 			<div className="md:w-1/5">
-				{data && data[count].answer && data[count].answer.word ? (
+				{data[count].answer.word ? (
 					<p className="pb-2 text-xl">
 						{data[count].answer.word}の意味を選んでください
 					</p>
@@ -51,7 +51,7 @@ const Memorize: NextPage = () => {
 					"データがありません。"
 				)}
 				<List
-					dataSource={data && data![count].choices}
+					dataSource={data && data[count].choices}
 					renderItem={(choice) => (
 						<List.Item key={choice.id}>
 							<Button
@@ -68,7 +68,7 @@ const Memorize: NextPage = () => {
 				{judge !== 0 ? (
 					<div className="mt-2 flex justify-around">
 						{judge === 1 ? "正解" : "不正解"}
-						{count !== data!.length - 1 ? (
+						{count !== data.length - 1 ? (
 							<Button onClick={handleGoToNext}>次へ</Button>
 						) : (
 							<p>終わり</p>

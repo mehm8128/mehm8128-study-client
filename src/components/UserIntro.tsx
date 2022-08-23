@@ -1,7 +1,7 @@
+import { useQuery } from "@tanstack/react-query"
 import { Avatar } from "antd"
-import { useRecoilValue } from "recoil"
-import { recordsState } from "src/recoil/atoms/record"
-import { usersState } from "src/recoil/atoms/user"
+import { fetchRecords } from "src/apis/record"
+import { fetchUsers } from "src/apis/user"
 import type { UserResponse } from "src/types/user"
 import { createdByToString } from "src/utils/createdByToString"
 import { minutesToHoursAndMinutes } from "src/utils/minutesToHoursAndMinutes"
@@ -10,8 +10,24 @@ type Props = {
 	user: UserResponse
 }
 const UserIntro: React.FC<Props> = (props) => {
-	const users = useRecoilValue(usersState)
-	const records = useRecoilValue(recordsState)
+	const {
+		isLoading: isUsersLoading,
+		isError: isUsersError,
+		data: users,
+	} = useQuery(["users"], fetchUsers)
+	const {
+		isLoading: isRecordsLoading,
+		isError: isRecordsError,
+		data: records,
+	} = useQuery(["records"], () => fetchRecords())
+
+	if (isUsersLoading || isRecordsLoading) {
+		return <div>Loading...</div>
+	}
+	if (isUsersError || isRecordsError) {
+		return <div>Error!</div>
+	}
+
 	const fullStudyTime = records.reduce((acc, record) => {
 		return acc + record.time
 	}, 0)
