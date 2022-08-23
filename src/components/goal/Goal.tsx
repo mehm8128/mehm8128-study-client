@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Avatar, Button, Modal } from "antd"
+import { Avatar, Button, Popover } from "antd"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -89,22 +89,8 @@ const Goal: React.FC<Props> = (props) => {
 						<div className="flex items-center">
 							<p className="mr-2">{dateFormatter(props.goal.createdAt)}</p>
 							{me.id === props.goal.createdBy ? (
-								<>
-									<Button
-										className="border-full text-12 w-12 font-bold"
-										type="text"
-										onClick={() => setShouldShowMenuModal(true)}
-									>
-										・・・
-									</Button>
-									<Modal
-										className="absolute right-0 top-0"
-										footer={null}
-										mask={false}
-										visible={shouldShowMenuModal}
-										width={200}
-										onCancel={() => setShouldShowMenuModal(false)}
-									>
+								<Popover
+									content={
 										<ul>
 											<li>
 												<Button type="text" onClick={handleClick}>
@@ -117,8 +103,18 @@ const Goal: React.FC<Props> = (props) => {
 												</Button>
 											</li>
 										</ul>
-									</Modal>
-								</>
+									}
+									trigger="click"
+									visible={shouldShowMenuModal}
+									onVisibleChange={setShouldShowMenuModal}
+								>
+									<Button
+										className="border-full text-12 w-12 font-bold"
+										type="text"
+									>
+										・・・
+									</Button>
+								</Popover>
 							) : null}
 						</div>
 					</div>
