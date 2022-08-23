@@ -1,7 +1,7 @@
 export interface MemorizeResponse {
 	id: string
 	name: string
-	words: Word[]
+	words: WordResponse[]
 	createdAt: string
 	updatedAt: string
 }
