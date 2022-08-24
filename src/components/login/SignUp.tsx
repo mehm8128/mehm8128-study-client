@@ -4,14 +4,9 @@ import { useState } from "react"
 import { useSetRecoilState } from "recoil"
 import { postSignup } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
+import { SignupRequest } from "src/types/user"
 
 const { TextArea } = Input
-
-export interface SignupData {
-	name: string
-	password: string
-	description: string
-}
 
 const SignUp: React.FC = () => {
 	const router = useRouter()
@@ -32,7 +27,7 @@ const SignUp: React.FC = () => {
 			)
 			return
 		}
-		const data: SignupData = {
+		const data: SignupRequest = {
 			name: userName,
 			password: password,
 			description: description,

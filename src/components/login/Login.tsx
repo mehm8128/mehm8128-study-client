@@ -4,11 +4,7 @@ import { useState } from "react"
 import { useSetRecoilState } from "recoil"
 import { postLogin } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
-
-export interface LoginData {
-	name: string
-	password: string
-}
+import { LoginRequest } from "src/types/user"
 
 const Login: React.FC = () => {
 	const router = useRouter()
@@ -17,7 +13,7 @@ const Login: React.FC = () => {
 	const [password, setPassword] = useState("")
 
 	function handleLogin() {
-		const data: LoginData = {
+		const data: LoginRequest = {
 			name: userName,
 			password: password,
 		}
