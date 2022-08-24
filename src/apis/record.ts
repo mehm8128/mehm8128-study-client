@@ -1,10 +1,6 @@
 import axios from "axios"
 import type { RecordFavoritePutRequest } from "src/types/favorite"
-import type {
-	RecordPostRequest,
-	RecordPutRequest,
-	RecordResponse,
-} from "src/types/record"
+import type { RecordRequest, RecordResponse } from "src/types/record"
 
 export const fetchRecords = async (id?: string) => {
 	const userId = id ? "/user/" + id : ""
@@ -14,7 +10,7 @@ export const fetchRecords = async (id?: string) => {
 	return records
 }
 
-export const postRecord = async (data: RecordPostRequest) => {
+export const postRecord = async (data: RecordRequest) => {
 	const res: RecordResponse = await axios.post(
 		process.env.NEXT_PUBLIC_URL + "/api/records",
 		data
@@ -22,7 +18,7 @@ export const postRecord = async (data: RecordPostRequest) => {
 	return res
 }
 
-export const putRecord = async (recordId: string, data: RecordPutRequest) => {
+export const putRecord = async (recordId: string, data: RecordRequest) => {
 	const res: RecordResponse = await axios.put(
 		process.env.NEXT_PUBLIC_URL + "/api/records/" + recordId,
 		data
