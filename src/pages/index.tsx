@@ -9,17 +9,11 @@ const { TabPane } = Tabs
 const Index: NextPage = () => {
 	return (
 		<div>
-			<Tabs
-				centered
-				className="mt-8 flex justify-center"
-				defaultActiveKey="timeline"
-				size="large"
-				tabBarGutter={100}
-			>
-				<TabPane className="h-12 text-lg" key="timeline" tab="タイムライン">
+			<Tabs centered className="mt-4" defaultActiveKey="timeline" size="large">
+				<TabPane key="timeline" tab="タイムライン">
 					<TimelineContainer />
 				</TabPane>
-				<TabPane className="h-12 text-lg" key="goals" tab="目標">
+				<TabPane key="goals" tab="目標">
 					<GoalListContainer />
 				</TabPane>
 			</Tabs>

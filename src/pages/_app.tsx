@@ -1,4 +1,5 @@
 import "../styles/globals.css"
+import "../styles/libs.css"
 import "windi.css"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
