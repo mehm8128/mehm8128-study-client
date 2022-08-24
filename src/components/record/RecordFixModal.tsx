@@ -1,7 +1,7 @@
 import { Modal } from "antd"
 
 import type { RecordResponse } from "../../types/record"
-import RecordFixForm from "./RecordFixForm"
+import RecordForm from "./RecordForm"
 
 type Props = {
 	record: RecordResponse
@@ -9,6 +9,12 @@ type Props = {
 	setShouldShowFixModal: (value: boolean) => void
 }
 const RecordFixModal: React.FC<Props> = (props) => {
+	const defaultValues = {
+		title: props.record.title,
+		page: props.record.page,
+		time: props.record.time,
+		comment: props.record.comment,
+	}
 	return (
 		<Modal
 			centered
@@ -17,11 +23,8 @@ const RecordFixModal: React.FC<Props> = (props) => {
 			visible={props.shoudShowFixModal}
 			onCancel={() => props.setShouldShowFixModal(false)}
 		>
-			<RecordFixForm
-				defaultComment={props.record.comment}
-				defaultPage={props.record.page.toString()}
-				defaultTime={props.record.time.toString()}
-				defaultTitle={props.record.title}
+			<RecordForm
+				defaultValues={defaultValues}
 				id={props.record.id}
 				setShouldShowFixModal={props.setShouldShowFixModal}
 			/>

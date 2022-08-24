@@ -14,19 +14,11 @@ export interface RecordResponse {
 	updatedAt: string
 }
 
-export interface RecordPostRequest {
+export interface RecordRequest {
 	title: string
 	page: number
 	time: number
 	comment: string
-	fileId: string | null
-	createdBy: string
-}
-
-export interface RecordPutRequest {
-	title: string
-	page: number
-	time: number
-	comment: string
+	fileId?: string | null
 	createdBy: string
 }
