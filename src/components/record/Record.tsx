@@ -62,7 +62,7 @@ const Record: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<div className="border-2 p-2">
+			<div className="border-2 p-2 text-lg">
 				<div className="flex justify-between">
 					<Link passHref href={"/user/" + props.record.createdBy}>
 						<div className="flex items-center justify-center">
@@ -72,7 +72,7 @@ const Record: React.FC<Props> = (props) => {
 									1
 								)}
 							</Avatar>
-							<span className="text-lg text-xl">
+							<span className="text-xl">
 								{createdByToString(props.record.createdBy, users)}
 							</span>
 						</div>

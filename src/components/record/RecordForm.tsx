@@ -108,7 +108,12 @@ const RecordForm: React.FC<Props> = ({
 	])
 
 	return (
-		<Form form={form} labelCol={{ span: 5 }} onFinish={handleSubmit}>
+		<Form
+			className={`${!isFixMode && "p-4"}`}
+			form={form}
+			labelCol={{ span: 5 }}
+			onFinish={handleSubmit}
+		>
 			<Form.Item
 				initialValue={defaultValues?.title}
 				label="タイトル"

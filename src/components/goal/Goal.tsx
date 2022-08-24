@@ -73,14 +73,14 @@ const Goal: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<div className="border-2 p-2">
+			<div className="border-2 p-2 text-lg">
 				<div className="flex justify-between">
 					<Link passHref href={"/user/" + props.goal.createdBy}>
 						<div className="flex items-center justify-center">
 							<Avatar className="mr-2">
 								{createdByToString(props.goal.createdBy, users).substring(0, 1)}
 							</Avatar>
-							<span className="text-lg text-xl">
+							<span className="text-xl">
 								{createdByToString(props.goal.createdBy, users)}
 							</span>
 						</div>
