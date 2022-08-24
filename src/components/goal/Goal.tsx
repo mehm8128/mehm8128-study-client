@@ -1,15 +1,9 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Popover } from "antd"
 import Link from "next/link"
-import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import {
-	deleteGoal,
-	fetchGoals,
-	putGoal,
-	putGoalFavorite,
-} from "../../apis/goal"
+import { deleteGoal, putGoal, putGoalFavorite } from "../../apis/goal"
 import type { GoalPutRequest, GoalResponse } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
 import { fetchUsers } from "src/apis/user"
@@ -23,7 +17,6 @@ type Props = {
 }
 
 const Goal: React.FC<Props> = (props) => {
-	const router = useRouter()
 	const me = useRecoilValue(meState)
 	const {
 		isLoading,
@@ -32,6 +25,9 @@ const Goal: React.FC<Props> = (props) => {
 	} = useQuery(["users"], () => fetchUsers())
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
+	const queryClient = useQueryClient()
+	const [favoriteNum, setFavoriteNum] = useState(0)
+	const [isCompleted, setIsCompleted] = useState(false)
 
 	function handleClick() {
 		setShouldShowFixModal(true)
@@ -46,23 +42,25 @@ const Goal: React.FC<Props> = (props) => {
 			createdBy: me.id,
 		}
 		await putGoal(props.goal.id, data)
-			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
-			.catch((err) => alert(err))
+		setIsCompleted(true)
 	}
 	async function handleFavorite() {
 		const data: GoalFavoritePutRequest = {
 			createdBy: me.id,
 		}
 		await putGoalFavorite(props.goal.id, data)
-			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
-			.catch((err) => alert(err))
+		setFavoriteNum(favoriteNum + 1)
 	}
 	async function handleDelete() {
 		await deleteGoal(props.goal.id)
-			.then(() => fetchGoals(router.asPath === "/user/me" ? me.id : ""))
-			.catch((err) => alert(err))
+		queryClient.invalidateQueries(["goals"])
 		setShouldShowMenuModal(false)
 	}
+
+	useEffect(() => {
+		setFavoriteNum(props.goal.favoriteNum)
+		setIsCompleted(props.goal.isCompleted)
+	}, [props.goal.favoriteNum, props.goal.isCompleted])
 
 	if (isLoading) {
 		return <div>Loading...</div>
@@ -126,14 +124,12 @@ const Goal: React.FC<Props> = (props) => {
 					<p className="whitespace-pre-wrap">{props.goal.comment}</p>
 				</div>
 				<div className="flex items-center justify-evenly">
-					{props.goal.isCompleted ? (
+					{isCompleted ? (
 						<Button disabled={true}>完了済み</Button>
 					) : (
 						<Button onClick={handleComplete}>この目標を完了する</Button>
 					)}
-					<Button onClick={handleFavorite}>
-						いいね！ {props.goal.favoriteNum}
-					</Button>
+					<Button onClick={handleFavorite}>いいね！ {favoriteNum}</Button>
 				</div>
 			</div>
 			<GoalFixModal

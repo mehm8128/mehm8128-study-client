@@ -1,16 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Modal, Popover } from "antd"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useRecoilValue } from "recoil"
-import {
-	deleteRecord,
-	fetchRecords,
-	putRecordFavorite,
-} from "../../apis/record"
+import { deleteRecord, putRecordFavorite } from "../../apis/record"
 import type { RecordResponse } from "../../types/record"
 import RecordFixModal from "./RecordFixModal"
 import { fetchUsers } from "src/apis/user"
@@ -23,7 +18,6 @@ type Props = {
 }
 
 const Record: React.FC<Props> = (props) => {
-	const router = useRouter()
 	const me = useRecoilValue(meState)
 	const {
 		isLoading,
@@ -33,6 +27,8 @@ const Record: React.FC<Props> = (props) => {
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	const [shouldShowImageModal, setShouldShowImageModal] = useState(false)
+	const queryClient = useQueryClient()
+	const [favoriteNum, setFavoriteNum] = useState(0)
 
 	function handleClick() {
 		setShouldShowFixModal(true)
@@ -43,15 +39,17 @@ const Record: React.FC<Props> = (props) => {
 			createdBy: me.id,
 		}
 		await putRecordFavorite(props.record.id, data)
-			.then(() => fetchRecords(router.asPath === "/user/me" ? me.id : ""))
-			.catch((err) => alert(err))
+		setFavoriteNum(favoriteNum + 1)
 	}
 	async function handleDelete() {
 		await deleteRecord(props.record.id)
-			.then(() => fetchRecords(router.asPath === "/user/me" ? me.id : ""))
-			.catch((err) => alert(err))
+		queryClient.invalidateQueries(["records"])
 		setShouldShowMenuModal(false)
 	}
+
+	useEffect(() => {
+		setFavoriteNum(props.record.favoriteNum)
+	}, [props.record.favoriteNum])
 
 	if (isLoading) {
 		return <div>Loading...</div>
@@ -148,9 +146,7 @@ const Record: React.FC<Props> = (props) => {
 					</div>
 				)}
 				<div className="flex items-center justify-evenly">
-					<Button onClick={handleFavorite}>
-						いいね！ {props.record.favoriteNum}
-					</Button>
+					<Button onClick={handleFavorite}>いいね！ {favoriteNum}</Button>
 				</div>
 			</div>
 			<RecordFixModal
