@@ -19,7 +19,7 @@ const User: NextPage = () => {
 		isLoading,
 		isError,
 		data: user,
-	} = useQuery(["user", userId], () => fetchUser(userId))
+	} = useQuery(["users", userId], () => fetchUser(userId))
 
 	if (isLoading) {
 		return <div>Loading...</div>

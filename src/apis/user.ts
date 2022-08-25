@@ -1,7 +1,11 @@
 import axios from "axios"
-import { LoginData } from "../components/login/Login"
-import { SignupData } from "../components/login/SignUp"
-import type { Me, UserResponse } from "src/types/user"
+import type {
+	LoginRequest,
+	Me,
+	SignupRequest,
+	UserPutRequest,
+	UserResponse,
+} from "src/types/user"
 
 export const fetchUsers = async () => {
 	const users: UserResponse[] = (
@@ -26,7 +30,7 @@ export const fetchMe = async () => {
 	return me
 }
 
-export const postSignup = async (data: SignupData) => {
+export const postSignup = async (data: SignupRequest) => {
 	const res = await axios.post(
 		process.env.NEXT_PUBLIC_URL + "/api/users/signup",
 		data
@@ -34,7 +38,7 @@ export const postSignup = async (data: SignupData) => {
 	return res
 }
 
-export const postLogin = async (data: LoginData) => {
+export const postLogin = async (data: LoginRequest) => {
 	const res = await axios.post(
 		process.env.NEXT_PUBLIC_URL + "/api/users/login",
 		data,
@@ -50,6 +54,15 @@ export const postLogout = async () => {
 		{
 			withCredentials: true,
 		}
+	)
+	return res
+}
+
+export const putUser = async (data: UserPutRequest) => {
+	const res = await axios.put(
+		process.env.NEXT_PUBLIC_URL + "/api/users/me",
+		data,
+		{ withCredentials: true }
 	)
 	return res
 }
