@@ -4,7 +4,11 @@ import { useRecoilState } from "recoil"
 import { fetchMe } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
 
-const Wrapper: React.FC = ({ children }) => {
+interface Props {
+	children: React.ReactNode
+}
+
+const Wrapper: React.FC<Props> = ({ children }) => {
 	const router = useRouter()
 	const [me, setMe] = useRecoilState(meState)
 
