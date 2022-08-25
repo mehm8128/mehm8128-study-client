@@ -1,31 +1,29 @@
 import { title } from "process"
-import { useQueryClient } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { putUser } from "src/apis/user"
+import { fetchUser, putUser } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import { UserPutRequest } from "src/types/user"
 
 const { TextArea } = Input
 
 interface Props {
-	defaultValues: {
-		username: string
-		description: string
-	}
 	setShouldShowFixModal: (value: boolean) => void
 }
 
-const UserFixForm: React.FC<Props> = ({
-	defaultValues,
-	setShouldShowFixModal,
-}) => {
+const UserFixForm: React.FC<Props> = ({ setShouldShowFixModal }) => {
 	const me = useRecoilValue(meState)
 	const [username, setUsername] = useState("")
 	const [description, setDescription] = useState("")
 	const queryClient = useQueryClient()
 	const [form] = Form.useForm()
+	const {
+		isLoading,
+		isError,
+		data: defaultValues,
+	} = useQuery(["users", me.id], () => fetchUser(me.id))
 
 	async function handleSubmit() {
 		if (username.length == 0) {
@@ -43,14 +41,21 @@ const UserFixForm: React.FC<Props> = ({
 	}
 
 	useEffect(() => {
-		setUsername(defaultValues.username)
-		setDescription(defaultValues.description)
-	}, [defaultValues.description, defaultValues.username])
+		setUsername(defaultValues!.name)
+		setDescription(defaultValues!.description)
+	}, [defaultValues?.description, defaultValues?.name])
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+	if (isError) {
+		return <div>Error!</div>
+	}
 
 	return (
 		<Form form={form} labelCol={{ span: 5 }} onFinish={handleSubmit}>
 			<Form.Item
-				initialValue={defaultValues.username}
+				initialValue={defaultValues.name}
 				label="ユーザー名"
 				name="username"
 			>

@@ -1,36 +1,34 @@
 import { useQuery } from "@tanstack/react-query"
 import { Avatar, Button } from "antd"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRecoilValue } from "recoil"
 import UserFixModal from "./UserFixModal"
 import { fetchRecords } from "src/apis/record"
+import { fetchUser } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
-import type { UserResponse } from "src/types/user"
 import { minutesToHoursAndMinutes } from "src/utils/minutesToHoursAndMinutes"
 
 type Props = {
-	user: UserResponse
+	userId: string
 }
 const UserIntro: React.FC<Props> = (props) => {
 	const {
-		isLoading,
-		isError,
+		isLoading: isRecordsLoading,
+		isError: isRecordsError,
 		data: records,
 	} = useQuery(["records"], () => fetchRecords())
-	const [username, setUsername] = useState(props.user.name)
-	const [description, setDescription] = useState(props.user.description)
+	const {
+		isLoading: isUserLoading,
+		isError: isUserError,
+		data: user,
+	} = useQuery(["users", props.userId], () => fetchUser(props.userId))
 	const me = useRecoilValue(meState)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 
-	useEffect(() => {
-		setUsername(props.user.name)
-		setDescription(props.user.description)
-	}, [props.user.description, props.user.name])
-
-	if (isLoading) {
+	if (isRecordsLoading || isUserLoading) {
 		return <div>Loading...</div>
 	}
-	if (isError) {
+	if (isRecordsError || isUserError) {
 		return <div>Error!</div>
 	}
 
@@ -42,9 +40,9 @@ const UserIntro: React.FC<Props> = (props) => {
 		<>
 			<div className="p-4">
 				<div className="flex items-center">
-					<Avatar className="mr-2">{username.substring(0, 1)}</Avatar>
-					<p className="text-2xl">{username}</p>
-					{me.id === props.user.id ? (
+					<Avatar className="mr-2">{user.name.substring(0, 1)}</Avatar>
+					<p className="text-2xl">{user.name}</p>
+					{me.id === props.userId ? (
 						<Button
 							className="ml-4"
 							onClick={() => setShouldShowFixModal(true)}
@@ -55,13 +53,12 @@ const UserIntro: React.FC<Props> = (props) => {
 				</div>
 				<div className="h-20 p-4 text-lg">
 					<p>総勉強時間：{minutesToHoursAndMinutes(fullStudyTime)}</p>
-					<p className="whitespace-pre-wrap">{description}</p>
+					<p className="whitespace-pre-wrap">{user.description}</p>
 				</div>
 			</div>
 			<UserFixModal
 				setShouldShowFixModal={setShouldShowFixModal}
 				shouldShowFixModal={shouldShowFixModal}
-				user={props.user}
 			/>
 		</>
 	)
