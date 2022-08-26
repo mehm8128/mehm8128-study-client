@@ -1,24 +1,21 @@
-import { useQuery } from "@tanstack/react-query"
 import { List, Button } from "antd"
 import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { useFetchQuiz } from "src/apis/memorize"
 
-import { fetchQuiz } from "src/apis/memorize"
 import { paramToString } from "src/utils/paramsToString"
 
 type Judge = 0 | 1 | 2 //0：まだ、1:正解、2:不正解
 
 const Memorize: NextPage = () => {
 	const router = useRouter()
-	const id = paramToString(router.query.memorizeId)
-	const { isLoading, isError, data } = useQuery(["quize", id], () =>
-		fetchQuiz(id)
-	)
+	const memorizeId = paramToString(router.query.memorizeId)
+	const { data: quiz, isError } = useFetchQuiz(memorizeId)
 	const [count, setCount] = useState(0)
 	const [judge, setJudge] = useState<Judge>(0)
 
-	if (isLoading) {
+	if (!quiz) {
 		return <div>Loading...</div>
 	}
 	if (isError) {
@@ -26,14 +23,14 @@ const Memorize: NextPage = () => {
 	}
 
 	function handleAnswer(id: string) {
-		if (id === data![count].answer.id) {
+		if (id === quiz![count].answer.id) {
 			setJudge(1)
 		} else {
 			setJudge(2)
 		}
 	}
 	function handleGoToNext() {
-		if (count < data!.length - 1) {
+		if (count < quiz!.length - 1) {
 			setJudge(0)
 			setCount(count + 1)
 		}
@@ -43,15 +40,15 @@ const Memorize: NextPage = () => {
 		<div className="p-8">
 			<h1 className="pb-8 text-2xl">タイトル</h1>
 			<div className="md:w-1/5">
-				{data[count].answer.word ? (
+				{quiz[count].answer.word ? (
 					<p className="pb-2 text-xl">
-						{data[count].answer.word}の意味を選んでください
+						{quiz[count].answer.word}の意味を選んでください
 					</p>
 				) : (
 					"データがありません。"
 				)}
 				<List
-					dataSource={data && data[count].choices}
+					dataSource={quiz[count].choices}
 					renderItem={(choice) => (
 						<List.Item key={choice.id}>
 							<Button
@@ -68,7 +65,7 @@ const Memorize: NextPage = () => {
 				{judge !== 0 ? (
 					<div className="mt-2 flex justify-around">
 						{judge === 1 ? "正解" : "不正解"}
-						{count !== data.length - 1 ? (
+						{count !== quiz.length - 1 ? (
 							<Button onClick={handleGoToNext}>次へ</Button>
 						) : (
 							<p>終わり</p>

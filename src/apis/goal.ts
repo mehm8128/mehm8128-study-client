@@ -1,17 +1,23 @@
 import axios from "axios"
+import useSWR from "swr"
+import { SwrResponse } from "src/types/SWR"
 import type { GoalFavoritePutRequest } from "src/types/favorite"
 import type {
 	GoalPostRequest,
 	GoalPutRequest,
 	GoalResponse,
 } from "src/types/goal"
+import { fetcher } from "src/utils/fetcher"
 
-export const fetchGoals = async (id?: string) => {
-	const goalId = id ? "/user/" + id : ""
-	const goals: GoalResponse[] = (
-		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/goals" + goalId)
-	).data
-	return goals
+export const useFetchGoals = (userId = ""): SwrResponse<GoalResponse[]> => {
+	const { data, error } = useSWR<GoalResponse[], Error>(
+		`${process.env.NEXT_PUBLIC_URL}/api/goals/user/${userId}`,
+		fetcher
+	)
+	return {
+		data: data,
+		isError: !!error,
+	}
 }
 
 export const postGoal = async (data: GoalPostRequest) => {

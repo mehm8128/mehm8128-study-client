@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Modal, Popover } from "antd"
 import Image from "next/image"
 import Link from "next/link"
@@ -8,7 +8,7 @@ import { useRecoilValue } from "recoil"
 import { deleteRecord, putRecordFavorite } from "../../apis/record"
 import type { RecordResponse } from "../../types/record"
 import RecordFixModal from "./RecordFixModal"
-import { fetchUsers } from "src/apis/user"
+import { useFetchUsers } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
@@ -19,11 +19,7 @@ type Props = {
 
 const Record: React.FC<Props> = (props) => {
 	const me = useRecoilValue(meState)
-	const {
-		isLoading,
-		isError,
-		data: users,
-	} = useQuery(["users"], () => fetchUsers())
+	const { data: users, isError } = useFetchUsers()
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	const [shouldShowImageModal, setShouldShowImageModal] = useState(false)
@@ -51,7 +47,7 @@ const Record: React.FC<Props> = (props) => {
 		setFavoriteNum(props.record.favoriteNum)
 	}, [props.record.favoriteNum])
 
-	if (isLoading) {
+	if (!users) {
 		return <div>Loading...</div>
 	}
 	if (isError) {

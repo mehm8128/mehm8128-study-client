@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Popover } from "antd"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil"
 import { deleteGoal, putGoal, putGoalFavorite } from "../../apis/goal"
 import type { GoalPutRequest, GoalResponse } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
-import { fetchUsers } from "src/apis/user"
+import { useFetchUsers } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import type { GoalFavoritePutRequest } from "src/types/favorite"
 import { createdByToString } from "src/utils/createdByToString"
@@ -18,11 +18,7 @@ type Props = {
 
 const Goal: React.FC<Props> = (props) => {
 	const me = useRecoilValue(meState)
-	const {
-		isLoading,
-		isError,
-		data: users,
-	} = useQuery(["users"], () => fetchUsers())
+	const { data: users, isError } = useFetchUsers()
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	const queryClient = useQueryClient()
@@ -62,7 +58,7 @@ const Goal: React.FC<Props> = (props) => {
 		setIsCompleted(props.goal.isCompleted)
 	}, [props.goal.favoriteNum, props.goal.isCompleted])
 
-	if (isLoading) {
+	if (!users) {
 		return <div>Loading...</div>
 	}
 	if (isError) {

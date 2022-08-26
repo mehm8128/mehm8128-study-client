@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
-import { fetchGoals, postGoal, putGoal } from "../../apis/goal"
+import { postGoal, putGoal } from "../../apis/goal"
 import { meState } from "src/recoil/atoms/user"
 import type { GoalPostRequest } from "src/types/goal"
 
@@ -51,7 +51,6 @@ const GoalSettingForm: React.FC<Props> = ({
 			await putGoal(id, data)
 			setShouldShowFixModal!(false)
 		}
-		fetchGoals()
 		setTitle("")
 		setGoalDate("")
 		setComment("")

@@ -1,33 +1,45 @@
 import axios from "axios"
+import useSWR from "swr"
+import { SwrResponse } from "src/types/SWR"
 import type {
 	LoginRequest,
-	Me,
 	SignupRequest,
 	UserPutRequest,
 	UserResponse,
 } from "src/types/user"
+import { fetcher } from "src/utils/fetcher"
 
-export const fetchUsers = async () => {
-	const users: UserResponse[] = (
-		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users")
-	).data
-	return users
+export const useFetchUsers = (): SwrResponse<UserResponse[]> => {
+	const { data, error } = useSWR<UserResponse[], Error>(
+		`${process.env.NEXT_PUBLIC_URL}/api/users`,
+		fetcher
+	)
+	return {
+		data: data,
+		isError: !!error,
+	}
 }
 
-export const fetchUser = async (userId: string) => {
-	const user: UserResponse = (
-		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users/" + userId)
-	).data
-	return user
+export const useFetchUser = (userId: string): SwrResponse<UserResponse> => {
+	const { data, error } = useSWR<UserResponse, Error>(
+		`${process.env.NEXT_PUBLIC_URL}/api/users/${userId}`,
+		fetcher
+	)
+	return {
+		data: data,
+		isError: !!error,
+	}
 }
 
-export const fetchMe = async () => {
-	const me: Me = (
-		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/users/me", {
-			withCredentials: true,
-		})
-	).data
-	return me
+export const useFetchMe = (): SwrResponse<UserResponse> => {
+	const { data, error } = useSWR<UserResponse, Error>(
+		`${process.env.NEXT_PUBLIC_URL}/api/users/me`,
+		fetcher
+	)
+	return {
+		data: data,
+		isError: !!error,
+	}
 }
 
 export const postSignup = async (data: SignupRequest) => {
