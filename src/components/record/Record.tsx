@@ -1,10 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Modal, Popover } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 import { useRecoilValue } from "recoil"
+import { useSWRConfig } from "swr"
 import { deleteRecord, putRecordFavorite } from "../../apis/record"
 import type { RecordResponse } from "../../types/record"
 import RecordFixModal from "./RecordFixModal"
@@ -23,8 +23,8 @@ const Record: React.FC<Props> = (props) => {
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	const [shouldShowImageModal, setShouldShowImageModal] = useState(false)
-	const queryClient = useQueryClient()
 	const [favoriteNum, setFavoriteNum] = useState(0)
+	const { mutate } = useSWRConfig()
 
 	function handleClick() {
 		setShouldShowFixModal(true)
@@ -34,12 +34,12 @@ const Record: React.FC<Props> = (props) => {
 		const data = {
 			createdBy: me.id,
 		}
+		setFavoriteNum((prev) => prev + 1)
 		await putRecordFavorite(props.record.id, data)
-		setFavoriteNum(favoriteNum + 1)
 	}
 	async function handleDelete() {
 		await deleteRecord(props.record.id)
-		queryClient.invalidateQueries(["records"])
+		mutate(`${process.env.NEXT_PUBLIC_URL}/api/records`)
 		setShouldShowMenuModal(false)
 	}
 

@@ -13,7 +13,7 @@ export const useFetchQuiz = (
 	memorizeId: string,
 	options: SWRConfiguration = {}
 ): SwrResponse<QuizResponse[]> => {
-	const { data, error } = useSWR<QuizResponse[], Error>(
+	const { data, error, mutate } = useSWR<QuizResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/memorizes/${memorizeId}/quiz`,
 		fetcher,
 		options
@@ -21,13 +21,14 @@ export const useFetchQuiz = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 
 export const useFetchMemorizes = (
 	options: SWRConfiguration = {}
 ): SwrResponse<MemorizeResponse[]> => {
-	const { data, error } = useSWR<MemorizeResponse[], Error>(
+	const { data, error, mutate } = useSWR<MemorizeResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/memorizes`,
 		fetcher,
 		options
@@ -35,6 +36,7 @@ export const useFetchMemorizes = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 

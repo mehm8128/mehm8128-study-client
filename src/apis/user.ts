@@ -13,7 +13,7 @@ import { fetcher } from "src/utils/fetcher"
 export const useFetchUsers = (
 	options: SWRConfiguration = {}
 ): SwrResponse<UserResponse[]> => {
-	const { data, error } = useSWR<UserResponse[], Error>(
+	const { data, error, mutate } = useSWR<UserResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/users`,
 		fetcher,
 		options
@@ -21,6 +21,7 @@ export const useFetchUsers = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 
@@ -28,7 +29,7 @@ export const useFetchUser = (
 	userId: string,
 	options: SWRConfiguration = {}
 ): SwrResponse<UserResponse> => {
-	const { data, error } = useSWR<UserResponse, Error>(
+	const { data, error, mutate } = useSWR<UserResponse, Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/users/${userId}`,
 		fetcher,
 		options
@@ -36,13 +37,14 @@ export const useFetchUser = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 
 export const useFetchMe = (
 	options: SWRConfiguration = {}
 ): SwrResponse<UserResponse> => {
-	const { data, error } = useSWR<UserResponse, Error>(
+	const { data, error, mutate } = useSWR<UserResponse, Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/users/me`,
 		fetcher,
 		options
@@ -50,6 +52,7 @@ export const useFetchMe = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 

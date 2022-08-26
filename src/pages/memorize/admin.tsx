@@ -26,11 +26,9 @@ const Admin: NextPage = () => {
 			word: newWord,
 			wordJp: newWordJp,
 		}
-		const res = await postWords(targetMemorize, data)
-		if (res.status === 200) {
-			setNewWord("")
-			setNewWordJp("")
-		}
+		await postWords(targetMemorize, data)
+		setNewWord("")
+		setNewWordJp("")
 	}
 	if (!memorizes) {
 		return <div>Loading...</div>

@@ -3,18 +3,14 @@ import useSWR from "swr"
 import type { SWRConfiguration } from "swr"
 import { SwrResponse } from "src/types/SWR"
 import type { GoalFavoritePutRequest } from "src/types/favorite"
-import type {
-	GoalPostRequest,
-	GoalPutRequest,
-	GoalResponse,
-} from "src/types/goal"
+import type { GoalRequest, GoalResponse } from "src/types/goal"
 import { fetcher } from "src/utils/fetcher"
 
 export const useFetchGoals = (
 	userId = "",
 	options: SWRConfiguration = {}
 ): SwrResponse<GoalResponse[]> => {
-	const { data, error } = useSWR<GoalResponse[], Error>(
+	const { data, error, mutate } = useSWR<GoalResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/goals${
 			userId === "" ? "" : `/user/${userId}`
 		}`,
@@ -24,10 +20,11 @@ export const useFetchGoals = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 
-export const postGoal = async (data: GoalPostRequest) => {
+export const postGoal = async (data: GoalRequest) => {
 	const res: GoalResponse = await axios.post(
 		process.env.NEXT_PUBLIC_URL + "/api/goals",
 		data
@@ -35,7 +32,7 @@ export const postGoal = async (data: GoalPostRequest) => {
 	return res
 }
 
-export const putGoal = async (goalId: string, data: GoalPutRequest) => {
+export const putGoal = async (goalId: string, data: GoalRequest) => {
 	const res: GoalResponse = await axios.put(
 		process.env.NEXT_PUBLIC_URL + "/api/goals/" + goalId,
 		data

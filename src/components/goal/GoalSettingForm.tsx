@@ -1,8 +1,8 @@
 import { title } from "process"
-import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
+import { useSWRConfig } from "swr"
 import { postGoal, putGoal } from "../../apis/goal"
 import { meState } from "src/recoil/atoms/user"
 import type { GoalRequest } from "src/types/goal"
@@ -33,9 +33,9 @@ const GoalSettingForm: React.FC<Props> = ({
 		isCompleted: false,
 		createdBy: me.id,
 	})
-	const queryClient = useQueryClient()
 	const [form] = Form.useForm()
 	const isFixMode = id !== undefined
+	const { mutate } = useSWRConfig()
 
 	async function handleSubmit() {
 		if (
@@ -60,7 +60,7 @@ const GoalSettingForm: React.FC<Props> = ({
 			createdBy: me.id,
 		})
 		form.resetFields()
-		queryClient.invalidateQueries(["goals"])
+		mutate(`${process.env.NEXT_PUBLIC_URL}/api/goals`)
 	}
 
 	useEffect(() => {

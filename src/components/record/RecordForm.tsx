@@ -1,8 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input, InputNumber, Upload } from "antd"
 import { RcFile } from "antd/lib/upload"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
+import { useSWRConfig } from "swr"
 import { postRecord, putRecord } from "../../apis/record"
 import { postFile } from "src/apis/file"
 import { meState } from "src/recoil/atoms/user"
@@ -35,9 +35,9 @@ const RecordForm: React.FC<Props> = ({
 		createdBy: me.id,
 	})
 	const [file, setFile] = useState<File | null>(null)
-	const queryClient = useQueryClient()
 	const [form] = Form.useForm()
 	const isFixMode = id !== undefined
+	const { mutate } = useSWRConfig()
 
 	const uploadProps = {
 		beforeUpload: (file: any) => {
@@ -84,7 +84,7 @@ const RecordForm: React.FC<Props> = ({
 		})
 		setFile(null)
 		form.resetFields()
-		queryClient.invalidateQueries(["records"])
+		mutate(`${process.env.NEXT_PUBLIC_URL}/api/records`)
 	}
 
 	useEffect(() => {

@@ -10,7 +10,7 @@ export const useFetchRecords = (
 	userId = "",
 	options: SWRConfiguration = {}
 ): SwrResponse<RecordResponse[]> => {
-	const { data, error } = useSWR<RecordResponse[], Error>(
+	const { data, error, mutate } = useSWR<RecordResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/records${
 			userId === "" ? "" : `/user/${userId}`
 		}`,
@@ -20,6 +20,7 @@ export const useFetchRecords = (
 	return {
 		data: data,
 		isError: !!error,
+		mutate: mutate,
 	}
 }
 

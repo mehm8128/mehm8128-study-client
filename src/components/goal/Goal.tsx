@@ -1,10 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Popover } from "antd"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
+import { useSWRConfig } from "swr"
 import { deleteGoal, putGoal, putGoalFavorite } from "../../apis/goal"
-import type { GoalPutRequest, GoalResponse } from "../../types/goal"
+import type { GoalRequest, GoalResponse } from "../../types/goal"
 import GoalFixModal from "./GoalFixModal"
 import { useFetchUsers } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
@@ -21,35 +21,35 @@ const Goal: React.FC<Props> = (props) => {
 	const { data: users, isError } = useFetchUsers()
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
-	const queryClient = useQueryClient()
 	const [favoriteNum, setFavoriteNum] = useState(0)
 	const [isCompleted, setIsCompleted] = useState(false)
+	const { mutate } = useSWRConfig()
 
 	function handleClick() {
 		setShouldShowFixModal(true)
 		setShouldShowMenuModal(false)
 	}
 	async function handleComplete() {
-		const data: GoalPutRequest = {
+		const data: GoalRequest = {
 			title: props.goal.title,
 			comment: props.goal.comment,
 			goalDate: props.goal.goalDate,
 			isCompleted: true,
 			createdBy: me.id,
 		}
-		await putGoal(props.goal.id, data)
 		setIsCompleted(true)
+		await putGoal(props.goal.id, data)
 	}
 	async function handleFavorite() {
 		const data: GoalFavoritePutRequest = {
 			createdBy: me.id,
 		}
-		await putGoalFavorite(props.goal.id, data)
 		setFavoriteNum(favoriteNum + 1)
+		await putGoalFavorite(props.goal.id, data)
 	}
 	async function handleDelete() {
 		await deleteGoal(props.goal.id)
-		queryClient.invalidateQueries(["goals"])
+		mutate(`${process.env.NEXT_PUBLIC_URL}/api/goals`)
 		setShouldShowMenuModal(false)
 	}
 

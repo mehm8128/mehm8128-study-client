@@ -10,7 +10,6 @@
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@tanstack/react-query": "^4.2.1",
 		"antd": "^4.22.7",
 		"axios": "^0.26.1",
 		"next": "12.1.0",

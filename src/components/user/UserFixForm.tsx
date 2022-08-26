@@ -1,8 +1,8 @@
 import { title } from "process"
-import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
+import { useSWRConfig } from "swr"
 import { putUser, useFetchUser } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import { UserPutRequest } from "src/types/user"
@@ -17,9 +17,9 @@ const UserFixForm: React.FC<Props> = ({ setShouldShowFixModal }) => {
 	const me = useRecoilValue(meState)
 	const [username, setUsername] = useState("")
 	const [description, setDescription] = useState("")
-	const queryClient = useQueryClient()
 	const [form] = Form.useForm()
 	const { data: defaultValues, isError } = useFetchUser(me.id)
+	const { mutate } = useSWRConfig()
 
 	async function handleSubmit() {
 		if (username.length == 0) {
@@ -32,7 +32,7 @@ const UserFixForm: React.FC<Props> = ({ setShouldShowFixModal }) => {
 			description: description,
 		}
 		await putUser(data)
-		queryClient.invalidateQueries(["users"])
+		mutate(`${process.env.NEXT_PUBLIC_URL}/api/users/${me.id}`)
 		setShouldShowFixModal(false)
 	}
 
