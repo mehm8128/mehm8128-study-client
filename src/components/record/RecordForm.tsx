@@ -27,10 +27,13 @@ const RecordForm: React.FC<Props> = ({
 	setShouldShowFixModal,
 }) => {
 	const me = useRecoilValue(meState)
-	const [title, setTitle] = useState("")
-	const [page, setPage] = useState(0)
-	const [time, setTime] = useState(0)
-	const [comment, setComment] = useState("")
+	const [formValue, setFormValue] = useState<RecordRequest>({
+		title: "",
+		page: 0,
+		time: 0,
+		comment: "",
+		createdBy: me.id,
+	})
 	const [file, setFile] = useState<File | null>(null)
 	const queryClient = useQueryClient()
 	const [form] = Form.useForm()
@@ -48,28 +51,16 @@ const RecordForm: React.FC<Props> = ({
 	}
 
 	async function handleSubmit() {
-		if (title === "" || (page == 0 && time == 0)) {
+		if (
+			formValue.title === "" ||
+			(formValue.page == 0 && formValue.time == 0)
+		) {
 			alert(
 				"タイトルは必須です。ページ数と時間のどちらかは1以上を入力してください。"
 			)
 			return
 		}
-		let data: RecordRequest = {
-			title: title,
-			page: page,
-			time: time,
-			comment: comment,
-			createdBy: me.id,
-		}
-		if (isFixMode) {
-			data = {
-				title: title,
-				page: page,
-				time: time,
-				comment: comment,
-				createdBy: me.id,
-			}
-		}
+		let data: RecordRequest = { ...formValue }
 		if (file && !isFixMode) {
 			const formData = new FormData()
 			formData.append("file", file as RcFile)
@@ -84,10 +75,13 @@ const RecordForm: React.FC<Props> = ({
 			await putRecord(id, data)
 			setShouldShowFixModal!(false)
 		}
-		setTitle("")
-		setPage(0)
-		setTime(0)
-		setComment("")
+		setFormValue({
+			title: "",
+			page: 0,
+			time: 0,
+			comment: "",
+			createdBy: me.id,
+		})
 		setFile(null)
 		form.resetFields()
 		queryClient.invalidateQueries(["records"])
@@ -95,10 +89,13 @@ const RecordForm: React.FC<Props> = ({
 
 	useEffect(() => {
 		if (isFixMode) {
-			setTitle(defaultValues!.title)
-			setPage(defaultValues!.page)
-			setTime(defaultValues!.time)
-			setComment(defaultValues!.comment)
+			setFormValue({
+				title: defaultValues!.title,
+				page: defaultValues!.page,
+				time: defaultValues!.time,
+				comment: defaultValues!.comment,
+				createdBy: me.id,
+			})
 		}
 	}, [
 		defaultValues?.title,
@@ -121,8 +118,10 @@ const RecordForm: React.FC<Props> = ({
 			>
 				<Input
 					placeholder="必須項目"
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
+					value={formValue.title}
+					onChange={(e) =>
+						setFormValue({ ...formValue, title: e.target.value })
+					}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -133,8 +132,8 @@ const RecordForm: React.FC<Props> = ({
 				<InputNumber
 					controls
 					min={0}
-					value={page}
-					onChange={(value) => setPage(value)}
+					value={formValue.page}
+					onChange={(value) => setFormValue({ ...formValue, page: value })}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -145,8 +144,8 @@ const RecordForm: React.FC<Props> = ({
 				<InputNumber
 					controls
 					min={0}
-					value={time}
-					onChange={(value) => setTime(value)}
+					value={formValue.time}
+					onChange={(value) => setFormValue({ ...formValue, time: value })}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -157,8 +156,10 @@ const RecordForm: React.FC<Props> = ({
 				<TextArea
 					placeholder="任意"
 					rows={4}
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
+					value={formValue.comment}
+					onChange={(e) =>
+						setFormValue({ ...formValue, comment: e.target.value })
+					}
 				/>
 			</Form.Item>
 			{!isFixMode && (

@@ -19,6 +19,6 @@ export interface RecordRequest {
 	page: number
 	time: number
 	comment: string
-	fileId?: string | null
+	fileId?: string
 	createdBy: string
 }

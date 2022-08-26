@@ -1,10 +1,11 @@
+import { title } from "process"
 import { useQueryClient } from "@tanstack/react-query"
 import { Button, Form, Input } from "antd"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
 import { postGoal, putGoal } from "../../apis/goal"
 import { meState } from "src/recoil/atoms/user"
-import type { GoalPostRequest } from "src/types/goal"
+import type { GoalRequest } from "src/types/goal"
 
 const { TextArea } = Input
 
@@ -13,56 +14,64 @@ interface Props {
 		title: string
 		goalDate: string
 		comment: string
+		isCompleted: boolean
 	}
-	isCompleted?: boolean
 	id?: string
 	setShouldShowFixModal?: (value: boolean) => void
 }
 
 const GoalSettingForm: React.FC<Props> = ({
-	isCompleted,
 	defaultValues,
 	id,
 	setShouldShowFixModal,
 }) => {
 	const me = useRecoilValue(meState)
-	const [title, setTitle] = useState("")
-	const [goalDate, setGoalDate] = useState("")
-	const [comment, setComment] = useState("")
+	const [formValue, setFormValue] = useState<GoalRequest>({
+		title: "",
+		goalDate: "",
+		comment: "",
+		isCompleted: false,
+		createdBy: me.id,
+	})
 	const queryClient = useQueryClient()
 	const [form] = Form.useForm()
 	const isFixMode = id !== undefined
 
 	async function handleSubmit() {
-		if (title === "" || !/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(goalDate)) {
+		if (
+			title === "" ||
+			!/^2[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(formValue.goalDate)
+		) {
 			alert("タイトルは必須です。期限はyyyy-MM-ddの形式で入力してください。")
 			return
 		}
-		const data: GoalPostRequest = {
-			title: title,
-			goalDate: goalDate,
-			comment: comment,
-			isCompleted: isCompleted ?? false,
-			createdBy: me.id,
-		}
+		const data: GoalRequest = { ...formValue }
 		if (!isFixMode) {
 			await postGoal(data)
 		} else {
 			await putGoal(id, data)
 			setShouldShowFixModal!(false)
 		}
-		setTitle("")
-		setGoalDate("")
-		setComment("")
+		setFormValue({
+			title: "",
+			goalDate: "",
+			comment: "",
+			isCompleted: false,
+			createdBy: me.id,
+		})
 		form.resetFields()
 		queryClient.invalidateQueries(["goals"])
 	}
 
 	useEffect(() => {
 		if (isFixMode) {
-			setTitle(defaultValues!.title)
-			setGoalDate(defaultValues!.goalDate)
-			setComment(defaultValues!.comment)
+			setFormValue({
+				title: defaultValues!.title,
+				goalDate: defaultValues!.goalDate,
+				comment: defaultValues!.comment,
+				isCompleted: defaultValues!.isCompleted,
+				createdBy: me.id,
+			})
 		}
 	}, [defaultValues?.title, defaultValues?.goalDate, defaultValues?.comment])
 
@@ -80,8 +89,10 @@ const GoalSettingForm: React.FC<Props> = ({
 			>
 				<Input
 					placeholder="必須項目"
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
+					value={formValue.title}
+					onChange={(e) =>
+						setFormValue({ ...formValue, title: e.target.value })
+					}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -91,8 +102,10 @@ const GoalSettingForm: React.FC<Props> = ({
 			>
 				<Input
 					placeholder="YYYY-MM-DD"
-					value={goalDate}
-					onChange={(e) => setGoalDate(e.target.value)}
+					value={formValue.goalDate}
+					onChange={(e) =>
+						setFormValue({ ...formValue, goalDate: e.target.value })
+					}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -103,8 +116,10 @@ const GoalSettingForm: React.FC<Props> = ({
 				<TextArea
 					placeholder="任意"
 					rows={4}
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
+					value={formValue.comment}
+					onChange={(e) =>
+						setFormValue({ ...formValue, comment: e.target.value })
+					}
 				/>
 			</Form.Item>
 			<Form.Item>
