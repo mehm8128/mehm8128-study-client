@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
-import { useEffect } from "react"
-import { useRecoilState } from "recoil"
-import { fetchMe } from "../../apis/user"
+import { useSetRecoilState } from "recoil"
+import type { SWRConfiguration } from "swr"
+import { useFetchMe } from "../../apis/user"
 import { meState } from "src/recoil/atoms/user"
 
 interface Props {
@@ -10,21 +10,25 @@ interface Props {
 
 const Wrapper: React.FC<Props> = ({ children }) => {
 	const router = useRouter()
-	const [me, setMe] = useRecoilState(meState)
+	const options: SWRConfiguration = {
+		onSuccess: (data) => {
+			setMe({
+				id: data.id,
+				name: data.name,
+				auth: true,
+			})
+		},
+		onError: () => {
+			router.push("/login")
+		},
+	}
+	const { isError } = useFetchMe(options)
+	const setMe = useSetRecoilState(meState)
 
-	useEffect(() => {
-		fetchMe()
-			.then((res) => {
-				setMe({
-					id: res.id,
-					name: res.name,
-					auth: true,
-				})
-			})
-			.catch(() => {
-				if (!me.auth) router.replace("/login")
-			})
-	}, [router.pathname])
+	if (isError) {
+		return <div>Error!</div>
+	}
+
 	return <>{children}</>
 }
 export default Wrapper

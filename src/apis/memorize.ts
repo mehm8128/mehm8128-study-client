@@ -1,5 +1,6 @@
 import axios from "axios"
 import useSWR from "swr"
+import type { SWRConfiguration } from "swr"
 import { SwrResponse } from "src/types/SWR"
 import type {
 	MemorizeResponse,
@@ -9,11 +10,13 @@ import type {
 import { fetcher } from "src/utils/fetcher"
 
 export const useFetchQuiz = (
-	memorizeId: string
+	memorizeId: string,
+	options: SWRConfiguration = {}
 ): SwrResponse<QuizResponse[]> => {
 	const { data, error } = useSWR<QuizResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/memorizes/${memorizeId}/quiz`,
-		fetcher
+		fetcher,
+		options
 	)
 	return {
 		data: data,
@@ -21,10 +24,13 @@ export const useFetchQuiz = (
 	}
 }
 
-export const useFetchMemorizes = (): SwrResponse<MemorizeResponse[]> => {
+export const useFetchMemorizes = (
+	options: SWRConfiguration = {}
+): SwrResponse<MemorizeResponse[]> => {
 	const { data, error } = useSWR<MemorizeResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/memorizes`,
-		fetcher
+		fetcher,
+		options
 	)
 	return {
 		data: data,
