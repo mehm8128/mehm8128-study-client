@@ -131,6 +131,7 @@ const RecordForm: React.FC<Props> = ({
 			>
 				<InputNumber
 					controls
+					defaultValue={0}
 					min={0}
 					value={formValue.page}
 					onChange={(value) => setFormValue({ ...formValue, page: value })}
@@ -143,6 +144,7 @@ const RecordForm: React.FC<Props> = ({
 			>
 				<InputNumber
 					controls
+					defaultValue={0}
 					min={0}
 					value={formValue.time}
 					onChange={(value) => setFormValue({ ...formValue, time: value })}

@@ -10,8 +10,8 @@ import type { RecordResponse } from "../../types/record"
 import RecordFixModal from "./RecordFixModal"
 import { useFetchUsers } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
-import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
+import { userIdToName } from "src/utils/userIdToName"
 
 type Props = {
 	record: RecordResponse
@@ -61,13 +61,10 @@ const Record: React.FC<Props> = (props) => {
 					<Link passHref href={"/user/" + props.record.createdBy}>
 						<div className="flex items-center justify-center">
 							<Avatar className="mr-2">
-								{createdByToString(props.record.createdBy, users).substring(
-									0,
-									1
-								)}
+								{userIdToName(props.record.createdBy, users).substring(0, 1)}
 							</Avatar>
 							<span className="text-xl">
-								{createdByToString(props.record.createdBy, users)}
+								{userIdToName(props.record.createdBy, users)}
 							</span>
 						</div>
 					</Link>

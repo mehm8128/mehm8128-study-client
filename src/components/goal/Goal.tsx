@@ -9,8 +9,8 @@ import GoalFixModal from "./GoalFixModal"
 import { useFetchUsers } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import type { GoalFavoritePutRequest } from "src/types/favorite"
-import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
+import { userIdToName } from "src/utils/userIdToName"
 
 type Props = {
 	goal: GoalResponse
@@ -72,10 +72,10 @@ const Goal: React.FC<Props> = (props) => {
 					<Link passHref href={"/user/" + props.goal.createdBy}>
 						<div className="flex items-center justify-center">
 							<Avatar className="mr-2">
-								{createdByToString(props.goal.createdBy, users).substring(0, 1)}
+								{userIdToName(props.goal.createdBy, users).substring(0, 1)}
 							</Avatar>
 							<span className="text-xl">
-								{createdByToString(props.goal.createdBy, users)}
+								{userIdToName(props.goal.createdBy, users)}
 							</span>
 						</div>
 					</Link>
