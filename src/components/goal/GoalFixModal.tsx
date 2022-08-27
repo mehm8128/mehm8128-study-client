@@ -2,7 +2,7 @@ import { Modal } from "antd"
 import type { GoalResponse } from "../../types/goal"
 import GoalSettingForm from "./GoalSettingForm"
 
-type Props = {
+interface Props {
 	goal: GoalResponse
 	shoudShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void
@@ -11,6 +11,7 @@ const GoalFixModal: React.FC<Props> = (props) => {
 	const defaultValues = {
 		title: props.goal.title,
 		goalDate: props.goal.goalDate,
+		isCompleted: props.goal.isCompleted,
 		comment: props.goal.comment,
 	}
 
@@ -25,7 +26,6 @@ const GoalFixModal: React.FC<Props> = (props) => {
 			<GoalSettingForm
 				defaultValues={defaultValues}
 				id={props.goal.id}
-				isCompleted={props.goal.isCompleted}
 				setShouldShowFixModal={props.setShouldShowFixModal}
 			/>
 		</Modal>

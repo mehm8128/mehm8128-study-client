@@ -12,19 +12,18 @@ const Login: React.FC = () => {
 	const [userName, setUserName] = useState("")
 	const [password, setPassword] = useState("")
 
-	function handleLogin() {
+	async function handleLogin() {
 		const data: LoginRequest = {
 			name: userName,
 			password: password,
 		}
-		postLogin(data)
+		await postLogin(data)
 			.then((res) => {
 				setMe({
 					id: res.data.id,
 					name: res.data.name,
 					auth: true,
 				})
-				console.log("authed")
 				router.push("/")
 			})
 			.catch((err) => alert(err))

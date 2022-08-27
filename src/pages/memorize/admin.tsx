@@ -1,21 +1,16 @@
-import { useQuery } from "@tanstack/react-query"
 import { Select, Input, Form, Button } from "antd"
 import type { NextPage } from "next"
 import { useState } from "react"
 
 import type { WordRequest } from "../../types/memorize"
-import { fetchMemorizes, postWords } from "src/apis/memorize"
+import { postWords, useFetchMemorizes } from "src/apis/memorize"
 
 const { Option } = Select
 
 const Admin: NextPage = () => {
 	const [newWord, setNewWord] = useState<string>("")
 	const [newWordJp, setNewWordJp] = useState<string>("")
-	const {
-		isLoading,
-		isError,
-		data: memorizes,
-	} = useQuery(["memorizes"], fetchMemorizes)
+	const { data: memorizes, isError } = useFetchMemorizes()
 	const [targetMemorize, setTargetMemorize] = useState<string>()
 
 	async function handleRegister() {
@@ -31,13 +26,11 @@ const Admin: NextPage = () => {
 			word: newWord,
 			wordJp: newWordJp,
 		}
-		const res = await postWords(targetMemorize, data)
-		if (res.status === 200) {
-			setNewWord("")
-			setNewWordJp("")
-		}
+		await postWords(targetMemorize, data)
+		setNewWord("")
+		setNewWordJp("")
 	}
-	if (isLoading) {
+	if (!memorizes) {
 		return <div>Loading...</div>
 	}
 	if (isError) {

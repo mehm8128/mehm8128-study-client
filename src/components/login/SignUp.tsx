@@ -16,7 +16,7 @@ const SignUp: React.FC = () => {
 	const [passwordConfirm, setPasswordConfirm] = useState("")
 	const [description, setDescription] = useState("")
 
-	function handleRegister() {
+	async function handleRegister() {
 		if (
 			password !== passwordConfirm ||
 			userName.length === 0 ||
@@ -33,7 +33,7 @@ const SignUp: React.FC = () => {
 			description: description,
 		}
 
-		postSignup(data)
+		await postSignup(data)
 			.then((res) => {
 				setMe({
 					id: res.data.id,

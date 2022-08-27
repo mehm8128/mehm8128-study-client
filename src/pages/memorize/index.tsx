@@ -1,19 +1,14 @@
-import { useQuery } from "@tanstack/react-query"
 import { List } from "antd"
 
 import type { NextPage } from "next"
 import Link from "next/link"
 
-import { fetchMemorizes } from "src/apis/memorize"
+import { useFetchMemorizes } from "src/apis/memorize"
 
 const MemorizePortal: NextPage = () => {
-	const {
-		isLoading,
-		isError,
-		data: memorizes,
-	} = useQuery(["memorizes"], fetchMemorizes)
+	const { data: memorizes, isError } = useFetchMemorizes()
 
-	if (isLoading) {
+	if (!memorizes) {
 		return <div>Loading...</div>
 	}
 	if (isError) {

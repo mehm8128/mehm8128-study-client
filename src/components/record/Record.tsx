@@ -1,34 +1,30 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Avatar, Button, Modal, Popover } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 import { useRecoilValue } from "recoil"
+import { useSWRConfig } from "swr"
 import { deleteRecord, putRecordFavorite } from "../../apis/record"
 import type { RecordResponse } from "../../types/record"
 import RecordFixModal from "./RecordFixModal"
-import { fetchUsers } from "src/apis/user"
+import { useFetchUsers } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
-import { createdByToString } from "src/utils/createdByToString"
 import { dateFormatter } from "src/utils/dateFormatter"
+import { userIdToName } from "src/utils/userIdToName"
 
-type Props = {
+interface Props {
 	record: RecordResponse
 }
 
 const Record: React.FC<Props> = (props) => {
 	const me = useRecoilValue(meState)
-	const {
-		isLoading,
-		isError,
-		data: users,
-	} = useQuery(["users"], () => fetchUsers())
+	const { data: users, isError } = useFetchUsers()
 	const [shouldShowMenuModal, setShouldShowMenuModal] = useState(false)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 	const [shouldShowImageModal, setShouldShowImageModal] = useState(false)
-	const queryClient = useQueryClient()
 	const [favoriteNum, setFavoriteNum] = useState(0)
+	const { mutate } = useSWRConfig()
 
 	function handleClick() {
 		setShouldShowFixModal(true)
@@ -38,12 +34,12 @@ const Record: React.FC<Props> = (props) => {
 		const data = {
 			createdBy: me.id,
 		}
+		setFavoriteNum((prev) => prev + 1)
 		await putRecordFavorite(props.record.id, data)
-		setFavoriteNum(favoriteNum + 1)
 	}
 	async function handleDelete() {
 		await deleteRecord(props.record.id)
-		queryClient.invalidateQueries(["records"])
+		mutate(`${process.env.NEXT_PUBLIC_URL}/api/records`)
 		setShouldShowMenuModal(false)
 	}
 
@@ -51,7 +47,7 @@ const Record: React.FC<Props> = (props) => {
 		setFavoriteNum(props.record.favoriteNum)
 	}, [props.record.favoriteNum])
 
-	if (isLoading) {
+	if (!users) {
 		return <div>Loading...</div>
 	}
 	if (isError) {
@@ -65,13 +61,10 @@ const Record: React.FC<Props> = (props) => {
 					<Link passHref href={"/user/" + props.record.createdBy}>
 						<div className="flex items-center justify-center">
 							<Avatar className="mr-2">
-								{createdByToString(props.record.createdBy, users).substring(
-									0,
-									1
-								)}
+								{userIdToName(props.record.createdBy, users).substring(0, 1)}
 							</Avatar>
 							<span className="text-xl">
-								{createdByToString(props.record.createdBy, users)}
+								{userIdToName(props.record.createdBy, users)}
 							</span>
 						</div>
 					</Link>

@@ -1,13 +1,27 @@
 import axios from "axios"
+import useSWR from "swr"
+import type { SWRConfiguration } from "swr"
+import { SwrResponse } from "src/types/SWR"
 import type { RecordFavoritePutRequest } from "src/types/favorite"
 import type { RecordRequest, RecordResponse } from "src/types/record"
+import { fetcher } from "src/utils/fetcher"
 
-export const fetchRecords = async (id?: string) => {
-	const userId = id ? "/user/" + id : ""
-	const records: RecordResponse[] = (
-		await axios.get(process.env.NEXT_PUBLIC_URL + "/api/records" + userId)
-	).data
-	return records
+export const useFetchRecords = (
+	userId = "",
+	options: SWRConfiguration = {}
+): SwrResponse<RecordResponse[]> => {
+	const { data, error, mutate } = useSWR<RecordResponse[], Error>(
+		`${process.env.NEXT_PUBLIC_URL}/api/records${
+			userId === "" ? "" : `/user/${userId}`
+		}`,
+		fetcher,
+		options
+	)
+	return {
+		data: data,
+		isError: !!error,
+		mutate: mutate,
+	}
 }
 
 export const postRecord = async (data: RecordRequest) => {

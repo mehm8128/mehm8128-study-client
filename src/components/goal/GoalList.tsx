@@ -1,20 +1,14 @@
-import { useQuery } from "@tanstack/react-query"
-
-import { fetchGoals } from "../../apis/goal"
 import Goal from "./Goal"
+import { useFetchGoals } from "src/apis/goal"
 
-type Props = {
+interface Props {
 	userId?: string
 }
 
 const GoalList: React.FC<Props> = (props) => {
-	const {
-		isLoading,
-		isError,
-		data: goals,
-	} = useQuery(["goals", props.userId], () => fetchGoals(props.userId || ""))
+	const { data: goals, isError } = useFetchGoals(props.userId ?? "")
 
-	if (isLoading) {
+	if (!goals) {
 		return <div>Loading...</div>
 	}
 	if (isError) {

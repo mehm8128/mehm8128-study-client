@@ -1,31 +1,24 @@
-import { useQuery } from "@tanstack/react-query"
 import { Avatar, Button } from "antd"
 import { useState } from "react"
 import { useRecoilValue } from "recoil"
 import UserFixModal from "./UserFixModal"
-import { fetchRecords } from "src/apis/record"
-import { fetchUser } from "src/apis/user"
+import { useFetchRecords } from "src/apis/record"
+import { useFetchUser } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import { minutesToHoursAndMinutes } from "src/utils/minutesToHoursAndMinutes"
 
-type Props = {
+interface Props {
 	userId: string
 }
 const UserIntro: React.FC<Props> = (props) => {
-	const {
-		isLoading: isRecordsLoading,
-		isError: isRecordsError,
-		data: records,
-	} = useQuery(["records"], () => fetchRecords())
-	const {
-		isLoading: isUserLoading,
-		isError: isUserError,
-		data: user,
-	} = useQuery(["users", props.userId], () => fetchUser(props.userId))
+	const { data: records, isError: isRecordsError } = useFetchRecords(
+		props.userId ?? ""
+	)
+	const { data: user, isError: isUserError } = useFetchUser(props.userId ?? "")
 	const me = useRecoilValue(meState)
 	const [shouldShowFixModal, setShouldShowFixModal] = useState(false)
 
-	if (isRecordsLoading || isUserLoading) {
+	if (!user || !records) {
 		return <div>Loading...</div>
 	}
 	if (isRecordsError || isUserError) {
