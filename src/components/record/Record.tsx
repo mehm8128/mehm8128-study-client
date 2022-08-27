@@ -35,10 +35,20 @@ const Record: React.FC<Props> = (props) => {
 			createdBy: me.id,
 		}
 		setFavoriteNum((prev) => prev + 1)
-		await putRecordFavorite(props.record.id, data)
+		try {
+			await putRecordFavorite(props.record.id, data)
+		} catch (e) {
+			alert(e)
+			setFavoriteNum((prev) => prev - 1)
+		}
 	}
 	async function handleDelete() {
-		await deleteRecord(props.record.id)
+		try {
+			await deleteRecord(props.record.id)
+		} catch (e) {
+			alert(e)
+			return
+		}
 		mutate(`${process.env.NEXT_PUBLIC_URL}/api/records`)
 		setShouldShowMenuModal(false)
 	}

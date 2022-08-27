@@ -47,9 +47,19 @@ const GoalSettingForm: React.FC<Props> = ({
 		}
 		const data: GoalRequest = { ...formValue }
 		if (!isFixMode) {
-			await postGoal(data)
+			try {
+				await postGoal(data)
+			} catch (e) {
+				alert(e)
+				return
+			}
 		} else {
-			await putGoal(id, data)
+			try {
+				await putGoal(id, data)
+			} catch (e) {
+				alert(e)
+				return
+			}
 			setShouldShowFixModal!(false)
 		}
 		setFormValue({

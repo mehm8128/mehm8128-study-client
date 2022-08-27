@@ -31,7 +31,12 @@ const UserFixForm: React.FC<Props> = ({ setShouldShowFixModal }) => {
 			name: username,
 			description: description,
 		}
-		await putUser(data)
+		try {
+			await putUser(data)
+		} catch (e) {
+			alert(e)
+			return
+		}
 		mutate(`${process.env.NEXT_PUBLIC_URL}/api/users/${me.id}`)
 		setShouldShowFixModal(false)
 	}
