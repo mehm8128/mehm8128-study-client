@@ -65,14 +65,29 @@ const RecordForm: React.FC<Props> = ({
 			const formData = new FormData()
 			formData.append("file", file as RcFile)
 			formData.append("userID", me.id)
-			const res = await postFile(formData)
-			data = { ...data, fileId: res.id }
+			try {
+				const res = await postFile(formData)
+				data = { ...data, fileId: res.id }
+			} catch (e) {
+				alert(e)
+				return
+			}
 		}
 
 		if (!isFixMode) {
-			await postRecord(data)
+			try {
+				await postRecord(data)
+			} catch (e) {
+				alert(e)
+				return
+			}
 		} else {
-			await putRecord(id, data)
+			try {
+				await putRecord(id, data)
+			} catch (e) {
+				alert(e)
+				return
+			}
 			setShouldShowFixModal!(false)
 		}
 		setFormValue({
@@ -131,7 +146,6 @@ const RecordForm: React.FC<Props> = ({
 			>
 				<InputNumber
 					controls
-					defaultValue={0}
 					min={0}
 					value={formValue.page}
 					onChange={(value) => setFormValue({ ...formValue, page: value })}
@@ -144,7 +158,6 @@ const RecordForm: React.FC<Props> = ({
 			>
 				<InputNumber
 					controls
-					defaultValue={0}
 					min={0}
 					value={formValue.time}
 					onChange={(value) => setFormValue({ ...formValue, time: value })}

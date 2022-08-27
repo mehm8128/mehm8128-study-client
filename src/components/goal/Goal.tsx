@@ -38,17 +38,31 @@ const Goal: React.FC<Props> = (props) => {
 			createdBy: me.id,
 		}
 		setIsCompleted(true)
-		await putGoal(props.goal.id, data)
+		try {
+			await putGoal(props.goal.id, data)
+		} catch (e) {
+			alert(e)
+		}
 	}
 	async function handleFavorite() {
 		const data: GoalFavoritePutRequest = {
 			createdBy: me.id,
 		}
-		setFavoriteNum(favoriteNum + 1)
-		await putGoalFavorite(props.goal.id, data)
+		setFavoriteNum((prev) => prev + 1)
+		try {
+			await putGoalFavorite(props.goal.id, data)
+		} catch (e) {
+			alert(e)
+			setFavoriteNum((prev) => prev - 1)
+		}
 	}
 	async function handleDelete() {
-		await deleteGoal(props.goal.id)
+		try {
+			await deleteGoal(props.goal.id)
+		} catch (e) {
+			alert(e)
+			return
+		}
 		mutate(`${process.env.NEXT_PUBLIC_URL}/api/goals`)
 		setShouldShowMenuModal(false)
 	}
