@@ -13,7 +13,7 @@ import { meState } from "src/recoil/atoms/user"
 import { dateFormatter } from "src/utils/dateFormatter"
 import { userIdToName } from "src/utils/userIdToName"
 
-type Props = {
+interface Props {
 	record: RecordResponse
 }
 

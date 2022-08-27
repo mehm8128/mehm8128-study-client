@@ -3,7 +3,7 @@ import { Modal } from "antd"
 import type { RecordResponse } from "../../types/record"
 import RecordForm from "./RecordForm"
 
-type Props = {
+interface Props {
 	record: RecordResponse
 	shoudShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void

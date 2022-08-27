@@ -1,7 +1,7 @@
 import Goal from "./Goal"
 import { useFetchGoals } from "src/apis/goal"
 
-type Props = {
+interface Props {
 	userId?: string
 }
 

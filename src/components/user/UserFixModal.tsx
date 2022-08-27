@@ -1,7 +1,7 @@
 import { Modal } from "antd"
 import UserFixForm from "./UserFixForm"
 
-type Props = {
+interface Props {
 	shouldShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void
 }

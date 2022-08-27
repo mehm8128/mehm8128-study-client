@@ -7,7 +7,7 @@ import { useFetchUser } from "src/apis/user"
 import { meState } from "src/recoil/atoms/user"
 import { minutesToHoursAndMinutes } from "src/utils/minutesToHoursAndMinutes"
 
-type Props = {
+interface Props {
 	userId: string
 }
 const UserIntro: React.FC<Props> = (props) => {

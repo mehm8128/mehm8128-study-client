@@ -1,7 +1,7 @@
 import Record from "./Record"
 import { useFetchRecords } from "src/apis/record"
 
-type Props = {
+interface Props {
 	userId?: string
 }
 

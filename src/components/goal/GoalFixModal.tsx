@@ -2,7 +2,7 @@ import { Modal } from "antd"
 import type { GoalResponse } from "../../types/goal"
 import GoalSettingForm from "./GoalSettingForm"
 
-type Props = {
+interface Props {
 	goal: GoalResponse
 	shoudShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void

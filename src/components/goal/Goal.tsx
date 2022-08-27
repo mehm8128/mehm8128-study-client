@@ -12,7 +12,7 @@ import type { GoalFavoritePutRequest } from "src/types/favorite"
 import { dateFormatter } from "src/utils/dateFormatter"
 import { userIdToName } from "src/utils/userIdToName"
 
-type Props = {
+interface Props {
 	goal: GoalResponse
 }
 
