@@ -133,7 +133,9 @@ const GoalSettingForm: React.FC<Props> = ({
 				/>
 			</Form.Item>
 			<Form.Item>
-				<Button htmlType="submit">目標を設定</Button>
+				<div className="text-right">
+					<Button htmlType="submit">目標を設定</Button>
+				</div>
 			</Form.Item>
 		</Form>
 	)

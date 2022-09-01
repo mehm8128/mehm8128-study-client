@@ -47,7 +47,9 @@ const Login: React.FC = () => {
 					/>
 				</Form.Item>
 				<Form.Item>
-					<Button htmlType="submit">ログイン</Button>
+					<div className="text-right">
+						<Button htmlType="submit">ログイン</Button>
+					</div>
 				</Form.Item>
 			</Form>
 		</div>

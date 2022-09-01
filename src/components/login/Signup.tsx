@@ -8,7 +8,7 @@ import { SignupRequest } from "src/types/user"
 
 const { TextArea } = Input
 
-const SignUp: React.FC = () => {
+const Signup: React.FC = () => {
 	const router = useRouter()
 	const setMe = useSetRecoilState(meState)
 	const [userName, setUserName] = useState("")
@@ -79,11 +79,13 @@ const SignUp: React.FC = () => {
 					/>
 				</Form.Item>
 				<Form.Item>
-					<Button htmlType="submit">登録</Button>
+					<div className="text-right">
+						<Button htmlType="submit">登録</Button>
+					</div>
 				</Form.Item>
 			</Form>
 		</div>
 	)
 }
 
-export default SignUp
+export default Signup

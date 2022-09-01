@@ -185,7 +185,9 @@ const RecordForm: React.FC<Props> = ({
 				</Form.Item>
 			)}
 			<Form.Item>
-				<Button htmlType="submit">記録する</Button>
+				<div className="text-right">
+					<Button htmlType="submit">記録する</Button>
+				</div>
 			</Form.Item>
 		</Form>
 	)
