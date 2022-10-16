@@ -1,6 +1,6 @@
 # mehm8128-study-client
 
-勉強記録管理用アプリのクライアントです(制作中)。
+勉強記録管理用アプリのクライアントです。
 
 サーバー：https://github.com/mehm8128/mehm8128-study-server
 
