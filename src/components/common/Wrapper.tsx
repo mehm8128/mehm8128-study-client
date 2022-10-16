@@ -25,10 +25,10 @@ const Wrapper: React.FC<Props> = ({ children }) => {
 	const { data: me, isError } = useFetchMe(options)
 	const setMe = useSetRecoilState(meState)
 
-	if (!me) {
+	if (!(me || router.pathname === "/login")) {
 		return <div>Loading...</div>
 	}
-	if (isError) {
+	if (isError && !(router.pathname === "/login")) {
 		return <div>Error!</div>
 	}
 
