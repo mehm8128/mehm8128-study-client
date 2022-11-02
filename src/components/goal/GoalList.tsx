@@ -6,9 +6,7 @@ interface Props {
 }
 
 const GoalList: React.FC<Props> = (props) => {
-	const { data: goals, isError } = useFetchGoals(props.userId ?? "", {
-		suspense: true,
-	})
+	const { data: goals, isError } = useFetchGoals(props.userId ?? "")
 
 	if (isError) {
 		return <div>Error!</div>
