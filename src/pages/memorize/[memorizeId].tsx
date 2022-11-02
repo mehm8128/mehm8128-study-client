@@ -15,9 +15,6 @@ const Memorize: NextPage = () => {
 	const [count, setCount] = useState(0)
 	const [judge, setJudge] = useState<Judge>(0)
 
-	if (!quiz) {
-		return <div>Loading...</div>
-	}
 	if (isError) {
 		return <div>Error!</div>
 	}

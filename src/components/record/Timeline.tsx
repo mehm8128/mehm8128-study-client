@@ -8,16 +8,13 @@ interface Props {
 const Timeline: React.FC<Props> = (props) => {
 	const { data: records, isError } = useFetchRecords(props.userId ?? "")
 
-	if (!records) {
-		return <div>Loading...</div>
-	}
 	if (isError) {
 		return <div>Error!</div>
 	}
 	return (
 		<div className="w-full">
 			<ul>
-				{records.map((record) => (
+				{records?.map((record) => (
 					<li className="mb-4" key={record.id}>
 						<Record record={record} />
 					</li>

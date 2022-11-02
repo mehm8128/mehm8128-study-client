@@ -1,6 +1,5 @@
 import axios from "axios"
-import useSWR from "swr"
-import type { SWRConfiguration } from "swr"
+import useSWR, { type SWRConfiguration } from "swr"
 import { SwrResponse } from "src/types/SWR"
 import type {
 	LoginRequest,
@@ -10,32 +9,27 @@ import type {
 } from "src/types/user"
 import { fetcher } from "src/utils/fetcher"
 
-export const useFetchUsers = (
-	options: SWRConfiguration = {}
-): SwrResponse<UserResponse[]> => {
+export const useFetchUsers = (): SwrResponse<UserResponse[]> => {
 	const { data, error, mutate } = useSWR<UserResponse[], Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/users`,
 		fetcher,
-		options
+		{ suspense: true }
 	)
 	return {
-		data: data,
+		data: data as UserResponse[],
 		isError: !!error,
 		mutate: mutate,
 	}
 }
 
-export const useFetchUser = (
-	userId: string,
-	options: SWRConfiguration = {}
-): SwrResponse<UserResponse> => {
+export const useFetchUser = (userId: string): SwrResponse<UserResponse> => {
 	const { data, error, mutate } = useSWR<UserResponse, Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/users/${userId}`,
 		fetcher,
-		options
+		{ suspense: true }
 	)
 	return {
-		data: data,
+		data: data as UserResponse,
 		isError: !!error,
 		mutate: mutate,
 	}
@@ -47,10 +41,10 @@ export const useFetchMe = (
 	const { data, error, mutate } = useSWR<UserResponse, Error>(
 		`${process.env.NEXT_PUBLIC_URL}/api/users/me`,
 		fetcher,
-		options
+		{ suspense: false, ...options }
 	)
 	return {
-		data: data,
+		data: data as UserResponse,
 		isError: !!error,
 		mutate: mutate,
 	}

@@ -10,6 +10,7 @@ interface Props {
 
 const Wrapper: React.FC<Props> = ({ children }) => {
 	const router = useRouter()
+	const setMe = useSetRecoilState(meState)
 	const options: SWRConfiguration = {
 		onSuccess: (data) => {
 			setMe({
@@ -22,15 +23,8 @@ const Wrapper: React.FC<Props> = ({ children }) => {
 			router.push("/login")
 		},
 	}
-	const { data: me, isError } = useFetchMe(options)
-	const setMe = useSetRecoilState(meState)
-
-	if (!(me || router.pathname === "/login")) {
-		return <div>Loading...</div>
-	}
-	if (isError && !(router.pathname === "/login")) {
-		return <div>Error!</div>
-	}
+	// todo:me使ってないからどうにかする
+	const { data: me } = useFetchMe(options)
 
 	return <>{children}</>
 }

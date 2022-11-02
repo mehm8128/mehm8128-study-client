@@ -6,11 +6,10 @@ interface Props {
 }
 
 const GoalList: React.FC<Props> = (props) => {
-	const { data: goals, isError } = useFetchGoals(props.userId ?? "")
+	const { data: goals, isError } = useFetchGoals(props.userId ?? "", {
+		suspense: true,
+	})
 
-	if (!goals) {
-		return <div>Loading...</div>
-	}
 	if (isError) {
 		return <div>Error!</div>
 	}
@@ -18,7 +17,7 @@ const GoalList: React.FC<Props> = (props) => {
 	return (
 		<div className="w-full">
 			<ul>
-				{goals.map((goal) => (
+				{goals?.map((goal) => (
 					<li className="mb-4" key={goal.id}>
 						<Goal goal={goal} />
 					</li>
