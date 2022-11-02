@@ -19,8 +19,8 @@ const RecordFixModal: React.FC<Props> = (props) => {
 		<Modal
 			centered
 			footer={null}
+			open={props.shoudShowFixModal}
 			title="記録の編集"
-			visible={props.shoudShowFixModal}
 			onCancel={() => props.setShouldShowFixModal(false)}
 		>
 			<RecordForm

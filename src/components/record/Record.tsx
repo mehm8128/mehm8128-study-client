@@ -97,9 +97,9 @@ const Record: React.FC<Props> = (props) => {
 											</li>
 										</ul>
 									}
+									open={shouldShowMenuModal}
 									trigger="click"
-									visible={shouldShowMenuModal}
-									onVisibleChange={setShouldShowMenuModal}
+									onOpenChange={setShouldShowMenuModal}
 								>
 									<Button
 										className="border-full text-12 relative w-12 font-bold"
@@ -134,7 +134,7 @@ const Record: React.FC<Props> = (props) => {
 						</Button>
 						<Modal
 							footer={null}
-							visible={shouldShowImageModal}
+							open={shouldShowImageModal}
 							width={600}
 							onCancel={() => setShouldShowImageModal(false)}
 						>

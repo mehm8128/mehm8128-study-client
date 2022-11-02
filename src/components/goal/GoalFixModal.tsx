@@ -19,8 +19,8 @@ const GoalFixModal: React.FC<Props> = (props) => {
 		<Modal
 			centered
 			footer={null}
+			open={props.shoudShowFixModal}
 			title="目標の編集"
-			visible={props.shoudShowFixModal}
 			onCancel={() => props.setShouldShowFixModal(false)}
 		>
 			<GoalSettingForm

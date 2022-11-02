@@ -112,9 +112,9 @@ const Goal: React.FC<Props> = (props) => {
 											</li>
 										</ul>
 									}
+									open={shouldShowMenuModal}
 									trigger="click"
-									visible={shouldShowMenuModal}
-									onVisibleChange={setShouldShowMenuModal}
+									onOpenChange={setShouldShowMenuModal}
 								>
 									<Button
 										className="border-full text-12 w-12 font-bold"

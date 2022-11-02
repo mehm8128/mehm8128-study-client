@@ -11,8 +11,8 @@ const UserFixModal: React.FC<Props> = (props) => {
 		<Modal
 			centered
 			footer={null}
+			open={props.shouldShowFixModal}
 			title="ユーザー情報の編集"
-			visible={props.shouldShowFixModal}
 			onCancel={() => props.setShouldShowFixModal(false)}
 		>
 			<UserFixForm setShouldShowFixModal={props.setShouldShowFixModal} />

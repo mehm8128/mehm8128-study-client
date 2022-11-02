@@ -47,7 +47,7 @@ const RecordForm: React.FC<Props> = ({
 		onRemove: () => {
 			setFile(null)
 		},
-		file,
+		file: file,
 	}
 
 	async function handleSubmit() {
@@ -148,7 +148,7 @@ const RecordForm: React.FC<Props> = ({
 					controls
 					min={0}
 					value={formValue.page}
-					onChange={(value) => setFormValue({ ...formValue, page: value })}
+					onChange={(value) => setFormValue({ ...formValue, page: value ?? 0 })}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -160,7 +160,7 @@ const RecordForm: React.FC<Props> = ({
 					controls
 					min={0}
 					value={formValue.time}
-					onChange={(value) => setFormValue({ ...formValue, time: value })}
+					onChange={(value) => setFormValue({ ...formValue, time: value ?? 0 })}
 				/>
 			</Form.Item>
 			<Form.Item
@@ -178,7 +178,7 @@ const RecordForm: React.FC<Props> = ({
 				/>
 			</Form.Item>
 			{!isFixMode && (
-				<Form.Item label="画像" name="image">
+				<Form.Item label="画像" name="image" valuePropName="fileList">
 					<Upload {...uploadProps}>
 						<Button>画像をアップロード</Button>
 					</Upload>
