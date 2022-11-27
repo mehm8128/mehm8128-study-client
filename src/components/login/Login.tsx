@@ -34,14 +34,15 @@ const Login: React.FC = () => {
 			<Form className="py-2" labelCol={{ span: 3 }} onFinish={handleLogin}>
 				<Form.Item label="ユーザー名" name="username">
 					<Input
-						placeholder="ユーザー名"
+						placeholder="ユーザー名を入力"
 						value={userName}
 						onChange={(e) => setUserName(e.target.value)}
 					/>
 				</Form.Item>
 				<Form.Item label="パスワード" name="password">
 					<Input
-						placeholder="パスワード"
+						placeholder="パスワードを入力"
+						type="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					/>
