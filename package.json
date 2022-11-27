@@ -44,6 +44,7 @@
 		"prettier": "^2.7.1",
 		"prettier-plugin-tailwindcss": "^0.1.13",
 		"recoil": "^0.7.6",
+		"storybook-addon-next-router": "^4.0.1",
 		"tsconfig-paths-webpack-plugin": "^4.0.0",
 		"typescript": "4.8.4",
 		"windicss-webpack-plugin": "^1.7.7"
