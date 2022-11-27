@@ -1,9 +1,7 @@
-import "windi.css"
-import "antd/dist/antd.css"
 import "styles/globals.css"
+import "windi.css"
 import { RouterContext } from "next/dist/shared/lib/router-context"
 import { RecoilRoot } from "recoil"
-import { withNextRouter } from "storybook-addon-next-router"
 
 export const parameters = {
 	actions: { argTypesRegex: "^on[A-Z].*" },
@@ -28,10 +26,4 @@ export const decorators = [
 			<Story />
 		</RecoilRoot>
 	),
-	// withNextRouter({
-	// 	path: "/",
-	// 	asPath: "/",
-	// 	query: {},
-	// 	push() {},
-	// }),
 ]
