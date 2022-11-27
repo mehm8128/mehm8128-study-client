@@ -122,7 +122,7 @@ const Record: React.FC<Props> = (props) => {
 					<p className="whitespace-pre-wrap">{props.record.comment}</p>
 				</div>
 				{props.record.fileId !== "00000000-0000-0000-0000-000000000000" && (
-					<div className="ml-20">
+					<div className="ml-20 h-32">
 						<Button type="text" onClick={() => setShouldShowImageModal(true)}>
 							<Image
 								alt=""
