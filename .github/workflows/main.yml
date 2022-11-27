@@ -46,3 +46,20 @@ jobs:
         run: yarn build
         env:
           NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - name: yarn install
+        run: yarn install
+      - name: publish to chromatic
+        uses: chromaui/action@v1
+        env:
+          NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
