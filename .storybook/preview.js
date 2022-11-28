@@ -3,6 +3,7 @@ import "styles/libs.css"
 import "windi.css"
 import { RouterContext } from "next/dist/shared/lib/router-context"
 import { RecoilRoot } from "recoil"
+import * as nextImage from "next/image"
 
 export const parameters = {
 	actions: { argTypesRegex: "^on[A-Z].*" },
@@ -28,3 +29,8 @@ export const decorators = [
 		</RecoilRoot>
 	),
 ]
+
+Object.defineProperty(nextImage, "default", {
+	configurable: true,
+	value: (props) => <img {...props} />,
+})
