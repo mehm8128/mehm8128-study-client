@@ -61,5 +61,6 @@ jobs:
         uses: chromaui/action@v1
         env:
           NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
+          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
