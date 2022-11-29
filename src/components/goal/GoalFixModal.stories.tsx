@@ -22,7 +22,7 @@ export default {
 
 export const Default = () => (
 	<GoalFixModal
-		shoudShowFixModal
+		shouldShowFixModal
 		goal={goal}
 		setShouldShowFixModal={() => {
 			return

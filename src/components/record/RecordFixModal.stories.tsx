@@ -23,7 +23,7 @@ export default {
 
 export const Default = () => (
 	<RecordFixModal
-		shoudShowFixModal
+		shouldShowFixModal
 		record={record}
 		setShouldShowFixModal={() => {
 			return
