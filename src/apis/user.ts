@@ -24,7 +24,7 @@ export const useFetchUsers = (): SwrResponse<UserResponse[]> => {
 
 export const useFetchUser = (userId: string): SwrResponse<UserResponse> => {
 	const { data, error, mutate } = useSWR<UserResponse, Error>(
-		`${process.env.NEXT_PUBLIC_URL}/api/users/${userId}`,
+		userId ? `${process.env.NEXT_PUBLIC_URL}/api/users/${userId}` : null,
 		fetcher,
 		{ suspense: true }
 	)

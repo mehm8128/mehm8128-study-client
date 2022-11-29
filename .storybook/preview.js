@@ -2,8 +2,10 @@ import "styles/globals.css"
 import "styles/libs.css"
 import "windi.css"
 import { RouterContext } from "next/dist/shared/lib/router-context"
-import { RecoilRoot } from "recoil"
 import * as nextImage from "next/image"
+
+import { Suspense } from "react"
+import StoryRecoilWrapper from "components/common/StoryRecoilWrapper"
 
 export const parameters = {
 	actions: { argTypesRegex: "^on[A-Z].*" },
@@ -24,9 +26,11 @@ export const parameters = {
 
 export const decorators = [
 	(Story) => (
-		<RecoilRoot>
-			<Story />
-		</RecoilRoot>
+		<Suspense fallback={<div>loading...</div>}>
+			<StoryRecoilWrapper>
+				<Story />
+			</StoryRecoilWrapper>
+		</Suspense>
 	),
 ]
 
