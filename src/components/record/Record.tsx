@@ -155,7 +155,7 @@ const Record: React.FC<Props> = (props) => {
 			<RecordFixModal
 				record={props.record}
 				setShouldShowFixModal={setShouldShowFixModal}
-				shoudShowFixModal={shouldShowFixModal}
+				shouldShowFixModal={shouldShowFixModal}
 			/>
 		</>
 	)

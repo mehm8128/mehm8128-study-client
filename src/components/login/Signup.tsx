@@ -59,6 +59,7 @@ const Signup: React.FC = () => {
 				<Form.Item label="パスワード" name="password">
 					<Input
 						placeholder="パスワード"
+						type="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					/>
@@ -66,6 +67,7 @@ const Signup: React.FC = () => {
 				<Form.Item label="パスワード(確認)" name="passwordConfirm">
 					<Input
 						placeholder="パスワード(確認)"
+						type="password"
 						value={passwordConfirm}
 						onChange={(e) => setPasswordConfirm(e.target.value)}
 					/>

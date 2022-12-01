@@ -4,7 +4,7 @@ import GoalSettingForm from "./GoalSettingForm"
 
 interface Props {
 	goal: GoalResponse
-	shoudShowFixModal: boolean
+	shouldShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void
 }
 const GoalFixModal: React.FC<Props> = (props) => {
@@ -19,7 +19,7 @@ const GoalFixModal: React.FC<Props> = (props) => {
 		<Modal
 			centered
 			footer={null}
-			open={props.shoudShowFixModal}
+			open={props.shouldShowFixModal}
 			title="目標の編集"
 			onCancel={() => props.setShouldShowFixModal(false)}
 		>

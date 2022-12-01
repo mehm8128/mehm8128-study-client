@@ -145,7 +145,7 @@ const Goal: React.FC<Props> = (props) => {
 			<GoalFixModal
 				goal={props.goal}
 				setShouldShowFixModal={setShouldShowFixModal}
-				shoudShowFixModal={shouldShowFixModal}
+				shouldShowFixModal={shouldShowFixModal}
 			/>
 		</>
 	)

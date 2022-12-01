@@ -5,7 +5,7 @@ import RecordForm from "./RecordForm"
 
 interface Props {
 	record: RecordResponse
-	shoudShowFixModal: boolean
+	shouldShowFixModal: boolean
 	setShouldShowFixModal: (value: boolean) => void
 }
 const RecordFixModal: React.FC<Props> = (props) => {
@@ -19,7 +19,7 @@ const RecordFixModal: React.FC<Props> = (props) => {
 		<Modal
 			centered
 			footer={null}
-			open={props.shoudShowFixModal}
+			open={props.shouldShowFixModal}
 			title="記録の編集"
 			onCancel={() => props.setShouldShowFixModal(false)}
 		>

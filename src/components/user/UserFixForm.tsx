@@ -42,8 +42,8 @@ const UserFixForm: React.FC<Props> = ({ setShouldShowFixModal }) => {
 	}
 
 	useEffect(() => {
-		setUsername(defaultValues!.name)
-		setDescription(defaultValues!.description)
+		setUsername(defaultValues?.name)
+		setDescription(defaultValues?.description)
 	}, [defaultValues?.description, defaultValues?.name])
 
 	if (!defaultValues) {

@@ -2,7 +2,9 @@ import "styles/globals.css"
 import "styles/libs.css"
 import "windi.css"
 import { RouterContext } from "next/dist/shared/lib/router-context"
-import { RecoilRoot } from "recoil"
+import * as nextImage from "next/image"
+
+import StoryWrapper from "components/common/StoryWrapper"
 
 export const parameters = {
 	actions: { argTypesRegex: "^on[A-Z].*" },
@@ -23,8 +25,13 @@ export const parameters = {
 
 export const decorators = [
 	(Story) => (
-		<RecoilRoot>
+		<StoryWrapper>
 			<Story />
-		</RecoilRoot>
+		</StoryWrapper>
 	),
 ]
+
+Object.defineProperty(nextImage, "default", {
+	configurable: true,
+	value: (props) => <img {...props} />,
+})
