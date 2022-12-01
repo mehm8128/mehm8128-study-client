@@ -4,8 +4,7 @@ import "windi.css"
 import { RouterContext } from "next/dist/shared/lib/router-context"
 import * as nextImage from "next/image"
 
-import { Suspense } from "react"
-import StoryRecoilWrapper from "components/common/StoryRecoilWrapper"
+import StoryWrapper from "components/common/StoryWrapper"
 
 export const parameters = {
 	actions: { argTypesRegex: "^on[A-Z].*" },
@@ -26,11 +25,9 @@ export const parameters = {
 
 export const decorators = [
 	(Story) => (
-		<Suspense fallback={<div>loading...</div>}>
-			<StoryRecoilWrapper>
-				<Story />
-			</StoryRecoilWrapper>
-		</Suspense>
+		<StoryWrapper>
+			<Story />
+		</StoryWrapper>
 	),
 ]
 
